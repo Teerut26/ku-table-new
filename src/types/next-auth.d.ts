@@ -1,12 +1,14 @@
-import { type DefaultSession } from "next-auth";
+import { SignInServiceResponseInterface, User } from "@/interfaces/SignInServiceResponseInterface";
+import { type DefaultUser } from "next-auth";
 
 declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
   interface Session {
     user?: {
-      id: string;
-    } & DefaultSession["user"];
+      email?: SignInServiceResponseInterface;
+    };
+  }
+
+  interface JWT {
+    email: SignInServiceResponseInterface;
   }
 }

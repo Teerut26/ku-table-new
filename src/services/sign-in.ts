@@ -17,7 +17,7 @@ const encodeString = (str: string) => {
 
 const SignInService = (props: SignInServicePropsInterface) => {
     return axios.post<SignInServiceResponseInterface>(
-        '/auth/login',
+        'https://myapi.ku.th/auth/login',
         {
             username: encodeString(props.username),
             password: encodeString(props.password),

@@ -1,8 +1,9 @@
 import { NextComponentType } from 'next'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 const ThemeSwich = dynamic(
     () => import('@/components/ThemeSwich'),
@@ -15,7 +16,11 @@ const Index: NextComponentType<Props> = () => {
     const usernameRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
 
+    const { data: session, status } = useSession()
+
     const [showPass, setShowPass] = useState(false)
+
+    const router = useRouter()
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -32,6 +37,13 @@ const Index: NextComponentType<Props> = () => {
         console.log(res);
         
     }
+
+    useEffect(() => {
+      if(status === 'authenticated'){
+        router.push("/")
+      }
+    }, [status])
+    
 
     return (
         <>
@@ -81,13 +93,13 @@ const Index: NextComponentType<Props> = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-start items-center gap-2">
+                    {/* <div className="flex justify-start items-center gap-2">
                         <input
                             type="checkbox"
                             className="checkbox checkbox-xs"
                         />
                         <div>Remember me</div>
-                    </div>
+                    </div> */}
                     <button type="submit" className="btn btn-primary">
                         SignIn
                     </button>
