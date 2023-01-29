@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
 
           const user = {
             id: res.data.user.idCode,
-            email: res.data,
+            email: res.data as any,
             name: res.data.user.firstNameEn + " " + res.data.user.lastNameEn,
             image: "",
           };
@@ -50,13 +50,14 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, user, token }) {
-      const data = jwt_decode(session.user?.email?.accesstoken!) as UserKuInterface
+      const data = jwt_decode(
+        session.user?.email?.accesstoken!
+      ) as UserKuInterface;
 
-      if (data.exp < Date.now() / 1000) {
-        return {};
-      }
-      
-
+        if (data.exp < Date.now() / 1000) {
+          return {} as any;
+        }
+    //   session.expires = data.exp.toString();
       return session;
     },
     async jwt({ token, user, account }) {
