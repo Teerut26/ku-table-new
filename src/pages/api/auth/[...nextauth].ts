@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
           };
 
           return user;
-        } catch (error) {
+        } catch (error:any) {
           throw new Error(error.response.data.message || "มีบางอย่างผิดพลาด");
           
         }
