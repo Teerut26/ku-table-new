@@ -41,7 +41,7 @@ const ThemeSwich: NextComponentType<Props> = () => {
 
     return (
         <div title="Change Theme" className="dropdown dropdown-end ">
-            <div tabIndex={0} className="btn gap-1 normal-case btn-ghost">
+            <div tabIndex={0} className="btn gap-1 normal-case btn-ghost btn-sm">
                 <svg
                     width={20}
                     height={20}

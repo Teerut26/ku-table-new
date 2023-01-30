@@ -39,14 +39,15 @@ export const authOptions: NextAuthOptions = {
 
           return user;
         } catch (error) {
-          console.log(error);
-          return null;
+          throw new Error(error.response.data.message || "มีบางอย่างผิดพลาด");
+          
         }
       },
     }),
   ],
   pages: {
     signIn: "/sign-in",
+    error: "/error",
   },
   callbacks: {
     async session({ session, user, token }) {
@@ -57,7 +58,6 @@ export const authOptions: NextAuthOptions = {
         if (data.exp < Date.now() / 1000) {
           return {} as any;
         }
-    //   session.expires = data.exp.toString();
       return session;
     },
     async jwt({ token, user, account }) {
