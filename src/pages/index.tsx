@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import LocaleSwip from "@/utils/localeSwip";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
+import SignOut from "@/components/SignOut";
 
 let times: string[] = [
   "8:00",
@@ -44,9 +45,8 @@ const Home: NextPage = () => {
   const area = useRef<HTMLDivElement>(null);
   const { theme: themeCurrent } = useTheme();
   const [isCapture, setIsCapture] = useState(false);
-  const [scale, setScale] = useLocalStorage<number>("scale", 1)
+  const [scale, setScale] = useLocalStorage<number>("scale", 1);
   const { locale } = useRouter();
-
 
   const getCourseData = api.group_course.getCourse.useQuery({
     stdId: session?.user?.email?.user.student.stdId!,
@@ -101,15 +101,22 @@ const Home: NextPage = () => {
                       {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
                       PNG
                     </div>
-                    <ChangeLanguage />
-                  </div>
-
-                  <div className="w-full md:max-w-[13rem]">
-                    <select defaultValue={scale} onChange={(e)=>setScale(e.target.value as any)} className="select-error select select-sm w-full text-error">
+                    <select
+                      defaultValue={scale}
+                      onChange={(e) => setScale(e.target.value as any)}
+                      className="select-error select select-sm  text-error"
+                    >
                       {[...new Array(7)].map((_, index) => (
-                        <option key={index} value={index+1} className="text-center ">x{index+1}</option>
+                        <option
+                          key={index}
+                          value={index + 1}
+                          className="text-center "
+                        >
+                          x{index + 1}
+                        </option>
                       ))}
                     </select>
+                    <ChangeLanguage />
                   </div>
                 </div>
                 <div
