@@ -3,9 +3,12 @@ import { NextPage } from "next";
 import { Kanit } from "@next/font/google";
 import LocaleSwip from "@/utils/localeSwip";
 import { useRouter } from "next/router";
-import ThemeSwich from "./ThemeSwich";
 import { signOut } from "next-auth/react";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import dynamic from "next/dynamic";
+const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
+    ssr: false,
+  });
 
 const kanit = Kanit({
   weight: ["100", "300", "400", "500", "600", "700", "800", "900"],

@@ -6,6 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ChangeLanguage from "@/components/ChangeLanguage";
 import LocaleSwip from "@/utils/localeSwip";
+import clsx from "clsx";
 
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
   ssr: false,
@@ -20,6 +21,7 @@ const Index: NextComponentType<Props> = () => {
   const { data: session, status } = useSession();
 
   const [showPass, setShowPass] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -31,12 +33,15 @@ const Index: NextComponentType<Props> = () => {
     }
 
     try {
+      setIsLoading(true);
       await signIn("credentials", {
         username: usernameRef.current.value!,
         password: passwordRef.current.value!,
       });
+      setIsLoading(false);
     } catch (error) {
-        console.log(error);
+      console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -97,7 +102,10 @@ const Index: NextComponentType<Props> = () => {
               />
             </div>
           </div>
-          <button type="submit" className="btn-primary btn">
+          <button
+            type="submit"
+            className={clsx("btn-primary btn", isLoading ? "loading" : "")}
+          >
             {LocaleSwip(router.locale!, "เข้าสู่ระบบ", "SignIn")}
           </button>
         </form>
