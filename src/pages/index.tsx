@@ -62,7 +62,7 @@ const Home: NextPage = () => {
     ) + 1;
 
   const handleDownload = async () => {
-    const scale = 5;
+    const scale = 1;
     setTimeout(async () => {
       const dataUrl = await domtoimage.toPng(area.current as any, {
         width: area.current?.clientWidth! * scale,
