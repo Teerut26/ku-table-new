@@ -1,8 +1,10 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { TimeMap } from "@/interfaces/TimeMap";
+import LocaleSwip from "@/utils/localeSwip";
 import styled from "@emotion/styled";
 import clsx from "clsx";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 
 let timeMap: TimeMap[] = [
   { time: "8:00", pos: 3 },
@@ -52,7 +54,27 @@ const Text = styled.div`
   white-space: nowrap;
 `;
 
+const GoldrenBadge = styled.div`
+  background: radial-gradient(
+      ellipse farthest-corner at right bottom,
+      #fedb37 0%,
+      #fdb931 8%,
+      #9f7928 30%,
+      #8a6e2f 40%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse farthest-corner at left top,
+      #ffffff 0%,
+      #ffffac 8%,
+      #d1b464 25%,
+      #5d4a1f 62.5%,
+      #5d4a1f 100%
+    );
+`;
+
 const CourseBar: NextPage<Props> = ({ times, day, data }) => {
+  const { locale } = useRouter();
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
@@ -74,14 +96,19 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
 
   return (
     <Bar>
-      <BarChildren start={1} end={3}>
+      <BarChildren
+        className="flex items-center justify-center text-xl"
+        start={1}
+        end={3}
+      >
         {day}
       </BarChildren>
       {data?.map((course, index) => (
         <BarChildren
+          key={index}
           start={getPosition(course.time_from)}
           end={getPosition(course.time_to)}
-          className="flex flex-col p-2 cursor-pointer hover:bg-base-200"
+          className="flex cursor-pointer flex-col p-2 hover:bg-base-200"
         >
           <div className="flex justify-between">
             <Text>{course.subject_code}</Text>
@@ -89,22 +116,54 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
               [{course.time_from} - {course.time_to}]
             </Text>
           </div>
-          <Text>{course.subject_name_en}</Text>
+          <Text>
+            {LocaleSwip(
+              locale!,
+              course.subject_name_th,
+              course.subject_name_en
+            )}
+          </Text>
           <Text>Room {course.room_name_en}</Text>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <div
               className={clsx(
                 "badge badge-sm",
-                course.section_type_en === "Lecture"
+                course.section_type_en === "Lecture" ||
+                  course.section_type_th === "บรรยาย"
                   ? "badge-primary"
                   : "badge-secondary"
               )}
             >
-              {course.section_type_en}
+              {LocaleSwip(
+                locale!,
+                course.section_type_th,
+                course.section_type_en
+              )}
             </div>
-            <div className="badge-accent badge badge-sm">
-              {course.std_status_en}
-            </div>
+            <>
+              {course.std_status_en === "Special" ||
+              course.section_type_th === "พิเศษ" ? (
+                <>
+                  <GoldrenBadge className="badge badge-sm border-0 text-white">
+                    {LocaleSwip(
+                      locale!,
+                      course.std_status_th,
+                      course.std_status_en
+                    )}
+                  </GoldrenBadge>
+                </>
+              ) : (
+                <>
+                  <div className="badge-accent badge badge-sm">
+                    {LocaleSwip(
+                      locale!,
+                      course.std_status_th,
+                      course.std_status_en
+                    )}
+                  </div>
+                </>
+              )}
+            </>
           </div>
         </BarChildren>
       ))}
