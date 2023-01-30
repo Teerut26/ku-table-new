@@ -35,6 +35,10 @@ let timeMap: TimeMap[] = [
   { time: "20:30", pos: 28 },
   { time: "21:00", pos: 29 },
   { time: "21:30", pos: 30 },
+  { time: "22:00", pos: 31 },
+  { time: "22:30", pos: 32 },
+  { time: "23:00", pos: 33 },
+  { time: "23:30", pos: 34 },
 ];
 
 interface Props {
@@ -154,7 +158,7 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
                 </>
               ) : (
                 <>
-                  <div className="badge-accent badge badge-sm">
+                  <div className="badge badge-accent badge-sm">
                     {LocaleSwip(
                       locale!,
                       course.std_status_th,
