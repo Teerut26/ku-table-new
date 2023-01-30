@@ -18,7 +18,7 @@ export default function Document() {
                     content="ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) สามารถบันทึกรูปตารางเรียนได้ เพียงล็อกอินด้วยบัญชีนนทรีเท่านั้น!"
                 />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://table.ku-cs.com/" />
+                <meta property="og:url" content="https://table.csku.in.th/" />
                 <meta property="og:title" content="KU Table 2" />
                 <meta
                     property="og:description"
@@ -31,7 +31,7 @@ export default function Document() {
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta
                     property="twitter:url"
-                    content="https://table.ku-cs.com/"
+                    content="https://table.csku.in.th/"
                 />
                 <meta property="twitter:title" content="KU Table 2" />
                 <meta
