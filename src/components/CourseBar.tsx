@@ -127,7 +127,14 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
               course.subject_name_en
             )}
           </Text>
-          <Text>Room {course.room_name_en}</Text>
+          <Text>
+            {LocaleSwip(locale!, "ห้อง", "Room")}{" "}
+            {LocaleSwip(locale!, course.room_name_th, course.room_name_en)}
+          </Text>
+          <Text className="flex gap-2">
+            <div>{LocaleSwip(locale!, "หมู่", "Section")}</div>
+            <div>{course.section_code}</div>
+          </Text>
           <div className="flex items-center gap-2">
             <div
               className={clsx(
