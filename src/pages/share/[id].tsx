@@ -1,5 +1,6 @@
 import LoadingAnimation from "@/components/LoadingAnimation";
 import Table from "@/components/Table";
+import ThemeSwich from "@/components/ThemeSwich";
 import WithCheckSession from "@/layouts/WithCheckSession";
 import { api } from "@/utils/api";
 import { NextPage } from "next";
@@ -14,17 +15,18 @@ const Share: NextPage<Props> = () => {
 
   return (
     <>
-      <div className="p-5">
         {couresData.status !== "loading" ? (
           <>
             {couresData.status === "success" && (
-              <Table hasShare={false} courseData={couresData.data!} />
+              <div className="p-5 flex flex-col gap-2">
+                <ThemeSwich />
+                <Table hasShare={false} courseData={couresData.data!} />
+              </div>
             )}
           </>
         ) : (
           <LoadingAnimation />
         )}
-      </div>
     </>
   );
 };
