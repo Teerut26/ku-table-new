@@ -109,9 +109,6 @@ const Index: NextComponentType<Props> = () => {
           >
             {LocaleSwip(router.locale!, "เข้าสู่ระบบ", "SignIn")}
           </button>
-          <div className="mx-auto w-full max-w-md">
-            <Alert />
-          </div>
         </form>
       </div>
     </>

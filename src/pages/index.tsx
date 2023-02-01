@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import Table from "@/components/Table";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -18,9 +19,6 @@ const Home: NextPage = () => {
 
   return (
     <WithCheckSession>
-      <div className="px-5 pt-5">
-        <Alert />
-      </div>
       <div className="mx-auto flex max-w-[85rem] flex-col justify-center gap-2 p-5 md:p-10">
         {getCourseData.status !== "loading" ? (
           <>
@@ -35,7 +33,7 @@ const Home: NextPage = () => {
             )}
           </>
         ) : (
-          "loading..."
+          <LoadingAnimation />
         )}
       </div>
     </WithCheckSession>
