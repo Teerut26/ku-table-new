@@ -5,7 +5,7 @@ interface Props {}
 const Alert: NextPage<Props> = () => {
     return (
         <>
-        <div className="alert alert-warning shadow-lg w-full">
+        {/* <div className="alert alert-warning shadow-lg w-full">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ const Alert: NextPage<Props> = () => {
               </svg>
               <span>การแชร์ link ตารางเรียนเว็บไซต์ version เก่าจะถูกยกเลิก ระบบการแชร์ link ใน version ใหม่จะมาเร็วๆนี้</span>
             </div>
-          </div>
+          </div> */}
         </>
     )
 }
