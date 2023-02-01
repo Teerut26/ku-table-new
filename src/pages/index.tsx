@@ -18,6 +18,7 @@ import LocaleSwip from "@/utils/localeSwip";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
 import SignOut from "@/components/SignOut";
+import Alert from "@/components/Alert";
 
 let times: string[] = [
   "8:00",
@@ -83,6 +84,9 @@ const Home: NextPage = () => {
 
   return (
     <WithCheckSession>
+      <div className="px-5 pt-5">
+      <Alert />
+      </div>
       <div className="mx-auto flex max-w-[85rem] flex-col justify-center gap-2 p-5 md:p-10">
         {getCourseData.status !== "loading" ? (
           <>

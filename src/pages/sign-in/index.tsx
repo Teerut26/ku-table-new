@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import ChangeLanguage from "@/components/ChangeLanguage";
 import LocaleSwip from "@/utils/localeSwip";
 import clsx from "clsx";
+import Alert from "@/components/Alert";
 
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
   ssr: false,
@@ -108,6 +109,9 @@ const Index: NextComponentType<Props> = () => {
           >
             {LocaleSwip(router.locale!, "เข้าสู่ระบบ", "SignIn")}
           </button>
+          <div className="mx-auto w-full max-w-md">
+            <Alert />
+          </div>
         </form>
       </div>
     </>
