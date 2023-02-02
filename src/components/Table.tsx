@@ -1,7 +1,7 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { saveAs } from "file-saver";
 import domtoimage from "dom-to-image";
@@ -78,6 +78,12 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
       setIsCapture(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    if (isIPhone) {
+      setScale(1);
+    }
+  }, []);
 
   return (
     <>
