@@ -45,7 +45,7 @@ interface Props {
 const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
-  const [scale, setScale] = useLocalStorage<number>("scale", 1);
+  const [scale, setScale] = useLocalStorage<number>("scaleV2", 1);
   const area = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const { theme: themeCurrent } = useTheme();
@@ -78,12 +78,6 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
       setIsCapture(false);
     }, 1000);
   };
-
-  useEffect(() => {
-    if (isIPhone) {
-      setScale(1);
-    }
-  }, []);
 
   return (
     <>
