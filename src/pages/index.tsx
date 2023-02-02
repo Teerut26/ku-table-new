@@ -1,6 +1,6 @@
 import { api } from "../utils/api";
 import WithCheckSession from "@/layouts/WithCheckSession";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import { useSession } from "next-auth/react";
 import _ from "lodash";
 
@@ -10,7 +10,28 @@ import Alert from "@/components/Alert";
 import Table from "@/components/Table";
 import LoadingAnimation from "@/components/LoadingAnimation";
 
-const Home: NextPage = () => {
+export async function getServerSideProps(context: NextPageContext) {
+  const UA = context.req!.headers["user-agent"];
+  let isIPhone = false;
+  if (UA!.match(/iPhone|iPad|Macintosh/i)) {
+    if (UA!.match(/Mobile/i)) {
+      isIPhone = true;
+    } else if (UA!.match(/Chrome/i)) {
+      isIPhone = false;
+    } else {
+      isIPhone = true;
+    }
+  }
+  return {
+    props: { isIPhone },
+  };
+}
+
+interface Props {
+  isIPhone: boolean;
+}
+
+const Home: NextPage<Props> = ({ isIPhone }) => {
   const { data: session } = useSession();
 
   const getCourseData = api.group_course.getCourse.useQuery({
@@ -25,7 +46,11 @@ const Home: NextPage = () => {
             {getCourseData.status === "success" ? (
               <>
                 <Navbar />
-                <Table hasShare={true} courseData={getCourseData.data.results[0]?.course!} />
+                <Table
+                  isIPhone={isIPhone}
+                  hasShare={true}
+                  courseData={getCourseData.data.results[0]?.course!}
+                />
                 <Footer />
               </>
             ) : (

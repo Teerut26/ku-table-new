@@ -1,4 +1,4 @@
-import { NextComponentType } from "next";
+import { NextComponentType, NextPageContext } from "next";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -13,7 +13,8 @@ const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
   ssr: false,
 });
 
-interface Props {}
+interface Props {
+}
 
 const Index: NextComponentType<Props> = () => {
   const usernameRef = useRef<HTMLInputElement>(null);

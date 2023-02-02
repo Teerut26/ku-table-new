@@ -1,5 +1,5 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
@@ -39,9 +39,10 @@ const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 interface Props {
   courseData: Course[];
   hasShare?: boolean;
+  isIPhone: boolean;
 }
 
-const Table: NextPage<Props> = ({ courseData, hasShare }) => {
+const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
   const [scale, setScale] = useLocalStorage<number>("scale", 1);
@@ -92,20 +93,22 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
             {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
             PNG
           </div>
-          <select
-            defaultValue={scale}
-            onChange={(e) => setScale(e.target.value as any)}
-            className="select-error select select-sm  text-error"
-          >
-            {[...new Array(7)].map((_, index) => (
-              <option key={index} value={index + 1} className="text-center ">
-                x{index + 1}
-              </option>
-            ))}
-          </select>
+          {!isIPhone && (
+            <select
+              defaultValue={scale}
+              onChange={(e) => setScale(e.target.value as any)}
+              className="select-error select select-sm  text-error"
+            >
+              {[...new Array(7)].map((_, index) => (
+                <option key={index} value={index + 1} className="text-center ">
+                  x{index + 1}
+                </option>
+              ))}
+            </select>
+          )}
+
           <ChangeLanguage />
           {hasShare && <ShareTableBtn courseData={courseData} />}
-          
         </div>
       </div>
       <div
@@ -140,7 +143,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
             ))}
           </div>
           {isCapture && (
-            <div className="flex gap-2 text-base-content whitespace-nowrap">
+            <div className="flex gap-2 whitespace-nowrap text-base-content">
               <div>Generate by :</div>
               <div className="font-bold">ku-table2.vercel.app</div>
             </div>
