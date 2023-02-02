@@ -5,6 +5,7 @@ import WithCheckSession from "@/layouts/WithCheckSession";
 import { api } from "@/utils/api";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface Props {
   isIPhone: boolean;
@@ -28,7 +29,7 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Share: NextPage<Props> = ({ isIPhone }) => {
-  const { query } = useRouter();
+  const { query, back } = useRouter();
 
   const couresData = api.share.getTable.useQuery({ link: query.id as string });
 
@@ -38,7 +39,15 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
         <>
           {couresData.status === "success" && (
             <div className="flex flex-col gap-2 p-5">
-              <ThemeSwich />
+              <div className="flex gap-2">
+                <div
+                  onClick={() => back()}
+                  className="btn-outline btn-error btn-sm btn w-fit"
+                >
+                  <ArrowBackIcon />
+                </div>
+                <ThemeSwich />
+              </div>
               <Table
                 isIPhone={isIPhone}
                 hasShare={false}
