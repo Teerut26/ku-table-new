@@ -86,7 +86,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
           <div
             onClick={() => handleDownload()}
             className={clsx(
-              "btn-outline btn-error btn-sm btn gap-2 uppercase",
+              "btn-outline btn-primary btn-sm btn gap-2 uppercase",
               isCapture && "loading"
             )}
           >
@@ -97,7 +97,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
             <select
               defaultValue={scale}
               onChange={(e) => setScale(e.target.value as any)}
-              className="select-error select select-sm  text-error"
+              className="select-primary select select-sm text-primary"
             >
               {[...new Array(7)].map((_, index) => (
                 <option key={index} value={index + 1} className="text-center ">

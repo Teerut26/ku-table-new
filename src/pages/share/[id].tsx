@@ -42,7 +42,7 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
               <div className="flex gap-2">
                 <div
                   onClick={() => back()}
-                  className="btn-outline btn-error btn-sm btn w-fit"
+                  className="btn-outline btn-primary btn-sm btn w-fit"
                 >
                   <ArrowBackIcon />
                 </div>

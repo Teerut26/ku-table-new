@@ -36,7 +36,7 @@ const ShareTableBtn: NextPage<Props> = ({ courseData }) => {
     <div
       onClick={() => handleShare()}
       className={clsx(
-        "btn-outline btn-error btn-sm btn gap-2 uppercase",
+        "btn-outline btn-primary btn-sm btn gap-2 uppercase",
         saveShare.status === "loading" && "loading"
       )}
     >

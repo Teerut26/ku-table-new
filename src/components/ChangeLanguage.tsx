@@ -8,7 +8,7 @@ const ChangeLanguage: NextPage<Props> = () => {
   const router = useRouter();
   const { pathname, asPath, query,locale } = router
   return (
-    <div onClick={()=>router.push({ pathname, query }, asPath, { locale: locale === "th" ? "en" : "th" })} className="btn-outline btn-error btn-sm btn gap-2 uppercase">
+    <div onClick={()=>router.push({ pathname, query }, asPath, { locale: locale === "th" ? "en" : "th" })} className="btn-outline btn-primary btn-sm btn gap-2 uppercase">
       <LanguageIcon sx={{width:20}} /> {locale === "th" ? "en" : "th"}
     </div>
   );
