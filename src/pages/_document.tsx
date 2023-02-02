@@ -22,7 +22,7 @@ export default function Document() {
         />
         <meta
           property="og:image"
-          content="https://ku-table2.vercel.app/main.png"
+          content="https://ku-table2.vercel.app/og.png"
         />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://ku-table2.vercel.app" />
@@ -33,7 +33,7 @@ export default function Document() {
         />
         <meta
           property="twitter:image"
-          content="https://ku-table2.vercel.app/main.png"
+          content="https://ku-table2.vercel.app/og.png"
         />
         <link rel="icon" href="/logo.png" />
         <script
