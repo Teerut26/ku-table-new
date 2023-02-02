@@ -1,7 +1,7 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { saveAs } from "file-saver";
 import domtoimage from "dom-to-image";
@@ -14,6 +14,7 @@ import ChangeLanguage from "./ChangeLanguage";
 import ShareTableBtn from "./ShareTableBtn";
 import TimeBar from "./TimeBar";
 import CourseBar from "./CourseBar";
+import { api } from "@/utils/api";
 
 let times: string[] = [
   "8:00",
@@ -49,6 +50,8 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
   const { data: session } = useSession();
   const { theme: themeCurrent } = useTheme();
 
+  const image = api.download.imageGenerate.useMutation();
+
   const maxTime = _.maxBy(courseData, (o) =>
     parseInt(o.time_to.split(":")[0]!)
   );
@@ -60,23 +63,28 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
     ) + 1;
 
   const handleDownload = async () => {
-    setIsCapture(true);
-    setTimeout(async () => {
-      const dataUrl = await domtoimage.toPng(area.current as any, {
-        width: area.current?.clientWidth! * scale,
-        height: area.current?.clientHeight! * scale,
-        style: {
-          transform: "scale(" + scale + ")",
-          transformOrigin: "top left",
-        },
-      });
-      saveAs(
-        dataUrl,
-        `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
-      );
-      setIsCapture(false);
-    }, 1000);
+    image.mutate();
+    // setIsCapture(true);
+    // setTimeout(async () => {
+    //   const dataUrl = await domtoimage.toPng(area.current as any, {
+    //     width: area.current?.clientWidth! * scale,
+    //     height: area.current?.clientHeight! * scale,
+    //     style: {
+    //       transform: "scale(" + scale + ")",
+    //       transformOrigin: "top left",
+    //     },
+    //   });
+    //   saveAs(
+    //     dataUrl,
+    //     `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
+    //   );
+    //   setIsCapture(false);
+    // }, 1000);
   };
+
+  useEffect(() => {
+    console.log(image.data);
+  }, [image.data]);
 
   return (
     <>
@@ -105,7 +113,6 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
           </select>
           <ChangeLanguage />
           {hasShare && <ShareTableBtn courseData={courseData} />}
-          
         </div>
       </div>
       <div
@@ -116,6 +123,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
       >
         <div
           ref={area}
+          id="capture"
           className={clsx(
             "flex min-w-[130rem] flex-col bg-base-100",
             isCapture && "p-8"
