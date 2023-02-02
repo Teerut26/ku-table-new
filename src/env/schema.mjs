@@ -19,6 +19,7 @@ export const serverSchema = z.object({
     process.env.VERCEL ? z.string() : z.string().url()
   ),
   FIREBASE_ADMIN: z.string(),
+  MYKU_PUBLIC_KEY: z.string(),
 });
 
 /**
@@ -31,6 +32,7 @@ export const serverEnv = {
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   FIREBASE_ADMIN: process.env.FIREBASE_ADMIN,
+  MYKU_PUBLIC_KEY: process.env.MYKU_PUBLIC_KEY,
 };
 
 /**
