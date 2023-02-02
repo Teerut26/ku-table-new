@@ -1,7 +1,7 @@
 # 📚 KU Table 2
 
 <a href="https://ku-table2.vercel.app/" >
-<img src="example/main.png" />
+<img src="public/main.png" />
 </a>
 
 
