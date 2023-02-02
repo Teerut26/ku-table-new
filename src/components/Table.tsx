@@ -140,7 +140,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare }) => {
             ))}
           </div>
           {isCapture && (
-            <div className="flex gap-2 text-base-content">
+            <div className="flex gap-2 text-base-content whitespace-nowrap">
               <div>Generate by :</div>
               <div className="font-bold">ku-table2.vercel.app</div>
             </div>
