@@ -1,11 +1,6 @@
 import { z } from "zod"
-export interface GroupCourseResponseInterface {
-  code: string;
-  results: Result[];
-  cache: boolean;
-}
 
-export interface Result {
+export interface GroupCourseResponseInterface {
   peroid_date: string;
   course: Course[];
 }

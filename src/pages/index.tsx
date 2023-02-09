@@ -32,11 +32,8 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ isIPhone }) => {
-  const { data: session } = useSession();
 
-  const getCourseData = api.group_course.getCourse.useQuery({
-    stdId: session?.user?.email?.user.student.stdId!,
-  });
+  const getCourseData = api.group_course.getCourse.useQuery();
 
   return (
     <WithCheckSession>

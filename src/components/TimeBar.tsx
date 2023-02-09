@@ -1,6 +1,5 @@
-import { Times } from "@/interfaces/Times";
 import styled from "@emotion/styled";
-import { NextComponentType, NextPage } from "next";
+import { NextPage } from "next";
 
 interface Props {
   times: string[];

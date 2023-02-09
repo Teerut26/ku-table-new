@@ -1,10 +1,8 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { TimeMap } from "@/interfaces/TimeMap";
-import LocaleSwip from "@/utils/localeSwip";
 import styled from "@emotion/styled";
-import clsx from "clsx";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import BarChildren from "./BarChildren";
 
 let timeMap: TimeMap[] = [
   { time: "8:00", pos: 3 },
@@ -47,44 +45,13 @@ interface Props {
   data: Course[] | undefined;
 }
 
-interface getCourseDataInterface {
-  start: number;
-  end: number;
-}
-
-const Text = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const GoldrenBadge = styled.div`
-  background: radial-gradient(
-      ellipse farthest-corner at right bottom,
-      #fedb37 0%,
-      #fdb931 8%,
-      #9f7928 30%,
-      #8a6e2f 40%,
-      transparent 80%
-    ),
-    radial-gradient(
-      ellipse farthest-corner at left top,
-      #ffffff 0%,
-      #ffffac 8%,
-      #d1b464 25%,
-      #5d4a1f 62.5%,
-      #5d4a1f 100%
-    );
-`;
-
 const CourseBar: NextPage<Props> = ({ times, day, data }) => {
-  const { locale } = useRouter();
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
   `;
 
-  const BarChildren = styled.div<getCourseDataInterface>`
+  const DayBar = styled.label<{ start: number; end: number }>`
     grid-column: ${(props) => props.start} / ${(props) => props.end};
     border: 0.5px solid;
     min-height: 7rem;
@@ -100,83 +67,20 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
 
   return (
     <Bar>
-      <BarChildren
+      <DayBar
         className="flex items-center justify-center text-xl"
         start={1}
         end={3}
       >
         {day}
-      </BarChildren>
+      </DayBar>
       {data?.map((course, index) => (
         <BarChildren
           key={index}
+          course={course}
           start={getPosition(course.time_from)}
           end={getPosition(course.time_to)}
-          className="flex cursor-pointer flex-col p-2 hover:bg-base-200"
-        >
-          <div className="flex justify-between">
-            <Text>{course.subject_code}</Text>
-            <Text>
-              [{course.time_from} - {course.time_to}]
-            </Text>
-          </div>
-          <Text>
-            {LocaleSwip(
-              locale!,
-              course.subject_name_th,
-              course.subject_name_en
-            )}
-          </Text>
-          <Text>
-            {LocaleSwip(locale!, "ห้อง", "Room")}{" "}
-            {LocaleSwip(locale!, course.room_name_th, course.room_name_en)}
-          </Text>
-          <Text className="flex gap-2">
-            <div>{LocaleSwip(locale!, "หมู่", "Section")}</div>
-            <div>{course.section_code}</div>
-          </Text>
-          <div className="flex items-center gap-2">
-            <div
-              className={clsx(
-                "badge badge-sm",
-                course.section_type_en === "Lecture" ||
-                  course.section_type_th === "บรรยาย"
-                  ? "badge-primary"
-                  : "badge-secondary"
-              )}
-            >
-              {LocaleSwip(
-                locale!,
-                course.section_type_th,
-                course.section_type_en
-              )}
-            </div>
-            <>
-              {course.std_status_en === "Special" ||
-              course.section_type_th === "พิเศษ" ? (
-                <>
-                  <GoldrenBadge className="badge badge-sm border-0 text-white">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </GoldrenBadge>
-                </>
-              ) : (
-                <>
-                  <div className="badge badge-accent badge-sm">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </div>
-                </>
-              )}
-            </>
-          </div>
-        </BarChildren>
+        />
       ))}
     </Bar>
   );

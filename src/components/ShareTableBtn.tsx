@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import ShareIcon from "@mui/icons-material/Share";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api } from "@/utils/api";
 import toast from "react-hot-toast";
 

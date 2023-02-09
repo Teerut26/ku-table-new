@@ -1,7 +1,7 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
-import { NextPage, NextPageContext } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { saveAs } from "file-saver";
 import domtoimage from "dom-to-image";
@@ -14,6 +14,7 @@ import ChangeLanguage from "./ChangeLanguage";
 import ShareTableBtn from "./ShareTableBtn";
 import TimeBar from "./TimeBar";
 import CourseBar from "./CourseBar";
+import LocaleSwip from "@/utils/localeSwip";
 
 let times: string[] = [
   "8:00",
@@ -47,7 +48,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
   const { locale } = useRouter();
   const [scale, setScale] = useLocalStorage<number>("scaleV2", 1);
   const area = useRef<HTMLDivElement>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
 
   const maxTime = _.maxBy(courseData, (o) =>
@@ -71,10 +72,11 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
           transformOrigin: "top left",
         },
       });
-      saveAs(
-        dataUrl,
-        `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
-      );
+      const name =
+        status === "authenticated"
+          ? `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
+          : `kutable-${themeCurrent}.png`;
+      saveAs(dataUrl, name);
       setIsCapture(false);
     }, 1000);
   };
@@ -121,7 +123,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
           ref={area}
           className={clsx(
             "flex min-w-[130rem] flex-col bg-base-100",
-            isCapture && "p-8"
+            isCapture && "p-5"
           )}
         >
           <div
@@ -143,9 +145,23 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
             ))}
           </div>
           {isCapture && (
-            <div className="flex gap-2 whitespace-nowrap text-base-content">
-              <div>Generate by :</div>
-              <div className="font-bold">ku-table2.vercel.app</div>
+            <div className="flex justify-between">
+              <div className="flex gap-2 whitespace-nowrap text-base-content">
+                <div>Generate by :</div>
+                <div className="font-bold">ku-table2.vercel.app</div>
+              </div>
+              {hasShare && (
+                <div className="flex gap-2 whitespace-nowrap text-base-content">
+                  <div className="font-bold">
+                    {session?.user?.email?.user.student.majorCode} -{" "}
+                    {LocaleSwip(
+                      locale!,
+                      session?.user?.email?.user.student.majorNameTh,
+                      session?.user?.email?.user.student.majorNameEn
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

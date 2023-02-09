@@ -37,10 +37,9 @@ export const authOptions: NextAuthOptions = {
             image: "",
           };
 
-          return user;
-        } catch (error:any) {
+          return user
+        } catch (error: any) {
           throw new Error(error.response.data.message || "มีบางอย่างผิดพลาด");
-          
         }
       },
     }),
@@ -55,9 +54,9 @@ export const authOptions: NextAuthOptions = {
         session.user?.email?.accesstoken!
       ) as UserKuInterface;
 
-        if (data.exp < Date.now() / 1000) {
-          return {} as any;
-        }
+      if (data.exp < Date.now() / 1000) {
+        return {} as any;
+      }
       return session;
     },
     async jwt({ token, user, account }) {
