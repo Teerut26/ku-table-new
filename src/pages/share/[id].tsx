@@ -40,12 +40,12 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
           {couresData.status === "success" && (
             <div className="flex flex-col gap-2 p-5">
               <div className="flex gap-2">
-                <div
-                  onClick={() => back()}
+                <a
+                  href="/"
                   className="btn-outline btn-primary btn-sm btn w-fit"
                 >
                   <ArrowBackIcon />
-                </div>
+                </a>
                 <ThemeSwich />
               </div>
               <Table
