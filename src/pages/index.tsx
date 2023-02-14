@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import Table from "@/components/Table";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import { useEffect } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -32,8 +33,14 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ isIPhone }) => {
-
+  const { data: session, status } = useSession();
   const getCourseData = api.group_course.getCourse.useQuery();
+
+  useEffect(() => {
+    if (status == "authenticated" && typeof window !== "undefined") {
+      window.umami(`student_status_name-${session.user?.email?.user.student.studentTypeNameEn}`);
+    }
+  }, [status]);
 
   return (
     <WithCheckSession>

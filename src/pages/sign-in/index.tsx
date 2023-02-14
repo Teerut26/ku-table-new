@@ -41,9 +41,15 @@ const Index: NextComponentType<Props> = () => {
         password: passwordRef.current.value!,
       });
       setIsLoading(false);
+      if (typeof window !== "undefined") {
+        window.umami(`sign-in-success`);
+      }
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      if (typeof window !== "undefined") {
+        window.umami(`sign-in-fail`);
+      }
     }
   };
 

@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import domtoimage from "dom-to-image";
 import saveAs from "file-saver";
 

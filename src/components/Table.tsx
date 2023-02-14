@@ -76,6 +76,8 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
         status === "authenticated"
           ? `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
           : `kutable-${themeCurrent}.png`;
+      window.umami(`save-image-theme-${themeCurrent}`);
+      window.umami(`save-image-scale-${scale}`);
       saveAs(dataUrl, name);
       setIsCapture(false);
     }, 1000);

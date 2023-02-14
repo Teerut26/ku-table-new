@@ -18,6 +18,7 @@ const ShareTableBtn: NextPage<Props> = ({ courseData }) => {
   const saveShare = api.share.saveShare.useMutation();
 
   const handleShare = async () => {
+    window.umami(`share-table`);
     saveShare.mutate({ courseData });
   };
 
