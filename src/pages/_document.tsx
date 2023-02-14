@@ -52,6 +52,7 @@ export default function Document() {
           `,
           }}
         />
+        <script async defer data-website-id="f17b31f5-307c-4fdd-9975-5f82fd31ae05" src="https://umami.csku.in.th/umami.js"></script>
       </Head>
       <body>
         <Main />
