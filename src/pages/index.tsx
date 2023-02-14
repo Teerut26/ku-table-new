@@ -38,7 +38,7 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
 
   useEffect(() => {
     if (status == "authenticated" && typeof window !== "undefined") {
-      window.umami(`student_status_name-${session.user?.email?.user.student.studentTypeNameEn}`);
+      window.umami(`student_type-${session.user?.email?.user.student.studentStatusNameEn}`);
     }
   }, [status]);
 
