@@ -9,7 +9,7 @@ const Footer: NextPage<Props> = () => {
       <footer className="footer items-center p-4 text-neutral-content">
         <div className="grid-flow-col gap-4 justify-self-center">
           <a href="https://github.com/Teerut26/ku-table-new">
-            <GitHubIcon />
+            <GitHubIcon className="text-base-content" />
           </a>
         </div>
       </footer>
