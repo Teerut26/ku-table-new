@@ -98,7 +98,7 @@ const Index: NextComponentType<Props> = () => {
               <input
                 ref={passwordRef}
                 type={showPass ? "text" : "password"}
-                placeholder="รหัสผ่านบัญชีผู้ใช้เครือข่ายนนทรี"
+                placeholder="รหัสผ่านบัญชีผู้ใช้เครือข่ายนนทรี "
                 className="input-bordered input-primary input w-full"
                 required
               />
