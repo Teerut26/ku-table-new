@@ -32,7 +32,6 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ isIPhone }) => {
-
   const getCourseData = api.group_course.getCourse.useQuery();
 
   return (
@@ -43,11 +42,23 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
             {getCourseData.status === "success" ? (
               <>
                 <Navbar />
-                <Table
-                  isIPhone={isIPhone}
-                  hasShare={true}
-                  courseData={getCourseData.data.results[0]?.course!}
-                />
+                {getCourseData.data ? (
+                  <>
+                    {getCourseData.data.results &&
+                    getCourseData.data.results.length > 0 ? (
+                      <Table
+                        isIPhone={isIPhone}
+                        hasShare={true}
+                        courseData={getCourseData.data.results[0]?.course!}
+                      />
+                    ) : (
+                      "No courses found"
+                    )}
+                  </>
+                ) : (
+                  ""
+                )}
+
                 <Footer />
               </>
             ) : (
