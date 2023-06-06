@@ -20,7 +20,7 @@ const SearchSubject: NextPage<Props> = ({
   onIsModalOpen,
 }) => {
   const [keyword, setKeyword] = useState("");
-  const [SeleteSubject, setSeleteSubject] = useState<
+  const [SelectSubject, setSelectSubject] = useState<
     SearchSubjectOpenEnrResponseInterface | undefined
   >();
 
@@ -55,7 +55,7 @@ const SearchSubject: NextPage<Props> = ({
     await subjectstApi.mutateAsync({
       query: subject.subjectCode,
     });
-    setSeleteSubject(subject);
+    setSelectSubject(subject);
   };
 
   const CourseDateSeparate = (date: string) => {
@@ -134,16 +134,16 @@ const SearchSubject: NextPage<Props> = ({
           <Input
             onChange={(e) => {
               if (e.target.value === "") {
-                setSeleteSubject(undefined);
+                setSelectSubject(undefined);
                 subjectSearchtApi.reset();
               }
               setKeyword(e.target.value);
-              setSeleteSubject(undefined);
+              setSelectSubject(undefined);
             }}
             size="large"
             placeholder="รหัสวิชา, ชื่อวิชา"
           />
-          {!SeleteSubject ? (
+          {!SelectSubject ? (
             <List loading={subjectSearchtApi.isLoading}>
               {subjectSearchtApi.data &&
                 subjectSearchtApi.data?.subjects.map((subject, index) => (

@@ -166,7 +166,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
           >
             <div className="flex w-full flex-col md:flex-row md:gap-2">
               <Form.Item
-                label={LocalsSwip("เลือกเวลา", "Selete Time")}
+                label={LocalsSwip("เลือกเวลา", "Select Time")}
                 name="time"
                 className="w-full"
               >
@@ -179,13 +179,13 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 />
               </Form.Item>
               <Form.Item
-                label={LocalsSwip("เลือกวัน", "Selete Day")}
+                label={LocalsSwip("เลือกวัน", "Select Day")}
                 name="day"
                 className="w-full"
               >
                 <Select
                   size="large"
-                  placeholder={LocalsSwip("เลือกวัน", "Selete Day")}
+                  placeholder={LocalsSwip("เลือกวัน", "Select Day")}
                 >
                   <Select.Option value="MON">
                     {LocalsSwip("จันทร์", "Monday")}
