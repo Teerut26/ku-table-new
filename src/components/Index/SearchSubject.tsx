@@ -98,7 +98,7 @@ const SearchSubject: NextPage<Props> = ({
           section_type_en: subject.sectionTypeEn,
           section_type_th: subject.sectionTypeTh,
           teacher_name: subject.teacherName,
-          teacher_name_en: subject.teacherName,
+          teacher_name_en: subject.teacherNameEn,
           day_w: date.day_w,
           time_to: date.time_to,
           time_from: date.time_form,
@@ -109,7 +109,6 @@ const SearchSubject: NextPage<Props> = ({
         } as Course;
       }
     );
-    console.log(newCourse);
 
     onSelect(newCourse);
     onIsModalOpen(false);

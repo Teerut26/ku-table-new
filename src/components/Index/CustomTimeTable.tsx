@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { useLocalStorage } from "usehooks-ts";
 import { Icon } from "@iconify/react";
 import SearchSubject from "./SearchSubject";
+import { v4 as uuid } from "uuid";
 import _ from "lodash";
 
 interface FormDataAllInterface {
@@ -42,6 +43,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom", []);
   const [FormDataAll, setFormDataAll] = useState<FormDataAllInterface | null>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEdit, setisEdit] = useState(false);
 
   const onFinish = () => {
     if (FormDataAll) {
@@ -55,10 +57,11 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         subject_name_en: FormDataAll.subject_name,
         subject_name_th: FormDataAll.subject_name,
         section_code: FormDataAll.section,
+        section_type: FormDataAll.section_type,
         room_name_en: FormDataAll.room,
         room_name_th: FormDataAll.room,
-        section_type_en: FormDataAll.subject_type,
-        section_type_th: FormDataAll.subject_type,
+        section_type_en: FormDataAll.section_type,
+        section_type_th: FormDataAll.section_type,
         teacher_name: FormDataAll.teacher_name,
         teacher_name_en: FormDataAll.teacher_name,
         time_from: FormDataAll.time[0],
@@ -81,8 +84,60 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       room: course.room_name_th,
       section: course.section_code,
       teacher_name: course.teacher_name,
-      subject_type: course.section_type_th,
+      section_type: course.section_type_en,
     });
+    setisEdit(true);
+  };
+
+  const onEditFinish = () => {
+    let courseAll = Courses;
+
+    _.remove(courseAll, {
+      day_w: FormDataAll?.day,
+      section_code: FormDataAll?.section,
+      time_from: TimeHourCovertToSingle(FormDataAll?.time[0]!),
+      time_to: TimeHourCovertToSingle(FormDataAll?.time[1]!),
+    });
+
+    if (FormDataAll) {
+      const time_start = dayjs(FormDataAll.time[0], "HH:mm").diff(
+        dayjs("00:00", "HH:mm"),
+        "minute"
+      );
+
+      const newCourse: Course = {
+        subject_code: FormDataAll.subject_code,
+        subject_name_en: FormDataAll.subject_name,
+        subject_name_th: FormDataAll.subject_name,
+        section_code: FormDataAll.section,
+        section_type: FormDataAll.section_type,
+        room_name_en: FormDataAll.room,
+        room_name_th: FormDataAll.room,
+        section_type_en: FormDataAll.section_type,
+        section_type_th: FormDataAll.section_type,
+        teacher_name: FormDataAll.teacher_name,
+        teacher_name_en: FormDataAll.teacher_name,
+        time_from: TimeHourCovertToSingle(FormDataAll.time[0]!),
+        time_to: TimeHourCovertToSingle(FormDataAll.time[1]!),
+        day_w: FormDataAll.day,
+        time_start: time_start,
+      } as Course;
+      SetCourses([...courseAll, newCourse]);
+      setFormDataAll(null);
+      form.resetFields();
+      setisEdit(false);
+    }
+  };
+
+  const CourseSorting = (courses: Course[]) => {
+    const sortedItems = _.orderBy(courses, ["time_start"], "asc");
+    return sortedItems;
+  };
+  const TimeHourCovertToSingle = (time: string) => {
+    const hour = parseInt(time.split(":")[0]!);
+    const minute = parseInt(time.split(":")[1]!);
+    const timeString = `${hour}:${minute === 0 ? "00" : "30"}`;
+    return timeString;
   };
 
   return (
@@ -227,20 +282,31 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 <Input size="large" />
               </Form.Item>
             </div>
-            <Button
-              type="primary"
-              size="large"
-              htmlType="submit"
-              className="w-full"
-            >
-              {LocalsSwip("เพิ่ม", "Add")}
-            </Button>
+            {!isEdit ? (
+              <Button
+                type="primary"
+                size="large"
+                htmlType="submit"
+                className="w-full"
+              >
+                {LocalsSwip("เพิ่ม", "Add")}
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                size="large"
+                className="w-full"
+                onClick={onEditFinish}
+              >
+                {LocalsSwip("แก้ไข", "Edit")}
+              </Button>
+            )}
           </Form>
         </Card>
         <Table
           isIPhone={isIPhone}
           hasShare={true}
-          courseData={Courses}
+          courseData={CourseSorting(Courses)}
           canRemove={true}
           onRemove={(course) => {
             SetCourses((pre) => {

@@ -6,6 +6,7 @@ export interface GroupCourseResponseInterface {
 }
 
 export interface Course {
+    uuid?: string;
   section_id: number;
   groupheader: string;
   weekstartday: string;
