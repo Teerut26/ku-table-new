@@ -305,7 +305,6 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         </Card>
         <Table
           isIPhone={isIPhone}
-          hasShare={true}
           courseData={CourseSorting(Courses)}
           canRemove={true}
           onRemove={(course) => {
