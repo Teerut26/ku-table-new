@@ -14,7 +14,7 @@ interface Props {
 const getSchedule = async (props: Props) => {
   return axios<BaseApiStructure<ScheduleResponseInterface[]>>({
     method: "get",
-    url: `https://myapi.ku.th/common/getschedule?stdStatusCode=17001&campusCode=B&facultyCode=D&majorCode=D14&userType=1`,
+    url: `https://myapi.ku.th/common/getschedule?stdStatusCode=${props.stdStatusCode}&campusCode=${props.campusCode}&facultyCode=${props.facultyCode}&majorCode=${props.majorCode}&userType=${props.userType}`,
     headers: {
       "app-key": "txCR5732xYYWDGdd49M3R19o1OVwdRFc",
       "x-access-token": props.token,

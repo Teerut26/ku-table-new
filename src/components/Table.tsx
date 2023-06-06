@@ -40,10 +40,22 @@ const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 interface Props {
   courseData: Course[];
   hasShare?: boolean;
+  canRemove?: boolean;
+  onRemove?: (course: Course) => void;
+  canEdit?: boolean;
+  onEdit?: (course: Course) => void;
   isIPhone: boolean;
 }
 
-const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
+const Table: NextPage<Props> = ({
+  courseData,
+  hasShare,
+  isIPhone,
+  canRemove,
+  onRemove,
+  canEdit,
+  onEdit,
+}) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
   const [scale, setScale] = useLocalStorage<number>("scaleV2", 1);
@@ -52,13 +64,15 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
   const { theme: themeCurrent } = useTheme();
 
   const maxTime = _.maxBy(courseData, (o) =>
-    parseInt(o.time_to.split(":")[0]!)
+    {
+        return parseInt(o.time_to?.split(":")[0]!)
+    }
   );
 
   const maxIndex =
     _.findIndex(
       times,
-      (time) => time === maxTime?.time_to.split(":")[0] + ":00"
+      (time) => time === maxTime?.time_to?.split(":")[0] + ":00"
     ) + 1;
 
   const handleDownload = async () => {
@@ -133,16 +147,22 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone }) => {
             )}
           >
             <TimeBar times={times.slice(0, maxIndex)} />
-            {days.map((day, index) => (
-              <CourseBar
-                key={index}
-                data={courseData.filter(
-                  (course) => course.day_w.replaceAll(" ", "") === day
-                )}
-                times={times.slice(0, maxIndex)}
-                day={day}
-              />
-            ))}
+            {days.map((day, index) => {
+              return (
+                <CourseBar
+                  key={index}
+                  data={courseData.filter(
+                    (course) => course.day_w?.replaceAll(" ", "") === day
+                  )}
+                  times={times.slice(0, maxIndex)}
+                  day={day}
+                  canRemove={canRemove}
+                  onRemove={onRemove}
+                  canEdit={canEdit}
+                  onEdit={onEdit}
+                />
+              );
+            })}
           </div>
           {isCapture && (
             <div className="flex justify-between">

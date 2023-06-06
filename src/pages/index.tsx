@@ -9,6 +9,10 @@ import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import Table from "@/components/Table";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import { Tabs } from "antd";
+import AntdTheme from "@/layouts/AntdTheme";
+import CustomTimeTable from "@/components/Index/CustomTimeTable";
+import useLocalsSwip from "@/hooks/useLocalsSwip";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -33,7 +37,7 @@ interface Props {
 
 const Home: NextPage<Props> = ({ isIPhone }) => {
   const getCourseData = api.group_course.getCourse.useQuery();
-
+  const { LocalsSwip } = useLocalsSwip();
   return (
     <WithCheckSession>
       <div className="mx-auto flex max-w-[85rem] flex-col justify-center gap-2 p-5 md:p-10">
@@ -42,22 +46,42 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
             {getCourseData.status === "success" ? (
               <>
                 <Navbar />
-                {getCourseData.data ? (
-                  <>
-                    {getCourseData.data.results &&
-                    getCourseData.data.results.length > 0 ? (
-                      <Table
-                        isIPhone={isIPhone}
-                        hasShare={true}
-                        courseData={getCourseData.data.results[0]?.course!}
-                      />
-                    ) : (
-                      "No courses found"
-                    )}
-                  </>
-                ) : (
-                  ""
-                )}
+                  <Tabs
+                    defaultActiveKey="tab2"
+                    items={[
+                      {
+                        key: "tab1",
+                        label: LocalsSwip("ตารางเรียน", "Time Table"),
+                        children: (
+                          <>
+                            {getCourseData.data ? (
+                              <>
+                                {getCourseData.data.results &&
+                                getCourseData.data.results.length > 0 ? (
+                                  <Table
+                                    isIPhone={isIPhone}
+                                    hasShare={true}
+                                    courseData={
+                                      getCourseData.data.results[0]?.course!
+                                    }
+                                  />
+                                ) : (
+                                    LocalsSwip("ไม่พบรายวิชา","No courses found")
+                                )}
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        ),
+                      },
+                      {
+                        key: "tab2",
+                        label: LocalsSwip("จัดตารางเรียน","Custom Time Table"),
+                        children: <CustomTimeTable isIPhone={isIPhone} />
+                      },
+                    ]}
+                  />
 
                 <Footer />
               </>

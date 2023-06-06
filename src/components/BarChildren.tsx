@@ -8,11 +8,16 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useRef, useState } from "react";
 import domtoimage from "dom-to-image";
 import saveAs from "file-saver";
+import { Button } from "antd";
 
 interface Props {
   start: number;
   end: number;
   course: Course;
+  canRemove?: boolean;
+  onRemove?: (course: Course) => void;
+  canEdit?: boolean;
+  onEdit?: (course: Course) => void;
 }
 
 interface getCourseDataInterface {
@@ -51,7 +56,15 @@ const GoldrenBadge = styled.div`
     );
 `;
 
-const BarChildren: NextPage<Props> = ({ start, end, course }) => {
+const BarChildren: NextPage<Props> = ({
+  start,
+  end,
+  course,
+  canRemove,
+  onRemove,
+  canEdit,
+  onEdit,
+}) => {
   const { locale } = useRouter();
   const [isCapture, setIsCapture] = useState(false);
   const area = useRef<HTMLLabelElement>(null);
@@ -150,7 +163,11 @@ const BarChildren: NextPage<Props> = ({ start, end, course }) => {
         htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}`}
         className="modal cursor-pointer"
       >
-        <label ref={area} className="modal-box relative flex flex-col gap-3" htmlFor="">
+        <label
+          ref={area}
+          className="modal-box relative flex flex-col gap-3"
+          htmlFor=""
+        >
           <div className="flex justify-between">
             <Text className="text-2xl">{course.subject_code}</Text>
             <Text className="text-2xl">
@@ -180,11 +197,11 @@ const BarChildren: NextPage<Props> = ({ start, end, course }) => {
             <Text>
               {LocaleSwip(locale!, "อาจารย์ :", "Teacher :")}{" "}
               {locale === "th"
-                ? course.teacher_name
-                    .split(",")
+                ? course
+                    .teacher_name!.split(",")
                     .map((name, tid) => <div key={tid}>- {name}</div>)
-                : course.teacher_name_en
-                    .split(",")
+                : course
+                    .teacher_name_en!.split(",")
                     .map((name, tid) => <div key={tid}>- {name}</div>)}
             </Text>
           </div>
@@ -229,6 +246,27 @@ const BarChildren: NextPage<Props> = ({ start, end, course }) => {
               )}
             </>
           </div>
+          {canRemove || canEdit ? (
+            <div className="flex gap-1">
+              {canRemove && (
+                <Button
+                  className="w-fit"
+                  danger
+                  onClick={() => onRemove!(course)}
+                >
+                  Remove
+                </Button>
+              )}
+              {canEdit && (
+                <Button className="w-fit" onClick={() => onEdit!(course)}>
+                  Edit
+                </Button>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+
           {/* {!isCapture && (
             <div className="flex justify-end gap-2">
               <div

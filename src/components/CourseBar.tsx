@@ -43,9 +43,21 @@ interface Props {
   times: string[];
   day: string;
   data: Course[] | undefined;
+  canRemove?: boolean;
+  onRemove?: (course: Course) => void;
+  canEdit?: boolean;
+  onEdit?: (course: Course) => void;
 }
 
-const CourseBar: NextPage<Props> = ({ times, day, data }) => {
+const CourseBar: NextPage<Props> = ({
+  times,
+  day,
+  data,
+  canRemove,
+  onRemove,
+  canEdit,
+  onEdit,
+}) => {
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
@@ -58,7 +70,10 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
   `;
 
   const getPosition = (time: string) => {
-    const timeObj = timeMap.find((t) => t.time === time);
+    const hour = parseInt(time.split(":")[0]!);
+    const minute = parseInt(time.split(":")[1]!);
+    const timeString = `${hour}:${minute === 0 ? "00" : "30"}`;
+    const timeObj = timeMap.find((t) => t.time === timeString);
     if (timeObj) {
       return timeObj.pos;
     }
@@ -74,14 +89,20 @@ const CourseBar: NextPage<Props> = ({ times, day, data }) => {
       >
         {day}
       </DayBar>
-      {data?.map((course, index) => (
-        <BarChildren
-          key={index}
-          course={course}
-          start={getPosition(course.time_from)}
-          end={getPosition(course.time_to)}
-        />
-      ))}
+      {data?.map((course, index) => {
+        return (
+          <BarChildren
+            key={index}
+            course={course}
+            start={getPosition(course.time_from!)}
+            end={getPosition(course.time_to!)}
+            canRemove={canRemove}
+            onRemove={onRemove}
+            canEdit={canEdit}
+            onEdit={onEdit}
+          />
+        );
+      })}
     </Bar>
   );
 };
