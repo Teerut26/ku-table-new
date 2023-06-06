@@ -47,7 +47,7 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
               <>
                 <Navbar />
                   <Tabs
-                    defaultActiveKey="tab2"
+                    defaultActiveKey="tab1"
                     items={[
                       {
                         key: "tab1",

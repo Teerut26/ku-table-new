@@ -85,18 +85,6 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
     });
   };
 
-  //   useEffect(() => {
-  //     if (FormDataAll !== null) {
-  //       form.setFieldsValue({
-  //         ...FormDataAll,
-  //         time: [
-  //           dayjs(FormDataAll?.time[0], "HH:mm"),
-  //           dayjs(FormDataAll?.time[1], "HH:mm"),
-  //         ],
-  //       });
-  //     }
-  //   }, []);
-
   return (
     <>
       <SearchSubject

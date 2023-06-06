@@ -3,12 +3,11 @@ import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { OpenSubjectForEnrollInterface } from "@/interfaces/OpenSubjectForEnrollInterface";
 import { SearchSubjectOpenEnrResponseInterface } from "@/interfaces/SearchSubjectOpenEnrResponseInterface";
 import { api } from "@/utils/api";
-import LocaleSwip from "@/utils/localeSwip";
-import { Avatar, Input, List, Modal, Tag } from "antd";
+import { Input, List, Modal, Tag } from "antd";
 import dayjs from "dayjs";
 import { NextPage } from "next";
-import { use, useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
+import NProgress from "nprogress";
 interface Props {
   isModalOpen: boolean;
   onSelect: (subject: Course[]) => void;
@@ -116,6 +115,14 @@ const SearchSubject: NextPage<Props> = ({
     onIsModalOpen(false);
   };
 
+  useEffect(() => {
+    if (subjectSearchtApi.isLoading || subjectstApi.isLoading) {
+      NProgress.start();
+    } else {
+      NProgress.done();
+    }
+  }, [subjectSearchtApi.isLoading, subjectstApi.isLoading]);
+
   return (
     <>
       <Modal
@@ -183,7 +190,7 @@ const SearchSubject: NextPage<Props> = ({
                           <div></div>
                           <div className="mt-2 flex">
                             {CourseDateSeparate(subject.coursedate).map(
-                              (date,index2) => (
+                              (date, index2) => (
                                 <Tag color="purple" key={index2}>
                                   {date.day_w} ({date.time_form}-{date.time_to})
                                 </Tag>
@@ -191,9 +198,13 @@ const SearchSubject: NextPage<Props> = ({
                             )}
                           </div>
                           <div className="mt-2 flex">
-                            {RoomSeparate(subject.roomNameEn).map((room,index2) => (
-                              <Tag key={index2} color="green">{room.room}</Tag>
-                            ))}
+                            {RoomSeparate(subject.roomNameEn).map(
+                              (room, index2) => (
+                                <Tag key={index2} color="green">
+                                  {room.room}
+                                </Tag>
+                              )
+                            )}
                           </div>
                         </div>
                       }
