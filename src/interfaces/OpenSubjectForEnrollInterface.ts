@@ -19,6 +19,7 @@ export interface OpenSubjectForEnrollInterface {
     totalRegistered: string
     teacherName: string
     teacherNameEn: string
+    teacherNameTh: string
     roomNameTh: string
     roomNameEn: string
     property: string

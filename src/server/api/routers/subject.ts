@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import getSchedule from "@/services/get-schedule";
 import getSubject from "@/services/get-subject";
 import getSubjects from "@/services/get-subjects";
+import getSubjectSearchService from "@/services/subject-search";
 
 export const subjectRouter = createTRPCRouter({
   get: protectedProcedure
@@ -50,7 +51,7 @@ export const subjectRouter = createTRPCRouter({
         query: z.string(),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .mutation(async ({ input, ctx }) => {
       const {
         studentStatusCode: stdStatusCode,
         campusCode,
@@ -74,6 +75,19 @@ export const subjectRouter = createTRPCRouter({
           campusCode: campusCode,
           semester: resSchedule.data.results[0]?.semester!,
           query: input.query,
+        });
+        return res.data;
+      } catch (error: any) {
+        throw new Error(error.response.data.code);
+      }
+    }),
+  search: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ input, ctx }) => {
+      try {
+        let res = await getSubjectSearchService({
+          token: ctx.session.user.email?.accesstoken!,
+          query: input,
         });
         return res.data;
       } catch (error: any) {

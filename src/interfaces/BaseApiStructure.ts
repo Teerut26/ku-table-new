@@ -3,3 +3,8 @@ export interface BaseApiStructure<T> {
   cache: boolean;
   results: T;
 }
+
+export interface BaseApiStructureSubjectsSearch<T> {
+  code: string;
+  subjects: T;
+}

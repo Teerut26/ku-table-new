@@ -90,7 +90,7 @@ const BarChildren: NextPage<Props> = ({
   return (
     <>
       <StyleCss
-        htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}`}
+        htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         start={start}
         end={end}
         className="flex cursor-pointer flex-col p-2 hover:bg-base-200"
@@ -156,11 +156,11 @@ const BarChildren: NextPage<Props> = ({
       </StyleCss>
       <input
         type="checkbox"
-        id={`modal-${course.subject_code}-${course.time_from}-${course.time_to}`}
+        id={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         className="modal-toggle"
       />
       <label
-        htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}`}
+        htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         className="modal cursor-pointer"
       >
         <label
