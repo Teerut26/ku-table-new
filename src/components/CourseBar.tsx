@@ -81,7 +81,7 @@ const CourseBar: NextPage<Props> = ({
   };
 
   return (
-    <Bar>
+    <Bar className="divide">
       <DayBar
         className="flex items-center justify-center text-xl row-span-6"
         start={1}

@@ -45,6 +45,7 @@ interface Props {
   canEdit?: boolean;
   onEdit?: (course: Course) => void;
   isIPhone: boolean;
+  childrenBar?: React.ReactNode;
 }
 
 const Table: NextPage<Props> = ({
@@ -55,6 +56,7 @@ const Table: NextPage<Props> = ({
   onRemove,
   canEdit,
   onEdit,
+  childrenBar,
 }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
@@ -63,11 +65,9 @@ const Table: NextPage<Props> = ({
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
 
-  const maxTime = _.maxBy(courseData, (o) =>
-    {
-        return parseInt(o.time_to?.split(":")[0]!)
-    }
-  );
+  const maxTime = _.maxBy(courseData, (o) => {
+    return parseInt(o.time_to?.split(":")[0]!);
+  });
 
   const maxIndex =
     _.findIndex(
@@ -98,7 +98,7 @@ const Table: NextPage<Props> = ({
   return (
     <>
       <div className="flex items-center gap-2">
-        <div className="flex w-full items-center gap-2">
+        <div className="flex w-full items-center flex-wrap gap-2">
           <div
             onClick={() => handleDownload()}
             className={clsx(
@@ -125,6 +125,7 @@ const Table: NextPage<Props> = ({
 
           <ChangeLanguage />
           {hasShare && <ShareTableBtn courseData={courseData} />}
+          {childrenBar && childrenBar}
         </div>
       </div>
       <div

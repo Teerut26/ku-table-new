@@ -1,25 +1,16 @@
 import useLocalsSwip from "@/hooks/useLocalsSwip";
-import LocaleSwip from "@/utils/localeSwip";
-import {
-  Button,
-  Card,
-  DatePicker,
-  Form,
-  Input,
-  Select,
-  TimePicker,
-} from "antd";
+import { Button, Card, Form, Input, Select, TimePicker } from "antd";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 import Table from "../Table";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import dayjs from "dayjs";
 import { useLocalStorage } from "usehooks-ts";
 import { Icon } from "@iconify/react";
 import SearchSubject from "./SearchSubject";
-import { v4 as uuid } from "uuid";
 import _ from "lodash";
+import { saveAs } from "file-saver";
+import { toast } from "react-hot-toast";
 
 interface FormDataAllInterface {
   time: string[];
@@ -44,6 +35,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const [FormDataAll, setFormDataAll] = useState<FormDataAllInterface | null>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setisEdit] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onFinish = () => {
     if (FormDataAll) {
@@ -140,6 +132,53 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
     return timeString;
   };
 
+  const exportTableJsonFile = () => {
+    const json = JSON.stringify(Courses);
+    const blob = new Blob([json], { type: "application/json" });
+    saveAs(blob, `timetable-${dayjs(new Date()).format("YYYY-MM-DD HHmmss")}.json`);
+  };
+
+  const importTableJsonFile = (e: any) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const json = event.target?.result;
+      if (typeof json === "string") {
+        try {
+          const data = JSON.parse(json) as Course[];
+          if (
+            !data[0]?.day_w ||
+            !data[0]?.section_code ||
+            !data[0]?.time_from
+          ) {
+            return toast.error(
+              LocalsSwip(
+                "ไม่สามารถนำเข้าไฟล์นี้ได้ กรุณาตรวจสอบอีกครั้ง",
+                "Cannot import this file. Please check again."
+              )
+            );
+          }
+          SetCourses(data);
+        } catch (error) {
+          return toast.error(
+            LocalsSwip(
+              "ไม่สามารถนำเข้าไฟล์นี้ได้ กรุณาตรวจสอบอีกครั้ง",
+              "Cannot import this file. Please check again."
+            )
+          );
+        }
+      } else {
+        return toast.error(
+          LocalsSwip(
+            "ไม่สามารถนำเข้าไฟล์นี้ได้ กรุณาตรวจสอบอีกครั้ง",
+            "Cannot import this file. Please check again."
+          )
+        );
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <>
       <SearchSubject
@@ -169,7 +208,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("เลือกเวลา", "Select Time")}
                 name="time"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <TimePicker.RangePicker
                   className="w-full"
@@ -183,7 +222,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("เลือกวัน", "Select Day")}
                 name="day"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Select
                   size="large"
@@ -232,7 +271,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 }
                 name="subject_code"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Input size="large" placeholder="01417111-65" />
               </Form.Item>
@@ -240,7 +279,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ชื่อวิชา", "Subject Name")}
                 name="subject_name"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Input
                   size="large"
@@ -253,7 +292,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ห้อง", "Room")}
                 name="room"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Input size="large" placeholder="SC45-709" />
               </Form.Item>
@@ -261,7 +300,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("หมู่เรียน", "Section")}
                 name="section"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Input size="large" placeholder="1" />
               </Form.Item>
@@ -271,7 +310,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
                 name="section_type"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Select
                   size="large"
@@ -285,7 +324,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ชื่ออาจารย์ผู้สอน", "Teacher Name")}
                 name="teacher_name"
                 className="w-full"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
               >
                 <Input size="large" />
               </Form.Item>
@@ -331,9 +370,51 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             }}
             canEdit={true}
             onEdit={onEdit}
+            childrenBar={
+              <>
+                <input
+                  ref={inputRef}
+                  type="file"
+                  onChange={importTableJsonFile}
+                  style={{ display: "none" }}
+                />
+                <div
+                  onClick={exportTableJsonFile}
+                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                >
+                  <Icon icon="tabler:table-import" className="text-lg" /> Export
+                </div>
+                <div
+                  onClick={() => {
+                    inputRef.current?.click();
+                  }}
+                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                >
+                  <Icon icon="tabler:table-export" className="text-lg" /> Import
+                </div>
+              </>
+            }
           />
         ) : (
-          <div className="flex justify-center p-5 border-[1px] border-base-content">
+          <div className="flex gap-3 justify-center flex-col items-center border-[1px] border-base-content p-5">
+            <div className="flex gap-2">
+              <>
+                <input
+                  ref={inputRef}
+                  type="file"
+                  onChange={importTableJsonFile}
+                  style={{ display: "none" }}
+                />
+                <div
+                  onClick={() => {
+                    inputRef.current?.click();
+                  }}
+                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                >
+                  <Icon icon="tabler:table-export" className="text-lg" /> Import
+                </div>
+              </>
+            </div>
             {LocalsSwip("คุณยังไม่มีจัดตารางเรียน", "You don't have timetable")}
           </div>
         )}
