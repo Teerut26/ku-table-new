@@ -130,6 +130,7 @@ const SearchSubject: NextPage<Props> = ({
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
         <div className="flex flex-col gap-2">
           <Input
