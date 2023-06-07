@@ -110,7 +110,7 @@ const SearchSubject: NextPage<Props> = ({
         } as Course;
       }
     );
-    toast.success("เพิ่มวิชาเรียบร้อยแล้ว");
+    toast.success(LocalsSwip("เพิ่มวิชาเรียบร้อยแล้ว", "Add course success"));
     onSelect(newCourse);
     onIsModalOpen(false);
   };
