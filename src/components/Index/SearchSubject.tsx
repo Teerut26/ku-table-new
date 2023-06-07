@@ -126,7 +126,7 @@ const SearchSubject: NextPage<Props> = ({
   return (
     <>
       <Modal
-        title={LocalsSwip("ค้นหาวิชา", "Search Subject")}
+        title={LocalsSwip("ค้นหาวิชา", "Search Subject")} 
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
