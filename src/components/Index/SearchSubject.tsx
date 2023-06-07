@@ -169,7 +169,7 @@ const SearchSubject: NextPage<Props> = ({
             </List>
           ) : (
             <List loading={subjectstApi.isLoading}>
-              {subjectstApi.data &&
+              {subjectstApi.data && subjectstApi.data.results.length > 0 ? (
                 subjectstApi.data?.results.map((subject, index) => (
                   <List.Item
                     key={index}
@@ -190,7 +190,6 @@ const SearchSubject: NextPage<Props> = ({
                               {LocalsSwip("หน่วยกิต", "Credit")}{" "}
                               {subject.maxCredit}
                             </Tag>
-                            
                           </div>
                         </div>
                       }
@@ -233,12 +232,19 @@ const SearchSubject: NextPage<Props> = ({
                               </Tag>
                             )}
                           </div>
-                          
                         </div>
                       }
                     />
                   </List.Item>
-                ))}
+                ))
+              ) : (
+                <div className="flex justify-center">
+                  {LocalsSwip(
+                    "ไม่เปิดรายวิชาหรือไม่พบวิชาที่ค้นหา",
+                    "No subject found or subject not open"
+                  )}
+                </div>
+              )}
             </List>
           )}
         </div>
