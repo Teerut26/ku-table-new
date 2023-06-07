@@ -89,6 +89,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       section_code: FormDataAll?.section,
       time_from: TimeHourCovertToSingle(FormDataAll?.time[0]!),
       time_to: TimeHourCovertToSingle(FormDataAll?.time[1]!),
+      subject_code: FormDataAll?.subject_code,
     });
 
     if (FormDataAll) {
@@ -363,6 +364,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                   section_code: course.section_code,
                   time_from: course.time_from,
                   time_to: course.time_to,
+                  subject_code: course.subject_code,
                 });
 
                 return courseAll;
