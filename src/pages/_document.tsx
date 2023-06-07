@@ -36,6 +36,7 @@ export default function Document() {
           content="https://ku-table2.vercel.app/og.png"
         />
         {/* <link rel="icon" href="/logo.png" /> */}
+        <script async src="https://umami-teerut.vercel.app/script.js" data-website-id="a12aa127-192f-47aa-8a6d-e6cdf9a48ffc"></script>
       </Head>
       <body>
         <Main />
