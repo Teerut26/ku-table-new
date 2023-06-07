@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import NProgress from "nprogress";
+import { toast } from "react-hot-toast";
 interface Props {
   isModalOpen: boolean;
   onSelect: (subject: Course[]) => void;
@@ -109,7 +110,7 @@ const SearchSubject: NextPage<Props> = ({
         } as Course;
       }
     );
-
+    toast.success("เพิ่มวิชาเรียบร้อยแล้ว");
     onSelect(newCourse);
     onIsModalOpen(false);
   };
