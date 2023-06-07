@@ -40,7 +40,7 @@ interface Props {
 const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const { LocalsSwip } = useLocalsSwip();
   const [form] = Form.useForm();
-  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom", []);
+  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom02", []);
   const [FormDataAll, setFormDataAll] = useState<FormDataAllInterface | null>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setisEdit] = useState(false);
@@ -169,6 +169,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("เลือกเวลา", "Select Time")}
                 name="time"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <TimePicker.RangePicker
                   className="w-full"
@@ -182,6 +183,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("เลือกวัน", "Select Day")}
                 name="day"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Select
                   size="large"
@@ -230,6 +232,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 }
                 name="subject_code"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Input size="large" placeholder="01417111-65" />
               </Form.Item>
@@ -237,6 +240,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ชื่อวิชา", "Subject Name")}
                 name="subject_name"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Input
                   size="large"
@@ -249,6 +253,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ห้อง", "Room")}
                 name="room"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Input size="large" placeholder="SC45-709" />
               </Form.Item>
@@ -256,6 +261,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("หมู่เรียน", "Section")}
                 name="section"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Input size="large" placeholder="1" />
               </Form.Item>
@@ -265,6 +271,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
                 name="section_type"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Select
                   size="large"
@@ -278,6 +285,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 label={LocalsSwip("ชื่ออาจารย์ผู้สอน", "Teacher Name")}
                 name="teacher_name"
                 className="w-full"
+                rules={[{required: true}]}
               >
                 <Input size="large" />
               </Form.Item>
