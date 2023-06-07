@@ -303,26 +303,32 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             )}
           </Form>
         </Card>
-        <Table
-          isIPhone={isIPhone}
-          courseData={CourseSorting(Courses)}
-          canRemove={true}
-          onRemove={(course) => {
-            SetCourses((pre) => {
-              let courseAll = pre;
-              _.remove(courseAll, {
-                day_w: course.day_w,
-                section_code: course.section_code,
-                time_from: course.time_from,
-                time_to: course.time_to,
-              });
+        {Courses.length !== 0 ? (
+          <Table
+            isIPhone={isIPhone}
+            courseData={CourseSorting(Courses)}
+            canRemove={true}
+            onRemove={(course) => {
+              SetCourses((pre) => {
+                let courseAll = pre;
+                _.remove(courseAll, {
+                  day_w: course.day_w,
+                  section_code: course.section_code,
+                  time_from: course.time_from,
+                  time_to: course.time_to,
+                });
 
-              return courseAll;
-            });
-          }}
-          canEdit={true}
-          onEdit={onEdit}
-        />
+                return courseAll;
+              });
+            }}
+            canEdit={true}
+            onEdit={onEdit}
+          />
+        ) : (
+          <div className="flex justify-center p-5 border-[1px] border-base-content">
+            {LocalsSwip("คุณยังไม่มีจัดตารางเรียน", "You don't have timetable")}
+          </div>
+        )}
       </div>
     </>
   );

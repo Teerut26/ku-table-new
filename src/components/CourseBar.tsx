@@ -83,7 +83,7 @@ const CourseBar: NextPage<Props> = ({
   return (
     <Bar>
       <DayBar
-        className="flex items-center justify-center text-xl"
+        className="flex items-center justify-center text-xl row-span-6"
         start={1}
         end={3}
       >

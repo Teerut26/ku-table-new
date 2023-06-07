@@ -128,7 +128,7 @@ const BarChildren: NextPage<Props> = ({
               course.section_type_en
             )}
           </div>
-          <>
+          {!(canRemove || canEdit) &&  <>
             {course.std_status_en === "Special" ||
             course.section_type_th === "พิเศษ" ? (
               <>
@@ -151,7 +151,8 @@ const BarChildren: NextPage<Props> = ({
                 </div>
               </>
             )}
-          </>
+          </>}
+         
         </div>
       </StyleCss>
       <input
@@ -221,30 +222,32 @@ const BarChildren: NextPage<Props> = ({
                 course.section_type_en
               )}
             </div>
-            <>
-              {course.std_status_en === "Special" ||
-              course.section_type_th === "พิเศษ" ? (
-                <>
-                  <GoldrenBadge className="badge border-0 text-white">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </GoldrenBadge>
-                </>
-              ) : (
-                <>
-                  <div className="badge-accent badge">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </div>
-                </>
-              )}
-            </>
+            {!(canRemove || canEdit) && (
+              <>
+                {course.std_status_en === "Special" ||
+                course.section_type_th === "พิเศษ" ? (
+                  <>
+                    <GoldrenBadge className="badge border-0 text-white">
+                      {LocaleSwip(
+                        locale!,
+                        course.std_status_th,
+                        course.std_status_en
+                      )}
+                    </GoldrenBadge>
+                  </>
+                ) : (
+                  <>
+                    <div className="badge-accent badge">
+                      {LocaleSwip(
+                        locale!,
+                        course.std_status_th,
+                        course.std_status_en
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
           {canRemove || canEdit ? (
             <div className="flex gap-1">

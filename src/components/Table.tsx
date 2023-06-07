@@ -136,7 +136,7 @@ const Table: NextPage<Props> = ({
         <div
           ref={area}
           className={clsx(
-            "flex min-w-[130rem] flex-col bg-base-100",
+            "flex min-w-[110rem] flex-col bg-base-100",
             isCapture && "p-5"
           )}
         >

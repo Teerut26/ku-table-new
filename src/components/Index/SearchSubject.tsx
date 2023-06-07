@@ -126,7 +126,7 @@ const SearchSubject: NextPage<Props> = ({
   return (
     <>
       <Modal
-        title={LocalsSwip("ค้นหาวิชา", "Search Subject")} 
+        title={LocalsSwip("ค้นหาวิชา", "Search Subject")}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -179,8 +179,19 @@ const SearchSubject: NextPage<Props> = ({
                     <List.Item.Meta
                       className="px-3"
                       title={
-                        <div className="flex">
-                          {subject.subjectCode} ({subject.sectionCode})
+                        <div className="flex gap-3">
+                          <div className="flex">{subject.subjectCode}</div>
+                          <div className="flex">
+                            <Tag color="cyan">
+                              {LocalsSwip("หมู่", "section")}{" "}
+                              {subject.sectionCode}
+                            </Tag>
+                            <Tag color="pink">
+                              {LocalsSwip("หน่วยกิต", "Credit")}{" "}
+                              {subject.maxCredit}
+                            </Tag>
+                            
+                          </div>
                         </div>
                       }
                       description={
@@ -189,10 +200,10 @@ const SearchSubject: NextPage<Props> = ({
                             {subject.subjectNameTh} ({subject.subjectNameEn})
                           </div>
                           <div></div>
-                          <div className="mt-2 flex">
+                          <div className="mt-2 flex flex-wrap">
                             {CourseDateSeparate(subject.coursedate).map(
                               (date, index2) => (
-                                <Tag color="purple" key={index2}>
+                                <Tag key={index2}>
                                   {date.day_w} ({date.time_form}-{date.time_to})
                                 </Tag>
                               )
@@ -206,7 +217,23 @@ const SearchSubject: NextPage<Props> = ({
                                 </Tag>
                               )
                             )}
+                            {subject.stdStatusEn === "Special" ? (
+                              <Tag color="orange">
+                                {LocalsSwip(
+                                  subject.stdStatusTh,
+                                  subject.stdStatusEn
+                                )}
+                              </Tag>
+                            ) : (
+                              <Tag color="blue">
+                                {LocalsSwip(
+                                  subject.stdStatusTh,
+                                  subject.stdStatusEn
+                                )}
+                              </Tag>
+                            )}
                           </div>
+                          
                         </div>
                       }
                     />

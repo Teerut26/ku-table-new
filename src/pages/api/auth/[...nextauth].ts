@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import { env } from "../../../env/server.mjs";
 import SignInService from "@/services/sign-in";
 import { UserKuInterface } from "@/interfaces/UserKuInterface.js";
+import getRenewToken from "@/services/renewtoken";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -37,7 +38,7 @@ export const authOptions: NextAuthOptions = {
             image: "",
           };
 
-          return user
+          return user;
         } catch (error: any) {
           throw new Error(error.response.data.message || "มีบางอย่างผิดพลาด");
         }
@@ -57,7 +58,21 @@ export const authOptions: NextAuthOptions = {
       if (data.exp < Date.now() / 1000) {
         return {} as any;
       }
-      return session;
+      
+      const renewToken = await getRenewToken({
+        renewtoken: session.user?.email?.renewtoken!,
+      });
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          email: {
+            ...session.user?.email,
+            accesstoken: renewToken.data.accesstoken,
+          },
+        },
+      };
     },
     async jwt({ token, user, account }) {
       return token;
