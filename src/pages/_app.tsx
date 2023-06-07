@@ -10,6 +10,8 @@ import "../styles/globals.css";
 import AntdTheme from "@/layouts/AntdTheme";
 import { useEffect } from "react";
 import Router from "next/router";
+import SEO from "../next-seo.config";
+import { DefaultSeo } from "next-seo";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -31,14 +33,17 @@ const MyApp: AppType<{ session: Session | null }> = ({
   }, []);
 
   return (
-    <SessionProvider session={session}>
-      <ThemeProvider>
-        <AntdTheme>
-          <Component {...pageProps} />
-          <Toaster />
-        </AntdTheme>
-      </ThemeProvider>
-    </SessionProvider>
+    <>
+      <DefaultSeo {...SEO} />
+      <SessionProvider session={session}>
+        <ThemeProvider>
+          <AntdTheme>
+            <Component {...pageProps} />
+            <Toaster />
+          </AntdTheme>
+        </ThemeProvider>
+      </SessionProvider>
+    </>
   );
 };
 
