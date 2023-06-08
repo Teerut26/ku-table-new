@@ -3,5 +3,10 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Noto Sans Thai', sans-serif !important;
+  font-family: "Noto Sans Thai", sans-serif !important;
+}
+
+.ant-tag {
+  display: inline-flex !important;
+  align-items: center !important;
 }

@@ -9,6 +9,7 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import NProgress from "nprogress";
 import { toast } from "react-hot-toast";
+import { Icon } from "@iconify/react";
 interface Props {
   isModalOpen: boolean;
   onSelect: (subject: Course[]) => void;
@@ -208,13 +209,29 @@ const SearchSubject: NextPage<Props> = ({
                               )
                             )}
                           </div>
-                          <div className="mt-2 flex">
+                          <div className="mt-2 flex flex-wrap">
                             {RoomSeparate(subject.roomNameEn).map(
                               (room, index2) => (
-                                <Tag key={index2} color="green">
+                                <Tag key={index2} color="green" icon={<Icon icon="material-symbols:location-on" />}>
                                   {room.room}
                                 </Tag>
                               )
+                            )}
+                             {subject.sectionTypeEn === "Lecture" ? (
+                              <Tag color="blue" icon={<Icon icon="ph:book-fill" />}>
+                                {LocalsSwip(
+                                  subject.sectionTypeTh,
+                                  subject.sectionTypeEn
+                                )}
+                              </Tag>
+                            ) : (
+                              <Tag color="orange" icon={<Icon icon="ic:baseline-science" />}>
+                                
+                                {LocalsSwip(
+                                  subject.sectionTypeTh,
+                                  subject.sectionTypeEn
+                                )}
+                              </Tag>
                             )}
                             {subject.stdStatusEn === "Special" ? (
                               <Tag color="orange">

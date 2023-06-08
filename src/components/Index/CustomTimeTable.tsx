@@ -11,6 +11,7 @@ import SearchSubject from "./SearchSubject";
 import _ from "lodash";
 import { saveAs } from "file-saver";
 import { toast } from "react-hot-toast";
+import { v4 as uuid } from "uuid";
 
 interface FormDataAllInterface {
   time: string[];
@@ -22,6 +23,7 @@ interface FormDataAllInterface {
   section: string;
   section_type: string;
   teacher_name: string;
+  uuid: string;
 }
 
 interface Props {
@@ -31,7 +33,7 @@ interface Props {
 const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const { LocalsSwip } = useLocalsSwip();
   const [form] = Form.useForm();
-  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom02", []);
+  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom03", []);
   const [FormDataAll, setFormDataAll] = useState<FormDataAllInterface | null>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setisEdit] = useState(false);
@@ -45,6 +47,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       );
 
       const newCourse: Course = {
+        uuid: uuid(),
         subject_code: FormDataAll.subject_code,
         subject_name_en: FormDataAll.subject_name,
         subject_name_th: FormDataAll.subject_name,
@@ -78,19 +81,22 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       teacher_name: course.teacher_name,
       section_type: course.section_type_en,
     });
+    setFormDataAll({
+      uuid: course.uuid as string,
+    } as any);
     setisEdit(true);
   };
 
   const onEditFinish = () => {
     let courseAll = Courses;
 
-    _.remove(courseAll, {
-      day_w: FormDataAll?.day,
-      section_code: FormDataAll?.section,
-      time_from: TimeHourCovertToSingle(FormDataAll?.time[0]!),
-      time_to: TimeHourCovertToSingle(FormDataAll?.time[1]!),
-      subject_code: FormDataAll?.subject_code,
+    let removeData = _.remove(courseAll, {
+      uuid: FormDataAll?.uuid,
     });
+
+    if (removeData.length === 0) {
+      return toast.error("ไม่พบวิชาที่ต้องการแก้ไข");
+    }
 
     if (FormDataAll) {
       const time_start = dayjs(FormDataAll.time[0], "HH:mm").diff(
@@ -100,20 +106,27 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
 
       const newCourse: Course = {
         subject_code: FormDataAll.subject_code,
-        subject_name_en: FormDataAll.subject_name,
+        subject_name_en: removeData[0]?.subject_name_en
+          ? removeData[0]?.subject_name_en
+          : FormDataAll.subject_name,
         subject_name_th: FormDataAll.subject_name,
         section_code: FormDataAll.section,
         section_type: FormDataAll.section_type,
-        room_name_en: FormDataAll.room,
+        room_name_en: removeData[0]?.room_name_en
+          ? removeData[0]?.room_name_en
+          : FormDataAll.room,
         room_name_th: FormDataAll.room,
         section_type_en: FormDataAll.section_type,
         section_type_th: FormDataAll.section_type,
         teacher_name: FormDataAll.teacher_name,
-        teacher_name_en: FormDataAll.teacher_name,
+        teacher_name_en: removeData[0]?.teacher_name_en
+          ? removeData[0]?.teacher_name_en
+          : FormDataAll.teacher_name,
         time_from: TimeHourCovertToSingle(FormDataAll.time[0]!),
         time_to: TimeHourCovertToSingle(FormDataAll.time[1]!),
         day_w: FormDataAll.day,
         time_start: time_start,
+        uuid: FormDataAll.uuid,
       } as Course;
       SetCourses([...courseAll, newCourse]);
       setFormDataAll(null);
@@ -136,7 +149,10 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const exportTableJsonFile = () => {
     const json = JSON.stringify(Courses);
     const blob = new Blob([json], { type: "application/json" });
-    saveAs(blob, `timetable-${dayjs(new Date()).format("YYYY-MM-DD HHmmss")}.json`);
+    saveAs(
+      blob,
+      `timetable-${dayjs(new Date()).format("YYYY-MM-DD HHmmss")}.json`
+    );
   };
 
   const importTableJsonFile = (e: any) => {
@@ -185,7 +201,10 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       <SearchSubject
         onIsModalOpen={(v) => setIsModalOpen(v)}
         isModalOpen={isModalOpen}
-        onSelect={(v) => SetCourses((pre) => [...pre, ...v])}
+        onSelect={(v) => {
+          let newCourses = v.map((course) => ({ ...course, uuid: uuid() }));
+          SetCourses((pre) => [...pre, ...newCourses]);
+        }}
       />
       <div className="flex flex-col gap-3">
         <Card>
@@ -356,20 +375,9 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             isIPhone={isIPhone}
             courseData={CourseSorting(Courses)}
             canRemove={true}
-            onRemove={(course) => {
-              SetCourses((pre) => {
-                let courseAll = pre;
-                _.remove(courseAll, {
-                  day_w: course.day_w,
-                  section_code: course.section_code,
-                  time_from: course.time_from,
-                  time_to: course.time_to,
-                  subject_code: course.subject_code,
-                });
-
-                return courseAll;
-              });
-            }}
+            onRemove={(course) =>
+              SetCourses((pre) => pre.filter((c) => c.uuid !== course.uuid))
+            }
             canEdit={true}
             onEdit={onEdit}
             childrenBar={
@@ -398,7 +406,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             }
           />
         ) : (
-          <div className="flex gap-3 justify-center flex-col items-center border-[1px] border-base-content p-5">
+          <div className="flex flex-col items-center justify-center gap-3 border-[1px] border-base-content p-5">
             <div className="flex gap-2">
               <>
                 <input
