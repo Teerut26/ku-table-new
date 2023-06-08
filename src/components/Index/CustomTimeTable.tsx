@@ -166,7 +166,8 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
           if (
             !data[0]?.day_w ||
             !data[0]?.section_code ||
-            !data[0]?.time_from
+            !data[0]?.time_from || 
+            !data[0]?.uuid
           ) {
             return toast.error(
               LocalsSwip(
