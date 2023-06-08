@@ -6,31 +6,41 @@ import {
 } from "@/interfaces/GroupCourseResponseInterface";
 import db from "@/configs/firestoreAdmin";
 import generateString from "@/utils/generateString";
-import {} from "firebase-admin/firestore";
+import CryptoJS from "crypto-js";
 
 export const shareRouter = createTRPCRouter({
   saveShare: protectedProcedure
     .input(z.object({ courseData: z.array(courseSchema) }))
     .mutation(async ({ input, ctx }) => {
-      const checkExsit = await db
-        .collection("links")
-        .where("stdId", "==", ctx.session.user.email?.user.student.stdId)
-        .get();
+      try {
+        const hascode = CryptoJS.SHA256(
+          JSON.stringify(
+            input.courseData.map((course) => ({ ...course, uuid: undefined }))
+          )
+        ).toString(CryptoJS.enc.Hex);
 
-      if (checkExsit.docs.length > 0) {
-        return checkExsit.docs.map((doc) => doc.data().link)[0];
+        const checkExsit = await db
+          .collection("links")
+          .where("hascode", "==", hascode)
+          .get();
+
+        if (checkExsit.docs.length > 0) {
+          return checkExsit.docs.map((doc) => doc.data().link)[0];
+        }
+
+        let link = generateString();
+
+        const linksRef = db.collection("links").doc(link);
+        linksRef.set({
+          link: link,
+          hascode: hascode,
+          courseData: input.courseData,
+        });
+
+        return link;
+      } catch (error: any) {
+        throw new Error(error.message);
       }
-
-      let link = generateString();
-
-      const linksRef = db.collection("links").doc(link);
-      linksRef.set({
-        link: link,
-        stdId: ctx.session.user.email?.user.student.stdId,
-        courseData: input.courseData,
-      });
-
-      return link;
     }),
   getTable: publicProcedure
     .input(z.object({ link: z.string() }))

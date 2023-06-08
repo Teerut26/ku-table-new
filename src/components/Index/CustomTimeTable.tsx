@@ -399,6 +399,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             onRemove={(course) =>
               SetCourses((pre) => pre.filter((c) => c.uuid !== course.uuid))
             }
+            hasShare={true}
             canEdit={true}
             onEdit={onEdit}
             childrenBar={
