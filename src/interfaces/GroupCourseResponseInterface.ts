@@ -7,6 +7,7 @@ export interface GroupCourseResponseInterface {
 
 export interface Course {
   uuid?: string;
+  max_credit?: number;
   section_id: number;
   groupheader: string;
   weekstartday: string;

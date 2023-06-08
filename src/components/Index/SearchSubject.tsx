@@ -101,6 +101,7 @@ const SearchSubject: NextPage<Props> = ({
             dayjs("00:00", "HH:mm"),
             "minute"
           ),
+          max_credit: subject.maxCredit,
         } as Course;
       }
     );

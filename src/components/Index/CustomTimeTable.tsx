@@ -1,5 +1,13 @@
 import useLocalsSwip from "@/hooks/useLocalsSwip";
-import { Button, Card, Form, Input, Select, TimePicker } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  TimePicker,
+} from "antd";
 import { NextPage } from "next";
 import Table from "../Table";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
@@ -24,6 +32,7 @@ interface FormDataAllInterface {
   section_type: string;
   teacher_name: string;
   uuid: string;
+  max_credit: number;
 }
 
 interface Props {
@@ -63,6 +72,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         time_to: FormDataAll.time[1],
         day_w: FormDataAll.day,
         time_start: time_start,
+        max_credit: FormDataAll.max_credit,
       } as Course;
       SetCourses((pre) => [...pre, newCourse]);
       setFormDataAll(null);
@@ -80,6 +90,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
       section: course.section_code,
       teacher_name: course.teacher_name,
       section_type: course.section_type_en,
+      max_credit: course.max_credit,
     });
     setFormDataAll({
       uuid: course.uuid as string,
@@ -127,6 +138,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         day_w: FormDataAll.day,
         time_start: time_start,
         uuid: FormDataAll.uuid,
+        max_credit: FormDataAll.max_credit,
       } as Course;
       SetCourses([...courseAll, newCourse]);
       setFormDataAll(null);
@@ -166,7 +178,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
           if (
             !data[0]?.day_w ||
             !data[0]?.section_code ||
-            !data[0]?.time_from || 
+            !data[0]?.time_from ||
             !data[0]?.uuid
           ) {
             return toast.error(
@@ -324,6 +336,14 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 rules={[{ required: true }]}
               >
                 <Input size="large" placeholder="1" />
+              </Form.Item>
+              <Form.Item
+                label={LocalsSwip("หน่วยกิต", "Credit")}
+                name="max_credit"
+                className="w-full"
+                rules={[{ required: true }]}
+              >
+                <InputNumber size="large" className="w-full" />
               </Form.Item>
             </div>
             <div className="flex w-full flex-col md:flex-row md:gap-2">
