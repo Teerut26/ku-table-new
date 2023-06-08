@@ -8,7 +8,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useRef, useState } from "react";
 import domtoimage from "dom-to-image";
 import saveAs from "file-saver";
-import { Button } from "antd";
+import { Button, Tag } from "antd";
 
 interface Props {
   start: number;
@@ -66,26 +66,38 @@ const BarChildren: NextPage<Props> = ({
   onEdit,
 }) => {
   const { locale } = useRouter();
-  const [isCapture, setIsCapture] = useState(false);
   const area = useRef<HTMLLabelElement>(null);
 
-  const handleDownload = async () => {
-    const scale = 1;
-    setIsCapture(true);
-    setTimeout(async () => {
-      const dataUrl = await domtoimage.toPng(area.current as any, {
-        width: area.current?.clientWidth! * scale,
-        height: area.current?.clientHeight! * scale,
-        style: {
-          transform: "scale(" + scale + ")",
-          transformOrigin: "top left",
-        },
-      });
-      const name = `kutable-${course.subject_code}.png`;
-      saveAs(dataUrl, name);
-      setIsCapture(false);
-    }, 1000);
-  };
+  const dayColorMap = [
+    {
+      day: "MON",
+      color: "yellow",
+    },
+    {
+      day: "TUE",
+      color: "pink",
+    },
+    {
+      day: "WED",
+      color: "green",
+    },
+    {
+      day: "THU",
+      color: "orange",
+    },
+    {
+      day: "FRI",
+      color: "blue",
+    },
+    {
+      day: "SAT",
+      color: "purple",
+    },
+    {
+      day: "SUN",
+      color: "red",
+    },
+  ];
 
   return (
     <>
@@ -93,7 +105,7 @@ const BarChildren: NextPage<Props> = ({
         htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         start={start}
         end={end}
-        className="flex cursor-pointer flex-col p-2 hover:bg-base-200"
+        className="flex cursor-pointer flex-col p-2 hover:bg-base-200 bg-base-200"
       >
         <div className="flex justify-between">
           <Text>{course.subject_code}</Text>
@@ -128,31 +140,32 @@ const BarChildren: NextPage<Props> = ({
               course.section_type_en
             )}
           </div>
-          {!(canRemove || canEdit) &&  <>
-            {course.std_status_en === "Special" ||
-            course.section_type_th === "พิเศษ" ? (
-              <>
-                <GoldrenBadge className="badge badge-sm border-0 text-white">
-                  {LocaleSwip(
-                    locale!,
-                    course.std_status_th,
-                    course.std_status_en
-                  )}
-                </GoldrenBadge>
-              </>
-            ) : (
-              <>
-                <div className="badge-accent badge badge-sm">
-                  {LocaleSwip(
-                    locale!,
-                    course.std_status_th,
-                    course.std_status_en
-                  )}
-                </div>
-              </>
-            )}
-          </>}
-         
+          {!(canRemove || canEdit) && (
+            <>
+              {course.std_status_en === "Special" ||
+              course.section_type_th === "พิเศษ" ? (
+                <>
+                  <GoldrenBadge className="badge badge-sm border-0 text-white">
+                    {LocaleSwip(
+                      locale!,
+                      course.std_status_th,
+                      course.std_status_en
+                    )}
+                  </GoldrenBadge>
+                </>
+              ) : (
+                <>
+                  <div className="badge-accent badge badge-sm">
+                    {LocaleSwip(
+                      locale!,
+                      course.std_status_th,
+                      course.std_status_en
+                    )}
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </StyleCss>
       <input
@@ -185,6 +198,17 @@ const BarChildren: NextPage<Props> = ({
             </Text>
           </div>
           <div className="flex flex-col">
+            <Text>
+              {LocaleSwip(locale!, "วัน :", "Day :")}{" "}
+              <Tag
+                color={
+                  dayColorMap.filter((day) => day.day === course.day_w)[0]
+                    ?.color
+                }
+              >
+                {course.day_w}
+              </Tag>
+            </Text>
             <Text>
               {LocaleSwip(locale!, "ห้อง :", "Room :")}{" "}
               {LocaleSwip(locale!, course.room_name_th, course.room_name_en)}
@@ -269,17 +293,6 @@ const BarChildren: NextPage<Props> = ({
           ) : (
             ""
           )}
-
-          {/* {!isCapture && (
-            <div className="flex justify-end gap-2">
-              <div
-                onClick={() => handleDownload()}
-                className="btn-outline btn-primary btn-sm btn"
-              >
-                <CameraAltIcon sx={{ width: 20 }} />
-              </div>
-            </div>
-          )} */}
         </label>
       </label>
     </>

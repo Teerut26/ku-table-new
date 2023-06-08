@@ -12,9 +12,9 @@ const TimeBar: NextPage<Props> = ({ times }) => {
   `;
   return (
     <Bar>
-      <div className="col-span-2 border border-base-content text-center text-xl">Day/Time</div>
+      <div className="col-span-2 border border-base-content text-center text-xl bg-base-200">Day/Time</div>
       {times.map((time, index) => (
-        <div key={index} className="col-span-2 border border-base-content pl-3 text-xl">
+        <div key={index} className="col-span-2 border border-base-content pl-3 text-xl bg-base-200">
           {time}
         </div>
       ))}
