@@ -42,7 +42,7 @@ interface Props {
 const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const { LocalsSwip } = useLocalsSwip();
   const [form] = Form.useForm();
-  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom03", []);
+  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom04", []);
   const [FormDataAll, setFormDataAll] = useState<FormDataAllInterface | null>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setisEdit] = useState(false);
@@ -422,6 +422,24 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                   className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
                 >
                   <Icon icon="tabler:table-export" className="text-lg" /> Import
+                </div>
+                <div className="flex justify-end md:mr-3 md:grow">
+                  <div className="stats btn-primary">
+                    <div className="stat">
+                      <div className="stat-title ">
+                        {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
+                      </div>
+                      <div className="stat-value">
+                        {_.sumBy(
+                          _.uniqBy(
+                            Courses,
+                            (x) => x.subject_code + x.max_credit
+                          ),
+                          (x) => x.max_credit!
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             }

@@ -97,7 +97,7 @@ const Table: NextPage<Props> = ({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 w-full">
         <div className="flex w-full items-center flex-wrap gap-2">
           <div
             onClick={() => handleDownload()}
