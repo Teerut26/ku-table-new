@@ -35,7 +35,7 @@ const SearchSubject: NextPage<Props> = ({
     const timer = setTimeout(() => {
       if (keyword === "") return;
       subjectSearchtApi.mutateAsync(keyword);
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [keyword]);
 
