@@ -186,7 +186,7 @@ const SearchSubject: NextPage<Props> = ({
             </List>
           ) : (
             <div className="flex flex-col">
-              {(subjectstApi.data && subjectstApi.data?.results.length > 0) && (
+              {subjectstApi.data && subjectstApi.data?.results.length > 0 && (
                 <Input
                   placeholder={LocalsSwip(
                     "ค้นหาชื่ออาจารย์",
@@ -291,16 +291,20 @@ const SearchSubject: NextPage<Props> = ({
                             </div>
                             <div className="mt-2 flex overflow-x-auto">
                               {locale === "th"
+                                ? subject.teacherName
+                                  ? subject
+                                      .teacherName!.split(",")
+                                      .map((name, tid) => (
+                                        <Tag key={tid}>{name}</Tag>
+                                      ))
+                                  : ""
+                                : subject.teacherNameEn
                                 ? subject
-                                    .teacherName!.split(",")
-                                    .map((name, tid) => (
-                                      <Tag key={tid}>{name}</Tag>
-                                    ))
-                                : subject
                                     .teacherNameEn!.split(",")
                                     .map((name, tid) => (
                                       <Tag key={tid}>{name}</Tag>
-                                    ))}
+                                    ))
+                                : ""}
                             </div>
                           </div>
                         }

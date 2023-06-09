@@ -103,7 +103,7 @@ const BarChildren: NextPage<Props> = ({
     "blue",
     "purple",
     "red",
-  ]
+  ];
 
   return (
     <>
@@ -173,7 +173,10 @@ const BarChildren: NextPage<Props> = ({
             </>
           )}
           {(canRemove || canEdit) && (
-            <Tag color={colorCreditMap[course.max_credit!-1]}>{LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}{course.max_credit}</Tag>
+            <Tag color={colorCreditMap[course.max_credit! - 1]}>
+              {LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}
+              {course.max_credit}
+            </Tag>
           )}
         </div>
       </StyleCss>
@@ -231,12 +234,16 @@ const BarChildren: NextPage<Props> = ({
             <Text>
               {LocaleSwip(locale!, "อาจารย์ :", "Teacher :")}{" "}
               {locale === "th"
+                ? course.teacher_name
+                  ? course
+                      .teacher_name!.split(",")
+                      .map((name, tid) => <div key={tid}>- {name}</div>)
+                  : ""
+                : course.teacher_name_en
                 ? course
-                    .teacher_name!.split(",")
-                    .map((name, tid) => <div key={tid}>- {name}</div>)
-                : course
                     .teacher_name_en!.split(",")
-                    .map((name, tid) => <div key={tid}>- {name}</div>)}
+                    .map((name, tid) => <div key={tid}>- {name}</div>)
+                : ""}
             </Text>
           </div>
           <div className="flex items-center gap-2">
@@ -282,7 +289,10 @@ const BarChildren: NextPage<Props> = ({
               </>
             )}
             {(canRemove || canEdit) && (
-            <Tag color={colorCreditMap[course.max_credit!-1]}>{LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}{course.max_credit}</Tag>
+              <Tag color={colorCreditMap[course.max_credit! - 1]}>
+                {LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}
+                {course.max_credit}
+              </Tag>
             )}
           </div>
 
