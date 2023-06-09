@@ -29,7 +29,11 @@ const SearchBar: NextPage<Props> = () => {
   const SearchApi = api.subject.search.useMutation();
 
   useEffect(() => {
-    SearchApi.mutate(keyword);
+    const timer = setTimeout(() => {
+      if (keyword === "") return;
+      SearchApi.mutate(keyword);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [keyword]);
 
   const filterOptions = createFilterOptions({
