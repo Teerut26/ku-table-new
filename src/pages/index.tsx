@@ -13,6 +13,7 @@ import { Tabs } from "antd";
 import AntdTheme from "@/layouts/AntdTheme";
 import CustomTimeTable from "@/components/Index/CustomTimeTable";
 import useLocalsSwip from "@/hooks/useLocalsSwip";
+import ShopSubject from "@/components/Index/ShopSubject";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -77,6 +78,11 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
                       },
                       {
                         key: "tab2",
+                        label: LocalsSwip("สำรวจวิชา","Explore Course"),
+                        children: <ShopSubject />
+                      },
+                      {
+                        key: "tab3",
                         label: LocalsSwip("จัดตารางเรียน","Custom Time Table"),
                         children: <CustomTimeTable isIPhone={isIPhone} />
                       },

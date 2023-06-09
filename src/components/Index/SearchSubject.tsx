@@ -11,6 +11,8 @@ import NProgress from "nprogress";
 import { toast } from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
+import CourseDateSeparate from "@/utils/courseDateSeparate";
+import RoomSeparate from "@/utils/roomSeparate";
 interface Props {
   isModalOpen: boolean;
   onSelect: (subject: Course[]) => void;
@@ -51,32 +53,7 @@ const SearchSubject: NextPage<Props> = ({
     });
     setSelectSubject(subject);
   };
-  const CourseDateSeparate = (date: string) => {
-    try {
-      const result = date.split(",").map((schedule) => {
-        const day = schedule.split("  ")[0];
-        const time_form = schedule.split("  ")[1]?.split("-")[0]?.trim();
-        const time_to = schedule.split("  ")[1]?.split("-")[1]?.trim();
-        return {
-          day_w: day,
-          time_form: time_form,
-          time_to: time_to,
-        };
-      });
 
-      return result;
-    } catch (error) {
-      return [];
-    }
-  };
-  const RoomSeparate = (room: string) => {
-    const result = room.split(",").map((room) => {
-      return {
-        room: room,
-      };
-    });
-    return result;
-  };
   const onSelectSubjectOk = (subject: OpenSubjectForEnrollInterface) => {
     const newCourse = CourseDateSeparate(subject.coursedate).map(
       (date, index) => {

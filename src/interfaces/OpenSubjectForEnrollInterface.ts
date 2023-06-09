@@ -1,4 +1,5 @@
 export interface OpenSubjectForEnrollInterface {
+    uuid?: string
     sectionId: number
     subjectCode: string
     flagRegisCon: string

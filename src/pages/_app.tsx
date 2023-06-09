@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import Router from "next/router";
 import SEO from "../next-seo.config";
 import { DefaultSeo } from "next-seo";
+import MuiThemeProvider from "@/layouts/MuiThemeProvider";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -37,10 +38,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <DefaultSeo {...SEO} />
       <SessionProvider session={session}>
         <ThemeProvider>
-          <AntdTheme>
-            <Component {...pageProps} />
-            <Toaster />
-          </AntdTheme>
+          <MuiThemeProvider>
+            <AntdTheme>
+              <Component {...pageProps} />
+              <Toaster />
+            </AntdTheme>
+          </MuiThemeProvider>
         </ThemeProvider>
       </SessionProvider>
     </>

@@ -6,6 +6,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { Button, Tag } from "antd";
+import TeacherSeparate from "@/utils/teacherSeparate";
 
 interface Props {
   start: number;
@@ -235,14 +236,12 @@ const BarChildren: NextPage<Props> = ({
               {LocaleSwip(locale!, "อาจารย์ :", "Teacher :")}{" "}
               {locale === "th"
                 ? course.teacher_name
-                  ? course
-                      .teacher_name!.split(",")
-                      .map((name, tid) => <div key={tid}>- {name}</div>)
+                  ? TeacherSeparate(course.teacher_name).map((name, tid) => <div key={tid}>- {name}</div>)
                   : ""
                 : course.teacher_name_en
-                ? course
-                    .teacher_name_en!.split(",")
-                    .map((name, tid) => <div key={tid}>- {name}</div>)
+                ? TeacherSeparate(course.teacher_name_en).map((name, tid) => (
+                    <div key={tid}>- {name}</div>
+                  ))
                 : ""}
             </Text>
           </div>
