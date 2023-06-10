@@ -32,9 +32,9 @@ COPY . .
 ENV SKIP_ENV_VALIDATION=1
 
 RUN \
- if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn postinstall && yarn lint && yarn build; \
- elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run postinstall && npm run lint && npm run build; \
- elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm postinstall && pnpm lint && pnpm run build; \
+ if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn lint && yarn build; \
+ elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run lint && npm run build; \
+ elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm lint && pnpm run build; \
  else echo "Lockfile not found." && exit 1; \
  fi
 
