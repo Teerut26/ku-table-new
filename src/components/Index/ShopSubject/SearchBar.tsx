@@ -37,10 +37,9 @@ const SearchBar: NextPage<Props> = () => {
   }, [keyword]);
 
   const filterOptions = createFilterOptions({
-    stringify: (option: SearchSubjectOpenEnrResponseInterface) =>
-      option.subjectCode.toLowerCase() +
-      option.subjectNameTh.toLowerCase() +
-      option.subjectNameEn.toLowerCase(),
+    stringify: (option: SearchSubjectOpenEnrResponseInterface) => {
+      return `${option.subjectCode} ${option.subjectNameTh} ${option.subjectNameEn}`;
+    },
     limit: 20,
   });
 
@@ -68,7 +67,7 @@ const SearchBar: NextPage<Props> = () => {
               setOpen(false);
             }}
           >
-            <div className="flex flex-col border-base-content border-l-2 pl-3 hover:border-primary text-base-content hover:text-primary">
+            <div className="flex flex-col border-l-2 border-base-content pl-3 text-base-content hover:border-primary hover:text-primary">
               <div>{option.subjectCode}</div>
               <div>{option.subjectNameTh}</div>
               <div>{option.subjectNameEn}</div>
