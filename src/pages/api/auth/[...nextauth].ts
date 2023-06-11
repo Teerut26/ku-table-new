@@ -58,24 +58,22 @@ export const authOptions: NextAuthOptions = {
       if (data.exp < Date.now() / 1000) {
         return {} as any;
       }
-      
-      const renewToken = await getRenewToken({
-        renewtoken: session.user?.email?.renewtoken!,
-      });
 
       return {
         ...session,
-        user: {
-          ...session.user,
-          email: {
-            ...session.user?.email,
-            accesstoken: renewToken.data.accesstoken,
-          },
-        },
       };
     },
-    async jwt({ token, user, account }) {
-      return token;
+    async jwt({ token, user, account, profile }) {
+      const renewToken = await getRenewToken({
+        renewtoken: (token as any).email.renewtoken as any,
+      });
+      return {
+        ...token,
+        email: {
+          ...(token.email as any),
+          accesstoken: renewToken.data.accesstoken,
+        },
+      };
     },
   },
 };
