@@ -20,6 +20,7 @@ export const serverSchema = z.object({
   ),
   FIREBASE_ADMIN: z.string(),
   MYKU_PUBLIC_KEY: z.string(),
+  TOKEN_LINE: z.string(),
 });
 
 /**
@@ -33,6 +34,7 @@ export const serverEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   FIREBASE_ADMIN: process.env.FIREBASE_ADMIN,
   MYKU_PUBLIC_KEY: process.env.MYKU_PUBLIC_KEY,
+  TOKEN_LINE: process.env.TOKEN_LINE,
 };
 
 /**

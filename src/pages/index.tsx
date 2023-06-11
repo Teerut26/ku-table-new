@@ -85,7 +85,7 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
                         key: "tab3",
                         label: LocalsSwip("จัดตารางเรียน","Custom Time Table"),
                         children: <CustomTimeTable isIPhone={isIPhone} />
-                      },
+                      }
                     ]}
                   />
 
