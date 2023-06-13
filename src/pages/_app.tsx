@@ -37,7 +37,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <>
       <DefaultSeo {...SEO} />
       <SessionProvider session={session}>
-        <ThemeProvider>
+        <ThemeProvider defaultTheme="lofi">
           <MuiThemeProvider>
             <AntdTheme>
               <Component {...pageProps} />

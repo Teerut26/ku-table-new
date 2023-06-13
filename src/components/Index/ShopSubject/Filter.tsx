@@ -1,8 +1,10 @@
 import useLocalsSwip from "@/hooks/useLocalsSwip";
 import useFilterStore from "@/stores/useFilterStore";
+import { convertKeyToColor } from "@/utils/colorsMap";
 import { DaysMap } from "@/utils/daysMap";
 import { sectionStudentTypeMap } from "@/utils/sectionStudentTypeMap";
 import { sectionTypeMap } from "@/utils/sectionTypeMap";
+import styled from "@emotion/styled";
 import {
   CardContent,
   Checkbox,
@@ -15,6 +17,14 @@ import { Modal } from "antd";
 import { NextPage } from "next";
 import { useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
+
+interface ChipDayProps {
+  day_w?: string;
+}
+
+const FormControlLabelColor = styled(FormControlLabel)<ChipDayProps>`
+  color: ${({ day_w }) => (day_w ? convertKeyToColor(day_w)?.textHex : "gray")};
+`;
 
 interface Props {}
 
@@ -104,7 +114,8 @@ const Filter: NextPage<Props> = () => {
                 </Typography>
                 <FormGroup>
                   {DaysMap.map((day, id) => (
-                    <FormControlLabel
+                    <FormControlLabelColor
+                      day_w={day.key}
                       key={id}
                       control={
                         <Checkbox
@@ -193,7 +204,8 @@ const Filter: NextPage<Props> = () => {
             </Typography>
             <FormGroup>
               {DaysMap.map((day, id) => (
-                <FormControlLabel
+                <FormControlLabelColor
+                  day_w={day.key}
                   key={id}
                   control={
                     <Checkbox
