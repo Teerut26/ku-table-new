@@ -26,7 +26,7 @@ const MuiThemeProvider: NextPage<Props> = ({ children }) => {
       },
       background: {
         default: hexB1,
-        paper: hexB2,
+        paper: hexB1,
       },
       mode: [
         "dark",
