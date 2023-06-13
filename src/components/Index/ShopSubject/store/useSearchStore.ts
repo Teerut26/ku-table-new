@@ -12,7 +12,7 @@ interface SearchType {
 }
 
 const useSearchStore = create<SearchType>((set) => ({
-  keyword: "01371111-64",
+  keyword: "",
   selectedSubjectCode: null,
   setSelectedSubjectCode: (subjectCode: string) => {
     set((state) => ({
