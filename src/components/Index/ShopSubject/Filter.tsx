@@ -60,7 +60,7 @@ const Filter: NextPage<Props> = () => {
             <CardContent className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
                 <Typography variant="caption">
-                  {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
+                  {LocalsSwip("ประเภทภาคเรียน", "Section Student Type")}
                 </Typography>
                 <FormGroup>
                   {sectionStudentTypeMap.map((type, id) => (
@@ -85,7 +85,7 @@ const Filter: NextPage<Props> = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <Typography variant="caption">
-                  {LocalsSwip("ประเภทภาคเรียน", "Section Student Type")}
+                  {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
                 </Typography>
                 <FormGroup>
                   {sectionTypeMap.map((type, id) => (
