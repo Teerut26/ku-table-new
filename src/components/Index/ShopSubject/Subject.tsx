@@ -64,7 +64,7 @@ const Subject: NextPage<Props> = ({ subject }) => {
   const { LocalsSwip } = useLocalsSwip();
   const { addCourse, courses,removeCourse } = useCartSubjectStore((state) => state);
   const { locale } = useRouter();
-  const [isCollapse, setIsCollapse] = useState(true);
+  const [isCollapse, setIsCollapse] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleCollapse = () => {

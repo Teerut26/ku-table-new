@@ -8,16 +8,62 @@ interface Filter {
   sectionType: sectionType[];
   sectionStudentType: sectionStudentType[];
   sectionDay: sectionDay[];
+  showFilterMobile: boolean;
+  showFilterDesktop: boolean;
+  result: number;
   addSectionType: (sectionType: sectionType) => void;
   removeSectionType: (sectionType: sectionType) => void;
   addSectionStudentType: (sectionStudentType: sectionStudentType) => void;
   removeSectionStudentType: (sectionStudentType: sectionStudentType) => void;
   addDay: (sectionDay: sectionDay) => void;
   removeDay: (sectionDay: sectionDay) => void;
+  setShowFilterMobile: (showFilter: boolean) => void;
+  handleShowFilterMobile: () => void;
+  setShowFilterDesktop: (showFilter: boolean) => void;
+  handleShowFilterDesktop: () => void;
+  setResult: (result: number) => void;
 }
 
 const useFilterStore = create<Filter>((set) => ({
+  result: 0,
+  showFilterMobile: false,
+  showFilterDesktop: true,
   sectionType: [],
+  setResult: (result: number) => {
+    set((state) => {
+      return {
+        result: result,
+      };
+    });
+  },
+  setShowFilterDesktop: (showFilter: boolean) => {
+    set((state) => {
+      return {
+        showFilterDesktop: showFilter,
+      };
+    });
+  },
+  handleShowFilterDesktop: () => {
+    set((state) => {
+      return {
+        showFilterDesktop: !state.showFilterDesktop,
+      };
+    });
+  },
+  setShowFilterMobile: (showFilter: boolean) => {
+    set((state) => {
+      return {
+        showFilterMobile: showFilter,
+      };
+    });
+  },
+  handleShowFilterMobile: () => {
+    set((state) => {
+      return {
+        showFilterMobile: !state.showFilterMobile,
+      };
+    });
+  },
   removeSectionType: (sectionType: sectionType) => {
     set((state) => {
       return {

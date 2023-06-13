@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Button,
   CircularProgress,
   IconButton,
   ListItemButton,
@@ -13,6 +14,8 @@ import { Icon } from "@iconify/react";
 import React, { useEffect } from "react";
 import { api } from "@/utils/api";
 import { SearchSubjectOpenEnrResponseInterface } from "@/interfaces/SearchSubjectOpenEnrResponseInterface";
+import useLocalsSwip from "@/hooks/useLocalsSwip";
+import useFilterStore from "@/stores/useFilterStore";
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -27,6 +30,10 @@ const SearchBar: NextPage<Props> = () => {
     useSearchStore((r) => r);
   const [open, setOpen] = React.useState(false);
   const SearchApi = api.subject.search.useMutation();
+  const { LocalsSwip } = useLocalsSwip();
+  const { setShowFilterDesktop, setShowFilterMobile,showFilterDesktop } = useFilterStore(
+    (r) => r
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,7 +51,7 @@ const SearchBar: NextPage<Props> = () => {
   });
 
   return (
-    <>
+    <div className="flex gap-2">
       <Autocomplete
         sx={{ width: "100%" }}
         open={open}
@@ -77,7 +84,10 @@ const SearchBar: NextPage<Props> = () => {
         loading={SearchApi.isLoading}
         renderInput={(params) => (
           <TextField
-            placeholder="รหัสวิชา / ชื่อวิชา"
+            placeholder={LocalsSwip(
+              "รหัสวิชา / ชื่อวิชา",
+              "Subject Code / Subject Name"
+            )}
             {...params}
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
@@ -100,7 +110,16 @@ const SearchBar: NextPage<Props> = () => {
           />
         )}
       />
-    </>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          setShowFilterDesktop(!showFilterDesktop);
+          setShowFilterMobile(!showFilterDesktop);
+        }}
+      >
+        <Icon icon="ic:outline-filter-list" className="text-xl" />
+      </Button>
+    </div>
   );
 };
 export default SearchBar;

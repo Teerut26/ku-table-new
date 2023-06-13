@@ -112,7 +112,7 @@ const BarChildren: NextPage<Props> = ({
         htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         start={start}
         end={end}
-        className="flex cursor-pointer flex-col bg-base-200 p-2 hover:bg-base-200"
+        className="flex cursor-pointer flex-col bg-base-200 p-2 hover:bg-base-200 overflow-hidden"
       >
         <div className="flex justify-between">
           <Text>{course.subject_code}</Text>

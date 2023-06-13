@@ -12,9 +12,8 @@ interface Props {}
 
 const ListSubject: NextPage<Props> = () => {
   const { selectedSubjectCode } = useSearchStore((r) => r);
-  const { sectionDay, sectionStudentType, sectionType } = useFilterStore(
-    (r) => r
-  );
+  const { sectionDay, sectionStudentType, sectionType, setResult } =
+    useFilterStore((r) => r);
   const [subjectsDataTemp, setSubjectsDataTemp] = useState<
     OpenSubjectForEnrollInterface[]
   >([]);
@@ -73,6 +72,7 @@ const ListSubject: NextPage<Props> = () => {
           ? sectionStudentTypeFilted
           : sectionDayFiltedRaw;
 
+      setResult(sectionDayFilted.length);
       return sectionDayFilted;
     } catch (error) {
       return input;
