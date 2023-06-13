@@ -11,6 +11,7 @@ interface Filter {
   showFilterMobile: boolean;
   showFilterDesktop: boolean;
   result: number;
+  expandAll: boolean;
   addSectionType: (sectionType: sectionType) => void;
   removeSectionType: (sectionType: sectionType) => void;
   addSectionStudentType: (sectionStudentType: sectionStudentType) => void;
@@ -22,13 +23,30 @@ interface Filter {
   setShowFilterDesktop: (showFilter: boolean) => void;
   handleShowFilterDesktop: () => void;
   setResult: (result: number) => void;
+  setExpandAll: (expandAll: boolean) => void;
+  handleExpandAll: () => void;
 }
 
 const useFilterStore = create<Filter>((set) => ({
   result: 0,
+  expandAll: false,
   showFilterMobile: false,
   showFilterDesktop: true,
   sectionType: [],
+  handleExpandAll: () => {
+    set((state) => {
+      return {
+        expandAll: !state.expandAll,
+      };
+    });
+  },
+  setExpandAll: (expandAll: boolean) => {
+    set((state) => {
+      return {
+        expandAll: expandAll,
+      };
+    });
+  },
   setResult: (result: number) => {
     set((state) => {
       return {

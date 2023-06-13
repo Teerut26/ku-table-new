@@ -44,6 +44,8 @@ const Filter: NextPage<Props> = () => {
     showFilterMobile,
     setShowFilterDesktop,
     setShowFilterMobile,
+    expandAll,
+    setExpandAll,
   } = useFilterStore((s) => s);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -58,6 +60,24 @@ const Filter: NextPage<Props> = () => {
         <div className="sticky top-[9rem] h-fit w-fit">
           <Paper variant="outlined" sx={{ width: "fit-content" }}>
             <CardContent className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <Typography variant="caption">
+                  {LocalsSwip("ขยายทั้งหมด", "Expand All")}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={expandAll}
+                        onChange={(e) => {
+                          setExpandAll(e.target.checked);
+                        }}
+                      />
+                    }
+                    label={LocalsSwip("ขยายทั้งหมด", "Expand")}
+                  />
+                </FormGroup>
+              </div>
               <div className="flex flex-col gap-2">
                 <Typography variant="caption">
                   {LocalsSwip("ประเภทภาคเรียน", "Section Student Type")}
@@ -148,6 +168,24 @@ const Filter: NextPage<Props> = () => {
         }}
       >
         <CardContent className="flex flex-wrap justify-between gap-5">
+        <div className="flex flex-col gap-2">
+                <Typography variant="caption">
+                  {LocalsSwip("ขยายทั้งหมด", "Expand All")}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={expandAll}
+                        onChange={(e) => {
+                          setExpandAll(e.target.checked);
+                        }}
+                      />
+                    }
+                    label={LocalsSwip("ขยายทั้งหมด", "Expand")}
+                  />
+                </FormGroup>
+              </div>
           <div className="flex flex-col gap-2">
             <Typography variant="caption">
               {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}

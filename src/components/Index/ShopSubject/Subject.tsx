@@ -20,11 +20,12 @@ import {
 import clsx from "clsx";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import useCartSubjectStore from "@/stores/useCartSubjectStore";
 import { toast } from "react-hot-toast";
 import _ from "lodash";
+import useFilterStore from "@/stores/useFilterStore";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
@@ -62,14 +63,20 @@ const ChipSectionStdType = styled(Chip)<ChipSectionStdTypeProps>`
 
 const Subject: NextPage<Props> = ({ subject }) => {
   const { LocalsSwip } = useLocalsSwip();
-  const { addCourse, courses,removeCourse } = useCartSubjectStore((state) => state);
+  const { addCourse, courses, removeCourse } = useCartSubjectStore(
+    (state) => state
+  );
   const { locale } = useRouter();
   const [isCollapse, setIsCollapse] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const { expandAll } = useFilterStore((state) => state);
   const handleCollapse = () => {
     setIsCollapse(!isCollapse);
   };
+
+  useEffect(() => {
+    setIsCollapse(expandAll);
+  }, [expandAll]);
 
   const checkCourseExist = () => {
     return _.some(courses, {
@@ -110,31 +117,31 @@ const Subject: NextPage<Props> = ({ subject }) => {
 
   const removeCourseFromCart = () => {
     removeCourse({
-        day_w: "",
-        subject_code: subject.subjectCode,
-        max_credit: subject.maxCredit,
-        section_id: 0,
-        groupheader: "",
-        weekstartday: "",
-        weekendday: "",
-        std_id: "",
-        subject_name_th: "",
-        subject_name_en: "",
-        section_code: "",
-        section_type: "",
-        section_type_th: "",
-        section_type_en: "",
-        student_status_code: "",
-        std_status_th: "",
-        std_status_en: "",
-        teacher_name: "",
-        teacher_name_en: "",
-        day_w_c: "",
-        time_from: "",
-        time_to: "",
-        room_name_th: "",
-        room_name_en: "",
-        time_start: 0
+      day_w: "",
+      subject_code: subject.subjectCode,
+      max_credit: subject.maxCredit,
+      section_id: 0,
+      groupheader: "",
+      weekstartday: "",
+      weekendday: "",
+      std_id: "",
+      subject_name_th: "",
+      subject_name_en: "",
+      section_code: "",
+      section_type: "",
+      section_type_th: "",
+      section_type_en: "",
+      student_status_code: "",
+      std_status_th: "",
+      std_status_en: "",
+      teacher_name: "",
+      teacher_name_en: "",
+      day_w_c: "",
+      time_from: "",
+      time_to: "",
+      room_name_th: "",
+      room_name_en: "",
+      time_start: 0,
     });
     toast.success(
       LocalsSwip(
@@ -142,7 +149,7 @@ const Subject: NextPage<Props> = ({ subject }) => {
         "Remove course from cart successfully"
       )
     );
-  }
+  };
 
   return (
     <>
@@ -170,7 +177,9 @@ const Subject: NextPage<Props> = ({ subject }) => {
             </Button>
           ) : (
             <Button
-              onClick={!checkCourseExist() ? addCourseToCart : removeCourseFromCart}
+              onClick={
+                !checkCourseExist() ? addCourseToCart : removeCourseFromCart
+              }
               size="large"
               variant={checkCourseExist() ? "outlined" : "contained"}
               disabled={CourseDateSeparate(subject.coursedate).length <= 0}
