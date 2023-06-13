@@ -4,6 +4,7 @@ import { convertKeyToColor } from "@/utils/colorsMap";
 import { DaysMap } from "@/utils/daysMap";
 import { sectionStudentTypeMap } from "@/utils/sectionStudentTypeMap";
 import { sectionTypeMap } from "@/utils/sectionTypeMap";
+import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 import {
   CardContent,
@@ -55,10 +56,18 @@ const Filter: NextPage<Props> = () => {
   }, [isMobile]);
 
   return (
-    <>
+    <div>
       {showFilterDesktop && !isMobile && (
         <div className="sticky top-[9rem] h-fit w-fit">
-          <Paper variant="outlined" sx={{ width: "fit-content" }}>
+          <Paper
+            variant="outlined"
+            sx={{ width: "fit-content" }}
+            className={css`
+              overflow: auto;
+              max-height: calc((100vh - 8rem) - 24px);
+              padding: 1rem;
+            `}
+          >
             <CardContent className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
                 <Typography variant="caption">
@@ -168,24 +177,24 @@ const Filter: NextPage<Props> = () => {
         }}
       >
         <CardContent className="flex flex-wrap justify-between gap-5">
-        <div className="flex flex-col gap-2">
-                <Typography variant="caption">
-                  {LocalsSwip("ขยายทั้งหมด", "Expand All")}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={expandAll}
-                        onChange={(e) => {
-                          setExpandAll(e.target.checked);
-                        }}
-                      />
-                    }
-                    label={LocalsSwip("ขยายทั้งหมด", "Expand")}
+          <div className="flex flex-col gap-2">
+            <Typography variant="caption">
+              {LocalsSwip("ขยายทั้งหมด", "Expand All")}
+            </Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={expandAll}
+                    onChange={(e) => {
+                      setExpandAll(e.target.checked);
+                    }}
                   />
-                </FormGroup>
-              </div>
+                }
+                label={LocalsSwip("ขยายทั้งหมด", "Expand")}
+              />
+            </FormGroup>
+          </div>
           <div className="flex flex-col gap-2">
             <Typography variant="caption">
               {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
@@ -264,7 +273,7 @@ const Filter: NextPage<Props> = () => {
           </div>
         </CardContent>
       </Modal>
-    </>
+    </div>
   );
 };
 
