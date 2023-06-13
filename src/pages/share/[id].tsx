@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 interface Props {
   isIPhone: boolean;
@@ -40,12 +41,12 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
           {couresData.status === "success" && (
             <div className="flex flex-col gap-2 p-5">
               <div className="flex gap-2">
-                <a
+                <Link
                   href="/"
                   className="btn-outline btn-primary btn-sm btn w-fit"
                 >
                   <ArrowBackIcon />
-                </a>
+                </Link>
                 <ThemeSwich />
               </div>
               <Table

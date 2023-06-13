@@ -1,4 +1,3 @@
-import useCSSVariableToCSSHexCode from "@/hooks/useCSSVariableToCSSHexCode";
 import useLocalsSwip from "@/hooks/useLocalsSwip";
 import { OpenSubjectForEnrollInterface } from "@/interfaces/OpenSubjectForEnrollInterface";
 import { convertKeyToColor } from "@/utils/colorsMap";
@@ -16,7 +15,6 @@ import {
   IconButton,
   Collapse,
   CardContent,
-  Grid,
   Button,
 } from "@mui/material";
 import clsx from "clsx";
@@ -24,10 +22,9 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import useSearchStore from "./store/useSearchStore";
 import useCartSubjectStore from "@/stores/useCartSubjectStore";
 import { toast } from "react-hot-toast";
-import { checkCanAdd, sha256 } from "@/utils/hashCourse";
+import _ from "lodash";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
@@ -65,7 +62,7 @@ const ChipSectionStdType = styled(Chip)<ChipSectionStdTypeProps>`
 
 const Subject: NextPage<Props> = ({ subject }) => {
   const { LocalsSwip } = useLocalsSwip();
-  const { addCourse, courses } = useCartSubjectStore((state) => state);
+  const { addCourse, courses,removeCourse } = useCartSubjectStore((state) => state);
   const { locale } = useRouter();
   const [isCollapse, setIsCollapse] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -74,9 +71,33 @@ const Subject: NextPage<Props> = ({ subject }) => {
     setIsCollapse(!isCollapse);
   };
 
+  const checkCourseExist = () => {
+    return _.some(courses, {
+      subject_code: subject.subjectCode,
+      max_credit: subject.maxCredit,
+    });
+  };
+
   const addCourseToCart = () => {
-    console.log(sha256(subject));
-    console.log(subject.uuid);
+    if (CourseDateSeparate(subject.coursedate).length <= 0) {
+      toast.error(
+        LocalsSwip(
+          "ไม่สามารถเพิ่มรายวิชาที่ไม่มีวันที่เรียนได้",
+          "Cannot add subject without class date."
+        )
+      );
+      return;
+    }
+
+    if (checkCourseExist()) {
+      toast.error(
+        LocalsSwip(
+          "ไม่สามารถเพิ่มรายวิชาที่เลือกซ้ำได้",
+          "Cannot add subject that already added."
+        )
+      );
+      return;
+    }
 
     addCourse(subject);
     toast.success(
@@ -87,32 +108,88 @@ const Subject: NextPage<Props> = ({ subject }) => {
     );
   };
 
-  const checkAdded = () => {
-    const hash = courses.filter((course) => course.uuid === sha256(subject));
-    return hash.length > 0;
-  };
+  const removeCourseFromCart = () => {
+    removeCourse({
+        day_w: "",
+        subject_code: subject.subjectCode,
+        max_credit: subject.maxCredit,
+        section_id: 0,
+        groupheader: "",
+        weekstartday: "",
+        weekendday: "",
+        std_id: "",
+        subject_name_th: "",
+        subject_name_en: "",
+        section_code: "",
+        section_type: "",
+        section_type_th: "",
+        section_type_en: "",
+        student_status_code: "",
+        std_status_th: "",
+        std_status_en: "",
+        teacher_name: "",
+        teacher_name_en: "",
+        day_w_c: "",
+        time_from: "",
+        time_to: "",
+        room_name_th: "",
+        room_name_en: "",
+        time_start: 0
+    });
+    toast.success(
+      LocalsSwip(
+        "ลบรายวิชาออกจากตะกร้าเรียบร้อยแล้ว",
+        "Remove course from cart successfully"
+      )
+    );
+  }
 
   return (
     <>
       <Paper variant="outlined" className="relative pb-14 md:pb-0">
-        {/* <div
+        <div
           className={clsx(
             "absolute bottom-3 right-3 gap-3",
             isMobile && "left-3"
           )}
         >
-          <Button
-            onClick={addCourseToCart}
-            size="large"
-            variant={checkAdded() ? "outlined" : "contained"}
-            sx={{ boxShadow: 0, width: "100%" }}
-            startIcon={
-              <Icon icon="material-symbols:add-rounded" className="text-2xl" />
-            }
-          >
-            {LocalsSwip("เลือก", "select")}
-          </Button>
-        </div> */}
+          {CourseDateSeparate(subject.coursedate).length <= 0 ? (
+            <Button
+              size="large"
+              variant={"contained"}
+              disabled={CourseDateSeparate(subject.coursedate).length <= 0}
+              sx={{ boxShadow: 0, width: "100%" }}
+              startIcon={
+                <Icon
+                  icon="material-symbols:add-rounded"
+                  className="text-2xl"
+                />
+              }
+            >
+              {LocalsSwip("เลือก", "select")}
+            </Button>
+          ) : (
+            <Button
+              onClick={!checkCourseExist() ? addCourseToCart : removeCourseFromCart}
+              size="large"
+              variant={checkCourseExist() ? "outlined" : "contained"}
+              disabled={CourseDateSeparate(subject.coursedate).length <= 0}
+              sx={{ boxShadow: 0, width: "100%" }}
+              startIcon={
+                !checkCourseExist() ? (
+                  <Icon
+                    icon="material-symbols:add-rounded"
+                    className="text-2xl"
+                  />
+                ) : (
+                  <Icon icon="ic:baseline-check" className="text-2xl" />
+                )
+              }
+            >
+              {LocalsSwip("เลือก", "select")}
+            </Button>
+          )}
+        </div>
         <CardHeader
           title={
             <div className="flex justify-between">

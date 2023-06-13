@@ -6,7 +6,9 @@
   font-family: "Noto Sans Thai", sans-serif !important;
 }
 
-.ant-tag {
+.ant-tag,
+.ant-btn {
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
 }

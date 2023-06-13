@@ -1,15 +1,18 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
 import { OpenSubjectForEnrollInterface } from "@/interfaces/OpenSubjectForEnrollInterface";
 import RoomSeparate from "@/utils/roomSeparate";
 import CourseDateSeparate from "@/utils/courseDateSeparate";
 import dayjs from "dayjs";
+import _ from "lodash";
+import { v4 as uuid } from "uuid";
 
 interface CartSubject {
   courses: Course[];
   addCourse: (subject: OpenSubjectForEnrollInterface) => void;
   removeCourse: (course: Course) => void;
+  setCourse: (courses: Course[]) => void;
+  clearCourse: () => void;
 }
 
 const useCartSubjectStore = create<CartSubject>((set) => ({
@@ -24,7 +27,7 @@ const useCartSubjectStore = create<CartSubject>((set) => ({
           "minute"
         );
         return {
-          uuid: subject.uuid,
+          uuid: uuid(),
           subject_code: subject.subjectCode,
           subject_name_en: subject.subjectNameEn,
           subject_name_th: subject.subjectNameTh,
@@ -43,13 +46,34 @@ const useCartSubjectStore = create<CartSubject>((set) => ({
         } as Course;
       }
     );
-    set((state) => ({
-      courses: [...state.courses, ...newCourse],
-    }));
+    set((state) => {
+      return {
+        courses: [...state.courses, ...newCourse],
+      };
+    });
   },
   removeCourse: (course: Course) => {
-    set((state) => ({
-      courses: state.courses.filter((c) => c.uuid !== course.uuid),
+    set((state) => {
+      let appCourse = state.courses;
+      _.remove(
+        appCourse,
+        (c) =>
+          c.subject_code === course.subject_code &&
+          c.max_credit === course.max_credit
+      );
+      return {
+        courses: appCourse,
+      };
+    });
+  },
+  setCourse: (courses: Course[]) => {
+    set(() => ({
+      courses: courses,
+    }));
+  },
+  clearCourse: () => {
+    set(() => ({
+      courses: [],
     }));
   },
 }));

@@ -20,6 +20,7 @@ import _ from "lodash";
 import { saveAs } from "file-saver";
 import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
+import calculateCredits from "@/utils/calculateCredits";
 
 interface FormDataAllInterface {
   time: string[];
@@ -425,19 +426,13 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                   <Icon icon="tabler:table-export" className="text-lg" /> Import
                 </div>
                 <div className="flex justify-end md:mr-3 md:grow">
-                  <div className="stats btn-primary">
+                  <div className="btn-primary stats">
                     <div className="stat">
                       <div className="stat-title ">
                         {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
                       </div>
                       <div className="stat-value">
-                        {_.sumBy(
-                          _.uniqBy(
-                            Courses,
-                            (x) => x.subject_code + x.max_credit
-                          ),
-                          (x) => x.max_credit!
-                        )}
+                        {calculateCredits(Courses)}
                       </div>
                     </div>
                   </div>

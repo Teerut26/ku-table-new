@@ -33,7 +33,6 @@ const ListSubject: NextPage<Props> = () => {
       {subjectsApi.data &&
         subjectsApi.data.results.length > 0 &&
         subjectsApi.data.results
-          .map((s) => ({ ...s, uuid: sha256(s) }))
           .map((subject, index) => <Subject subject={subject} key={index} />)}
     </div>
   );
