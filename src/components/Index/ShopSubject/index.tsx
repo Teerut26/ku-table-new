@@ -2,13 +2,11 @@ import { NextPage } from "next";
 import SearchBar from "./SearchBar";
 import ListSubjects from "./ListSubjects";
 import MenuBar from "./MenuBar";
-import useFilterStore from "@/stores/useFilterStore";
 import Filter from "./Filter";
 
 interface Props {}
 
 const ShopSubject: NextPage<Props> = () => {
-  const {} = useFilterStore((r) => r);
 
   return (
     <div className="flex flex-col ">
