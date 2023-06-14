@@ -6,22 +6,36 @@ import { useLocalStorage } from "usehooks-ts";
 import useTableStore from "./store/useTableStore";
 import { toast } from "react-hot-toast";
 import { css } from "@emotion/css";
+import { Typography } from "@mui/material";
+import clsx from "clsx";
 
 interface Props {}
 
 const ChangeImageBackground: NextPage<Props> = () => {
   const { LocalsSwip } = useLocalsSwip();
   const [Open, setOpen] = useState(false);
-  const { setImageBackground, imageBackground, opacity, setOpacity } =
-    useTableStore((s) => s);
+  const {
+    setImageBackground,
+    imageBackground,
+    opacity,
+    setOpacity,
+    opacityTable,
+    setOpacityTable,
+  } = useTableStore((s) => s);
+
   const [Image, setImage] = useLocalStorage<string | null>(
     "ImageBackground",
     ""
   );
+
   const [valueOpacity, setValueOpacity] = useLocalStorage<number | null>(
     "ValueOpacity",
     null
   );
+
+  const [valueOpacityTable, setValueOpacityTable] = useLocalStorage<
+    number | null
+  >("ValueOpacityTable", null);
 
   const onClear = () => {
     setImageBackground(null);
@@ -62,6 +76,11 @@ const ChangeImageBackground: NextPage<Props> = () => {
     setOpacity(v);
   };
 
+  const onOpacityTable = (v: number) => {
+    setValueOpacityTable(v);
+    setOpacityTable(v);
+  };
+
   useEffect(() => {
     if (Image) {
       setImageBackground(Image);
@@ -73,6 +92,12 @@ const ChangeImageBackground: NextPage<Props> = () => {
       setOpacity(valueOpacity);
     }
   }, [valueOpacity]);
+
+  useEffect(() => {
+    if (valueOpacityTable) {
+      setOpacityTable(valueOpacityTable);
+    }
+  }, [valueOpacityTable]);
 
   return (
     <>
@@ -90,21 +115,59 @@ const ChangeImageBackground: NextPage<Props> = () => {
       >
         <div className="flex flex-col gap-3">
           {imageBackground && (
-            <img
-              src={imageBackground}
-              className={css`
-                opacity: ${imageBackground ? opacity : "0.5"};
-              `}
-            />
+            <div className="relative h-[20rem] flex justify-center items-center">
+              <div className={clsx("z-20 relative flex p-10",css`
+                    border-left: 5px solid #c7117f;
+                    background-color: hsl(var(--b2, var(--b1)) / ${imageBackground ? opacityTable : "1"});
+              `)}>
+                test
+              </div>
+              <img
+                src={imageBackground}
+                className={clsx(
+                  css`
+                    opacity: ${imageBackground ? opacity : "0.5"};
+                  `,
+                  "absolute top-0 left-0 z-0 h-full w-full object-cover object-center"
+                )}
+              />
+            </div>
           )}
           {imageBackground && (
-            <Slider
-              min={0}
-              max={1}
-              onChange={(v) => onOpacity(v)}
-              value={opacity!}
-              step={0.01}
-            />
+            <div className="flex flex-col">
+              <div className="flex flex-col">
+                <Typography>
+                  {LocalsSwip(
+                    "ปรับความโปรใสภาพพื้นหลัง",
+                    "Adjustment Transparent Background"
+                  )}
+                </Typography>
+                <Slider
+                  min={0}
+                  max={1}
+                  defaultValue={1}
+                  step={0.01}
+                  value={opacity!}
+                  onChange={(v) => onOpacity(v)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <Typography>
+                  {LocalsSwip(
+                    "ปรับความโปรใสตาราง",
+                    "Adjustment Transparent Table"
+                  )}
+                </Typography>
+                <Slider
+                  min={0}
+                  max={1}
+                  defaultValue={1}
+                  step={0.01}
+                  value={opacityTable!}
+                  onChange={(v) => onOpacityTable(v)}
+                />
+              </div>
+            </div>
           )}
           {imageBackground ? (
             <>

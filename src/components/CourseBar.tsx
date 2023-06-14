@@ -60,7 +60,7 @@ const CourseBar: NextPage<Props> = ({
   canEdit,
   onEdit,
 }) => {
-  const { expand,imageBackground } = useTableStore((r) => r);
+  const { expand, imageBackground, opacityTable } = useTableStore((r) => r);
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
@@ -73,7 +73,9 @@ const CourseBar: NextPage<Props> = ({
     grid-column: ${(props) => props.start} / ${(props) => props.end};
     border-right: 0.5px solid;
     min-height: ${expand ? "7rem" : "5rem"};
-    background-color: hsl(var(--b2, var(--b1)) / ${imageBackground ? "var(--obg)" : "1"} );
+    background-color: hsl(
+      var(--b2, var(--b1)) / ${imageBackground ? opacityTable : "1"}
+    );
   `;
 
   const getPosition = (time: string) => {
