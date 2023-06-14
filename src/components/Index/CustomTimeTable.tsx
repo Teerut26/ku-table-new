@@ -91,8 +91,6 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         }}
       />
       <div className="flex flex-col gap-3">
-        <AddCourse />
-
         {Courses.length !== 0 ? (
           <Table
             isIPhone={isIPhone}
@@ -102,8 +100,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
               SetCourses((pre) => pre.filter((c) => c.uuid !== course.uuid))
             }
             hasShare={true}
-            // canEdit={true}
-            // onEdit={onEdit}
+            canEdit={true}
             childrenBar={
               <>
                 <input
@@ -126,6 +123,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 >
                   <Icon icon="tabler:table-export" className="text-lg" /> Import
                 </div>
+                <AddCourse />
                 <div className="flex justify-end md:mr-3 md:grow">
                   <button className="btn-primary btn-sm btn gap-3 disabled btn-outline">
                     {LocalsSwip("หน่วยกิตรวม", "Total Credit")}

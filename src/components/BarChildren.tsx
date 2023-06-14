@@ -10,6 +10,7 @@ import TeacherSeparate from "@/utils/teacherSeparate";
 import { Icon } from "@iconify/react";
 import { colorsMap, convertKeyToColor } from "@/utils/colorsMap";
 import useTableStore from "./Table/store/useTableStore";
+import EditCourse from "./Index/EditCourse";
 
 interface Props {
   start: number;
@@ -326,9 +327,7 @@ const BarChildren: NextPage<Props> = ({
                 </Button>
               )}
               {canEdit && (
-                <Button className="w-fit" onClick={() => onEdit!(course)}>
-                  Edit
-                </Button>
+                <EditCourse course={course} />
               )}
             </div>
           ) : (
