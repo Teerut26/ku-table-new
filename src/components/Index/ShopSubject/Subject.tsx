@@ -327,7 +327,7 @@ const Subject: NextPage<Props> = ({ subject }) => {
                   ? CourseDateSeparate(subject.coursedate).map(
                       (date, index) => (
                         <div key={index}>
-                          {date.day_w} {date.time_form} - {date.time_to}
+                          {date.day_w} {date.time_from} - {date.time_to}
                         </div>
                       )
                     )

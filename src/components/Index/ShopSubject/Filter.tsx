@@ -4,14 +4,19 @@ import { convertKeyToColor } from "@/utils/colorsMap";
 import { DaysMap } from "@/utils/daysMap";
 import { sectionStudentTypeMap } from "@/utils/sectionStudentTypeMap";
 import { sectionTypeMap } from "@/utils/sectionTypeMap";
+import { timeMap } from "@/utils/timeMap";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 import {
   CardContent,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Typography,
 } from "@mui/material";
 import { Modal } from "antd";
@@ -47,6 +52,8 @@ const Filter: NextPage<Props> = () => {
     setShowFilterMobile,
     expandAll,
     setExpandAll,
+    sectionTime,
+    setSectionTime,
   } = useFilterStore((s) => s);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -70,7 +77,7 @@ const Filter: NextPage<Props> = () => {
           >
             <CardContent className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("ขยายทั้งหมด", "Expand All")}
                 </Typography>
                 <FormGroup>
@@ -88,7 +95,7 @@ const Filter: NextPage<Props> = () => {
                 </FormGroup>
               </div>
               <div className="flex flex-col gap-2">
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("ประเภทภาคเรียน", "Section Student Type")}
                 </Typography>
                 <FormGroup>
@@ -113,7 +120,7 @@ const Filter: NextPage<Props> = () => {
                 </FormGroup>
               </div>
               <div className="flex flex-col gap-2">
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
                 </Typography>
                 <FormGroup>
@@ -138,7 +145,7 @@ const Filter: NextPage<Props> = () => {
                 </FormGroup>
               </div>
               <div className="flex flex-col gap-2">
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("วันที่เรียน", "Day")}
                 </Typography>
                 <FormGroup>
@@ -163,6 +170,89 @@ const Filter: NextPage<Props> = () => {
                   ))}
                 </FormGroup>
               </div>
+              <div className="flex flex-col gap-2">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
+                  {LocalsSwip("เวลาเรียน", "Time")}
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSectionTime({
+                            timeFrom: timeMap[0]?.dayjs.format("HH:mm")!,
+                            timeTo:
+                              timeMap[timeMap.length - 1]?.dayjs.format(
+                                "HH:mm"
+                              )!,
+                          });
+                        } else {
+                          setSectionTime(null);
+                        }
+                      }}
+                    />
+                  }
+                  label={LocalsSwip("เปิดใช้งาน", "Enable")}
+                />
+                <div className="flex flex-col gap-3">
+                  <FormGroup>
+                    <FormControl fullWidth>
+                      <InputLabel disabled>
+                        {LocalsSwip("ในช่วง", "In range")}
+                      </InputLabel>
+                      <Select
+                        disabled={!sectionTime}
+                        value={
+                          sectionTime?.timeFrom
+                            ? sectionTime?.timeFrom
+                            : timeMap[0]?.label
+                        }
+                        label="Age"
+                        onChange={(e) => {
+                          setSectionTime({
+                            timeFrom: e.target.value as string,
+                            timeTo: sectionTime?.timeTo!,
+                          });
+                        }}
+                      >
+                        {timeMap.map((time, id) => (
+                          <MenuItem key={id} value={time.dayjs.format("HH:mm")}>
+                            {time.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormControl fullWidth>
+                      <InputLabel disabled>
+                        {LocalsSwip("ถึง", "To")}
+                      </InputLabel>
+                      <Select
+                        disabled={!sectionTime}
+                        value={
+                          sectionTime?.timeTo
+                            ? sectionTime?.timeTo
+                            : timeMap[timeMap.length - 1]?.label
+                        }
+                        label="Age"
+                        onChange={(e) => {
+                          setSectionTime({
+                            timeFrom: sectionTime?.timeFrom!,
+                            timeTo: e.target.value as string,
+                          });
+                        }}
+                      >
+                        {timeMap.map((time, id) => (
+                          <MenuItem key={id} value={time.dayjs.format("HH:mm")}>
+                            {time.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </FormGroup>
+                </div>
+              </div>
             </CardContent>
           </Paper>
         </div>
@@ -178,7 +268,7 @@ const Filter: NextPage<Props> = () => {
       >
         <CardContent className="flex flex-wrap justify-between gap-5">
           <div className="flex flex-col gap-2">
-            <Typography variant="caption">
+            <Typography variant="caption" sx={{ opacity: 0.5 }}>
               {LocalsSwip("ขยายทั้งหมด", "Expand All")}
             </Typography>
             <FormGroup>
@@ -196,7 +286,7 @@ const Filter: NextPage<Props> = () => {
             </FormGroup>
           </div>
           <div className="flex flex-col gap-2">
-            <Typography variant="caption">
+            <Typography variant="caption" sx={{ opacity: 0.5 }}>
               {LocalsSwip("ประเภทหมู่เรียน", "Section Type")}
             </Typography>
             <FormGroup>
@@ -221,7 +311,7 @@ const Filter: NextPage<Props> = () => {
             </FormGroup>
           </div>
           <div className="flex flex-col gap-2">
-            <Typography variant="caption">
+            <Typography variant="caption" sx={{ opacity: 0.5 }}>
               {LocalsSwip("ประเภทภาคเรียน", "Section Student Type")}
             </Typography>
             <FormGroup>
@@ -246,7 +336,7 @@ const Filter: NextPage<Props> = () => {
             </FormGroup>
           </div>
           <div className="flex flex-col gap-2">
-            <Typography variant="caption">
+            <Typography variant="caption" sx={{ opacity: 0.5 }}>
               {LocalsSwip("วันที่เรียน", "Day")}
             </Typography>
             <FormGroup>

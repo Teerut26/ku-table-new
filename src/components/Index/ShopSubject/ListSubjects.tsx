@@ -7,13 +7,19 @@ import { OpenSubjectForEnrollInterface } from "@/interfaces/OpenSubjectForEnroll
 import useFilterStore from "@/stores/useFilterStore";
 import CourseDateSeparate from "@/utils/courseDateSeparate";
 import _ from "lodash";
+import { isTimeInRanges } from "@/utils/timeMap";
 
 interface Props {}
 
 const ListSubject: NextPage<Props> = () => {
   const { selectedSubjectCode } = useSearchStore((r) => r);
-  const { sectionDay, sectionStudentType, sectionType, setResult } =
-    useFilterStore((r) => r);
+  const {
+    sectionDay,
+    sectionStudentType,
+    sectionType,
+    setResult,
+    sectionTime,
+  } = useFilterStore((r) => r);
   const [subjectsDataTemp, setSubjectsDataTemp] = useState<
     OpenSubjectForEnrollInterface[]
   >([]);
@@ -29,7 +35,13 @@ const ListSubject: NextPage<Props> = () => {
   useEffect(() => {
     if (!subjectsApi.data) return;
     setSubjectsDataTemp(Filter(subjectsApi.data.results));
-  }, [subjectsApi.data, sectionDay, sectionStudentType, sectionType]);
+  }, [
+    subjectsApi.data,
+    sectionDay,
+    sectionStudentType,
+    sectionType,
+    sectionTime,
+  ]);
 
   if (subjectsApi.isLoading) {
     return (
@@ -72,8 +84,24 @@ const ListSubject: NextPage<Props> = () => {
           ? sectionStudentTypeFilted
           : sectionDayFiltedRaw;
 
-      setResult(sectionDayFilted.length);
-      return sectionDayFilted;
+      const sectionTimeFiltedRaw = sectionDayFilted.filter((subject) => {
+        const daySeparate = CourseDateSeparate(subject.coursedate).filter(
+          (day) => {
+            return isTimeInRanges(
+              sectionTime?.timeFrom!,
+              sectionTime?.timeTo!,
+              day.time_from!,
+              day.time_to!
+            );
+          }
+        ).length > 0;
+
+        return daySeparate;
+      });
+      const sectionTimeFilted = sectionTime ? sectionTimeFiltedRaw : input;
+
+      setResult(sectionTimeFilted.length);
+      return sectionTimeFilted;
     } catch (error) {
       return input;
     }

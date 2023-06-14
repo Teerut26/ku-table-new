@@ -3,11 +3,16 @@ import { create } from "zustand";
 export type sectionType = "Lecture" | "Laboratory";
 export type sectionStudentType = "Regular" | "Special";
 export type sectionDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
+export interface TimeSection {
+  timeFrom: string;
+  timeTo: string;
+}
 
 interface Filter {
   sectionType: sectionType[];
   sectionStudentType: sectionStudentType[];
   sectionDay: sectionDay[];
+  sectionTime: TimeSection | null;
   showFilterMobile: boolean;
   showFilterDesktop: boolean;
   result: number;
@@ -25,6 +30,7 @@ interface Filter {
   setResult: (result: number) => void;
   setExpandAll: (expandAll: boolean) => void;
   handleExpandAll: () => void;
+  setSectionTime: (sectionTime: TimeSection | null) => void;
 }
 
 const useFilterStore = create<Filter>((set) => ({
@@ -33,6 +39,14 @@ const useFilterStore = create<Filter>((set) => ({
   showFilterMobile: false,
   showFilterDesktop: true,
   sectionType: [],
+  sectionTime: null,
+  setSectionTime: (sectionTime: TimeSection | null) => {
+    set((state) => {
+      return {
+        sectionTime: sectionTime,
+      };
+    });
+  },
   handleExpandAll: () => {
     set((state) => {
       return {

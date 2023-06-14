@@ -22,7 +22,7 @@ const useCartSubjectStore = create<CartSubject>((set) => ({
       (date, index) => {
         const rspEN = RoomSeparate(subject.roomNameEn);
         const rspTH = RoomSeparate(subject.roomNameTh);
-        const timeStart = dayjs(date.time_form, "HH:mm").diff(
+        const timeStart = dayjs(date.time_from, "HH:mm").diff(
           dayjs("00:00", "HH:mm"),
           "minute"
         );
@@ -40,7 +40,7 @@ const useCartSubjectStore = create<CartSubject>((set) => ({
           teacher_name_en: subject.teacherNameEn,
           day_w: date.day_w,
           time_to: date.time_to,
-          time_from: date.time_form,
+          time_from: date.time_from,
           time_start: timeStart,
           max_credit: subject.maxCredit,
         } as Course;

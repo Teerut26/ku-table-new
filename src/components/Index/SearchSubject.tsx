@@ -73,8 +73,8 @@ const SearchSubject: NextPage<Props> = ({
           teacher_name_en: subject.teacherNameEn,
           day_w: date.day_w,
           time_to: date.time_to,
-          time_from: date.time_form,
-          time_start: dayjs(date.time_form, "HH:mm").diff(
+          time_from: date.time_from,
+          time_start: dayjs(date.time_from, "HH:mm").diff(
             dayjs("00:00", "HH:mm"),
             "minute"
           ),
@@ -209,7 +209,7 @@ const SearchSubject: NextPage<Props> = ({
                               {CourseDateSeparate(subject.coursedate).map(
                                 (date, index2) => (
                                   <Tag key={index2}>
-                                    {date.day_w} ({date.time_form}-
+                                    {date.day_w} ({date.time_from}-
                                     {date.time_to})
                                   </Tag>
                                 )
