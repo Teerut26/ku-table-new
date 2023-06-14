@@ -19,6 +19,7 @@ const VerticalLine: NextPage<Props> = ({ times }) => {
 
   const Time = styled.div`
     border-right: 0.5px solid;
+    border-color: hsl(var(--bc) / 0.3);
   `;
   return (
     <Bar className="relative">

@@ -72,6 +72,7 @@ const BarChildren: NextPage<Props> = ({
       ${({ day }) => (day ? convertKeyToColor(day)?.textHex : "gray")};
     border-right: 0.5px solid;
     min-height: ${expand ? "7rem" : "5rem"};
+    border-right-color: hsl(var(--bc) / 0.3);
   `;
 
   const dayColorMap = [

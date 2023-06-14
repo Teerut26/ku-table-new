@@ -14,6 +14,7 @@ const TimeBar: NextPage<Props> = ({ times }) => {
   const Time = styled.div`
     border-right: 0.5px solid;
     border-top: 0.5px solid;
+    border-bottom: 0.5px solid;
   `;
   return (
     <Bar className="relative">

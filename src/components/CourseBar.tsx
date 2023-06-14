@@ -66,6 +66,7 @@ const CourseBar: NextPage<Props> = ({
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
     border-top: 0.5px solid;
     border-bottom: 0.5px solid;
+    border-color: hsl(var(--bc) / 0.3);
   `;
 
   const DayBar = styled.label<{ start: number; end: number; day?: string }>`
