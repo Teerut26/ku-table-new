@@ -64,7 +64,7 @@ const BarChildren: NextPage<Props> = ({
 }) => {
   const { locale } = useRouter();
   const area = useRef<HTMLLabelElement>(null);
-  const { expand } = useTableStore((r) => r);
+  const { expand,imageBackground } = useTableStore((r) => r);
 
   const StyleCss = styled.label<getCourseDataInterface>`
     grid-column: ${(props) => props.start} / ${(props) => props.end};
@@ -73,6 +73,7 @@ const BarChildren: NextPage<Props> = ({
     border-right: 0.5px solid;
     min-height: ${expand ? "7rem" : "5rem"};
     border-right-color: hsl(var(--bc) / 0.3);
+    background-color: hsl(var(--b2, var(--b1)) / ${imageBackground ? "var(--obg)" : "1"} );
   `;
 
   const dayColorMap = [

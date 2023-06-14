@@ -18,6 +18,8 @@ import LocaleSwip from "@/utils/localeSwip";
 import VerticalLine from "./VerticalLine";
 import ExpandData from "./Table/ExpandData";
 import useTableStore from "./Table/store/useTableStore";
+import ChangeImageBackground from "./Table/ChangeImageBackground";
+import { css } from "@emotion/css";
 
 let times: string[] = [
   "8:00",
@@ -67,7 +69,7 @@ const Table: NextPage<Props> = ({
   const area = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
-  const { expand } = useTableStore((r) => r);
+  const { expand, imageBackground } = useTableStore((r) => r);
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -143,18 +145,26 @@ const Table: NextPage<Props> = ({
           ref={area}
           className={clsx(
             "flex flex-col bg-base-100",
-            isCapture && "p-5", expand ? "min-w-[110rem]" : "min-w-[75rem]"
+            isCapture && "p-5",
+            expand ? "min-w-[110rem]" : "min-w-[75rem]"
           )}
         >
           <div
             className={clsx(
               isCapture &&
                 "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
-              "relative"
+              "relative",
+              imageBackground &&
+                css`
+                  background-image: url(${imageBackground});
+                  background-position: center;
+                  background-size: cover;
+                  background-repeat: no-repeat;
+                `
             )}
           >
             <VerticalLine times={times.slice(0, maxIndex)} />
-            <div className="z-10 relative">
+            <div className={clsx("relative z-10")}>
               <TimeBar times={times.slice(0, maxIndex)} />
               {days.map((day, index) => {
                 return (
@@ -195,6 +205,9 @@ const Table: NextPage<Props> = ({
             </div>
           )}
         </div>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-3">
+        <ChangeImageBackground />
       </div>
     </>
   );
