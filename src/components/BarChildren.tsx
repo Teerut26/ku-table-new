@@ -7,6 +7,9 @@ import { useRouter } from "next/router";
 import { useRef } from "react";
 import { Button, Tag } from "antd";
 import TeacherSeparate from "@/utils/teacherSeparate";
+import { Icon } from "@iconify/react";
+import { colorsMap, convertKeyToColor } from "@/utils/colorsMap";
+import useTableStore from "./Table/store/useTableStore";
 
 interface Props {
   start: number;
@@ -21,13 +24,8 @@ interface Props {
 interface getCourseDataInterface {
   start: number;
   end: number;
+  day?: string;
 }
-
-const StyleCss = styled.label<getCourseDataInterface>`
-  grid-column: ${(props) => props.start} / ${(props) => props.end};
-  border: 0.5px solid;
-  min-height: 7rem;
-`;
 
 const Text = styled.div`
   overflow: hidden;
@@ -65,6 +63,15 @@ const BarChildren: NextPage<Props> = ({
 }) => {
   const { locale } = useRouter();
   const area = useRef<HTMLLabelElement>(null);
+  const { expand } = useTableStore((r) => r);
+
+  const StyleCss = styled.label<getCourseDataInterface>`
+    grid-column: ${(props) => props.start} / ${(props) => props.end};
+    border-left: 5px solid
+      ${({ day }) => (day ? convertKeyToColor(day)?.textHex : "gray")};
+    border-right: 0.5px solid;
+    min-height: ${expand ? "7rem" : "5rem"};
+  `;
 
   const dayColorMap = [
     {
@@ -109,77 +116,86 @@ const BarChildren: NextPage<Props> = ({
   return (
     <>
       <StyleCss
+        day={course.day_w}
         htmlFor={`modal-${course.subject_code}-${course.time_from}-${course.time_to}-${course.day_w}`}
         start={start}
         end={end}
-        className="flex cursor-pointer flex-col bg-base-200 p-2 hover:bg-base-200 overflow-hidden"
+        className={clsx(
+          "flex cursor-pointer flex-col overflow-hidden bg-base-200 p-2 hover:bg-base-300"
+        )}
       >
         <div className="flex justify-between">
           <Text>{course.subject_code}</Text>
-          <Text>
-            [{course.time_from} - {course.time_to}]
-          </Text>
+          {expand && (
+            <Text>
+              [{course.time_from} - {course.time_to}]
+            </Text>
+          )}
         </div>
         <Text>
           {LocaleSwip(locale!, course.subject_name_th, course.subject_name_en)}
         </Text>
-        <Text>
-          {LocaleSwip(locale!, "ห้อง", "Room")}{" "}
+        <Text className="flex gap-1">
+          <Icon icon="material-symbols:location-on" className="text-lg" />{" "}
           {LocaleSwip(locale!, course.room_name_th, course.room_name_en)}
         </Text>
-        <Text className="flex gap-2">
-          <div>{LocaleSwip(locale!, "หมู่", "Section")}</div>
-          <div>{course.section_code}</div>
-        </Text>
-        <div className="flex items-center gap-2">
-          <div
-            className={clsx(
-              "badge badge-sm",
-              course.section_type_en === "Lecture" ||
-                course.section_type_th === "บรรยาย"
-                ? "badge-primary"
-                : "badge-secondary"
-            )}
-          >
-            {LocaleSwip(
-              locale!,
-              course.section_type_th,
-              course.section_type_en
-            )}
-          </div>
-          {!(canRemove || canEdit) && (
-            <>
-              {course.std_status_en === "Special" ||
-              course.section_type_th === "พิเศษ" ? (
+        {expand && (
+          <>
+            <Text className="flex gap-2">
+              <div>{LocaleSwip(locale!, "หมู่", "Section")}</div>
+              <div>{course.section_code}</div>
+            </Text>
+            <div className="flex items-center gap-2">
+              <div
+                className={clsx(
+                  "badge badge-sm",
+                  course.section_type_en === "Lecture" ||
+                    course.section_type_th === "บรรยาย"
+                    ? "badge-primary"
+                    : "badge-secondary"
+                )}
+              >
+                {LocaleSwip(
+                  locale!,
+                  course.section_type_th,
+                  course.section_type_en
+                )}
+              </div>
+              {!(canRemove || canEdit) && (
                 <>
-                  <GoldrenBadge className="badge badge-sm border-0 text-white">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </GoldrenBadge>
-                </>
-              ) : (
-                <>
-                  <div className="badge-accent badge badge-sm">
-                    {LocaleSwip(
-                      locale!,
-                      course.std_status_th,
-                      course.std_status_en
-                    )}
-                  </div>
+                  {course.std_status_en === "Special" ||
+                  course.section_type_th === "พิเศษ" ? (
+                    <>
+                      <GoldrenBadge className="badge badge-sm border-0 text-white">
+                        {LocaleSwip(
+                          locale!,
+                          course.std_status_th,
+                          course.std_status_en
+                        )}
+                      </GoldrenBadge>
+                    </>
+                  ) : (
+                    <>
+                      <div className="badge-accent badge badge-sm">
+                        {LocaleSwip(
+                          locale!,
+                          course.std_status_th,
+                          course.std_status_en
+                        )}
+                      </div>
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
-          {(canRemove || canEdit) && (
-            <Tag color={colorCreditMap[course.max_credit! - 1]}>
-              {LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}
-              {course.max_credit}
-            </Tag>
-          )}
-        </div>
+              {(canRemove || canEdit) && (
+                <Tag color={colorCreditMap[course.max_credit! - 1]}>
+                  {LocaleSwip(locale!, "หน่วยกิต : ", "Credit : ")}
+                  {course.max_credit}
+                </Tag>
+              )}
+            </div>
+          </>
+        )}
       </StyleCss>
       <input
         type="checkbox"
@@ -215,8 +231,9 @@ const BarChildren: NextPage<Props> = ({
               {LocaleSwip(locale!, "วัน :", "Day :")}{" "}
               <Tag
                 color={
-                  dayColorMap.filter((day) => day.day === course.day_w)[0]
-                    ?.color
+                  dayColorMap.filter(
+                    (day) => day.day === course.day_w.trim()
+                  )[0]?.color
                 }
               >
                 {course.day_w}
@@ -236,7 +253,9 @@ const BarChildren: NextPage<Props> = ({
               {LocaleSwip(locale!, "อาจารย์ :", "Teacher :")}{" "}
               {locale === "th"
                 ? course.teacher_name
-                  ? TeacherSeparate(course.teacher_name).map((name, tid) => <div key={tid}>- {name}</div>)
+                  ? TeacherSeparate(course.teacher_name).map((name, tid) => (
+                      <div key={tid}>- {name}</div>
+                    ))
                   : ""
                 : course.teacher_name_en
                 ? TeacherSeparate(course.teacher_name_en).map((name, tid) => (

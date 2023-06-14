@@ -3,6 +3,8 @@ import { TimeMap } from "@/interfaces/TimeMap";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import BarChildren from "./BarChildren";
+import { convertKeyToColor } from "@/utils/colorsMap";
+import useTableStore from "./Table/store/useTableStore";
 
 let timeMap: TimeMap[] = [
   { time: "8:00", pos: 3 },
@@ -58,15 +60,18 @@ const CourseBar: NextPage<Props> = ({
   canEdit,
   onEdit,
 }) => {
+  const { expand } = useTableStore((r) => r);
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
+    border-top: 0.5px solid;
+    border-bottom: 0.5px solid;
   `;
 
-  const DayBar = styled.label<{ start: number; end: number }>`
+  const DayBar = styled.label<{ start: number; end: number; day?: string }>`
     grid-column: ${(props) => props.start} / ${(props) => props.end};
-    border: 0.5px solid;
-    min-height: 7rem;
+    border-right: 0.5px solid;
+    min-height: ${expand ? "7rem" : "5rem"};
   `;
 
   const getPosition = (time: string) => {
@@ -81,7 +86,7 @@ const CourseBar: NextPage<Props> = ({
   };
 
   return (
-    <Bar className="border-base-content/30 border-[0.25px]">
+    <Bar className="z-20 border-base-content/30">
       <DayBar
         className="row-span-6 flex items-center justify-center bg-base-200 text-xl"
         start={1}

@@ -15,6 +15,9 @@ import ShareTableBtn from "./ShareTableBtn";
 import TimeBar from "./TimeBar";
 import CourseBar from "./CourseBar";
 import LocaleSwip from "@/utils/localeSwip";
+import VerticalLine from "./VerticalLine";
+import ExpandData from "./Table/ExpandData";
+import useTableStore from "./Table/store/useTableStore";
 
 let times: string[] = [
   "8:00",
@@ -64,6 +67,7 @@ const Table: NextPage<Props> = ({
   const area = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
+  const { expand } = useTableStore((r) => r);
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -97,8 +101,8 @@ const Table: NextPage<Props> = ({
 
   return (
     <>
-      <div className="flex items-center gap-2 w-full">
-        <div className="flex w-full items-center flex-wrap gap-2">
+      <div className="flex w-full items-center gap-2">
+        <div className="flex w-full flex-wrap items-center gap-2">
           <div
             onClick={() => handleDownload()}
             className={clsx(
@@ -124,6 +128,7 @@ const Table: NextPage<Props> = ({
           )}
 
           <ChangeLanguage />
+          <ExpandData />
           {hasShare && <ShareTableBtn courseData={courseData} />}
           {childrenBar && childrenBar}
         </div>
@@ -137,33 +142,37 @@ const Table: NextPage<Props> = ({
         <div
           ref={area}
           className={clsx(
-            "flex min-w-[110rem] flex-col bg-base-100",
-            isCapture && "p-5"
+            "flex flex-col bg-base-100",
+            isCapture && "p-5", expand ? "min-w-[110rem]" : "min-w-[75rem]"
           )}
         >
           <div
             className={clsx(
               isCapture &&
-                "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content"
+                "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
+              "relative"
             )}
           >
-            <TimeBar times={times.slice(0, maxIndex)} />
-            {days.map((day, index) => {
-              return (
-                <CourseBar
-                  key={index}
-                  data={courseData.filter(
-                    (course) => course.day_w?.replaceAll(" ", "") === day
-                  )}
-                  times={times.slice(0, maxIndex)}
-                  day={day}
-                  canRemove={canRemove}
-                  onRemove={onRemove}
-                  canEdit={canEdit}
-                  onEdit={onEdit}
-                />
-              );
-            })}
+            <VerticalLine times={times.slice(0, maxIndex)} />
+            <div className="z-10 relative">
+              <TimeBar times={times.slice(0, maxIndex)} />
+              {days.map((day, index) => {
+                return (
+                  <CourseBar
+                    key={index}
+                    data={courseData.filter(
+                      (course) => course.day_w?.replaceAll(" ", "") === day
+                    )}
+                    times={times.slice(0, maxIndex)}
+                    day={day}
+                    canRemove={canRemove}
+                    onRemove={onRemove}
+                    canEdit={canEdit}
+                    onEdit={onEdit}
+                  />
+                );
+              })}
+            </div>
           </div>
           {isCapture && (
             <div className="flex justify-between">

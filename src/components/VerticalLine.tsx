@@ -5,28 +5,30 @@ interface Props {
   times: string[];
 }
 
-const TimeBar: NextPage<Props> = ({ times }) => {
+const VerticalLine: NextPage<Props> = ({ times }) => {
   const Bar = styled.div`
     display: grid;
     grid-template-columns: repeat(${times.length * 2 + 2}, minmax(0, 1fr));
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
   `;
 
   const Time = styled.div`
     border-right: 0.5px solid;
-    border-top: 0.5px solid;
   `;
   return (
     <Bar className="relative">
-      <Time className="col-span-2 bg-base-200 text-center text-xl">
-        Day/Time
-      </Time>
       {times.map((time, index) => (
-        <Time key={index} className="col-span-2 bg-base-200 pl-3 text-xl">
-          {time}
+        <Time key={index} className="col-span-2 pl-3 text-xl">
+         
         </Time>
       ))}
     </Bar>
   );
 };
 
-export default TimeBar;
+export default VerticalLine;

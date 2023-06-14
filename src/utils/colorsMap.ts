@@ -43,9 +43,8 @@ const colorsMap = [
   },
 ];
 
-
 const convertKeyToColor = (key: string) => {
-    return colorsMap.find((day) => day.key === key);
-}
+  return colorsMap.find((day) => day.key === key.replace(" ", ""));
+};
 
 export { colorsMap, convertKeyToColor };
