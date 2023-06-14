@@ -336,6 +336,89 @@ const Filter: NextPage<Props> = () => {
             </FormGroup>
           </div>
           <div className="flex flex-col gap-2">
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
+                  {LocalsSwip("เวลาเรียน", "Time")}
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSectionTime({
+                            timeFrom: timeMap[0]?.dayjs.format("HH:mm")!,
+                            timeTo:
+                              timeMap[timeMap.length - 1]?.dayjs.format(
+                                "HH:mm"
+                              )!,
+                          });
+                        } else {
+                          setSectionTime(null);
+                        }
+                      }}
+                    />
+                  }
+                  label={LocalsSwip("เปิดใช้งาน", "Enable")}
+                />
+                <div className="flex flex-col gap-3">
+                  <FormGroup>
+                    <FormControl fullWidth>
+                      <InputLabel disabled>
+                        {LocalsSwip("ในช่วง", "In range")}
+                      </InputLabel>
+                      <Select
+                        disabled={!sectionTime}
+                        value={
+                          sectionTime?.timeFrom
+                            ? sectionTime?.timeFrom
+                            : timeMap[0]?.label
+                        }
+                        label="Age"
+                        onChange={(e) => {
+                          setSectionTime({
+                            timeFrom: e.target.value as string,
+                            timeTo: sectionTime?.timeTo!,
+                          });
+                        }}
+                      >
+                        {timeMap.map((time, id) => (
+                          <MenuItem key={id} value={time.dayjs.format("HH:mm")}>
+                            {time.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormControl fullWidth>
+                      <InputLabel disabled>
+                        {LocalsSwip("ถึง", "To")}
+                      </InputLabel>
+                      <Select
+                        disabled={!sectionTime}
+                        value={
+                          sectionTime?.timeTo
+                            ? sectionTime?.timeTo
+                            : timeMap[timeMap.length - 1]?.label
+                        }
+                        label="Age"
+                        onChange={(e) => {
+                          setSectionTime({
+                            timeFrom: sectionTime?.timeFrom!,
+                            timeTo: e.target.value as string,
+                          });
+                        }}
+                      >
+                        {timeMap.map((time, id) => (
+                          <MenuItem key={id} value={time.dayjs.format("HH:mm")}>
+                            {time.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </FormGroup>
+                </div>
+              </div>
+          <div className="flex flex-col gap-2">
             <Typography variant="caption" sx={{ opacity: 0.5 }}>
               {LocalsSwip("วันที่เรียน", "Day")}
             </Typography>
@@ -361,6 +444,7 @@ const Filter: NextPage<Props> = () => {
               ))}
             </FormGroup>
           </div>
+          
         </CardContent>
       </Modal>
     </div>
