@@ -1,20 +1,26 @@
 import useLocalsSwip from "@/hooks/useLocalsSwip";
-import { Button, Modal } from "antd";
+import { Button, Modal, Slider } from "antd";
 import { NextPage } from "next";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import useTableStore from "./store/useTableStore";
 import { toast } from "react-hot-toast";
+import { css } from "@emotion/css";
 
 interface Props {}
 
 const ChangeImageBackground: NextPage<Props> = () => {
   const { LocalsSwip } = useLocalsSwip();
   const [Open, setOpen] = useState(false);
-  const { setImageBackground, imageBackground } = useTableStore((s) => s);
+  const { setImageBackground, imageBackground, opacity, setOpacity } =
+    useTableStore((s) => s);
   const [Image, setImage] = useLocalStorage<string | null>(
     "ImageBackground",
     ""
+  );
+  const [valueOpacity, setValueOpacity] = useLocalStorage<number | null>(
+    "ValueOpacity",
+    null
   );
 
   const onClear = () => {
@@ -35,7 +41,7 @@ const ChangeImageBackground: NextPage<Props> = () => {
   };
 
   const fileValidImage = (file: File) => {
-    const validTypes = ["image/jpeg", "image/jpg", "image/png","image/gif"];
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
@@ -51,16 +57,29 @@ const ChangeImageBackground: NextPage<Props> = () => {
     });
   };
 
+  const onOpacity = (v: number) => {
+    setValueOpacity(v);
+    setOpacity(v);
+  };
+
   useEffect(() => {
     if (Image) {
       setImageBackground(Image);
     }
-  }, [Image])
-  
+  }, [Image]);
+
+  useEffect(() => {
+    if (valueOpacity) {
+      setOpacity(valueOpacity);
+    }
+  }, [valueOpacity]);
 
   return (
     <>
-      <button className="btn-outline btn-primary btn-sm btn" onClick={() => setOpen(pre=>!pre)}>
+      <button
+        className="btn-outline btn-primary btn-sm btn"
+        onClick={() => setOpen((pre) => !pre)}
+      >
         {LocalsSwip("เปลี้ยนรูปพื้นหลัง", "Change Image Background")}
       </button>
       <Modal
@@ -70,7 +89,23 @@ const ChangeImageBackground: NextPage<Props> = () => {
         title={LocalsSwip("เปลี้ยนรูปพื้นหลัง", "Change Image Background")}
       >
         <div className="flex flex-col gap-3">
-          {imageBackground && <img src={imageBackground} />}
+          {imageBackground && (
+            <img
+              src={imageBackground}
+              className={css`
+                opacity: ${imageBackground ? opacity : "0.5"};
+              `}
+            />
+          )}
+          {imageBackground && (
+            <Slider
+              min={0}
+              max={1}
+              onChange={(v) => onOpacity(v)}
+              value={opacity!}
+              step={0.01}
+            />
+          )}
           {imageBackground ? (
             <>
               <Button danger onClick={onClear}>

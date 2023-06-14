@@ -69,7 +69,7 @@ const Table: NextPage<Props> = ({
   const area = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
-  const { expand, imageBackground } = useTableStore((r) => r);
+  const { expand, imageBackground, opacity } = useTableStore((r) => r);
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -153,16 +153,28 @@ const Table: NextPage<Props> = ({
             className={clsx(
               isCapture &&
                 "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
-              "relative",
-              imageBackground &&
-                css`
-                  background-image: url(${imageBackground});
-                  background-position: center;
-                  background-size: cover;
-                  background-repeat: no-repeat;
-                `
+              "relative overflow-hidden"
             )}
           >
+            {imageBackground && (
+              <img
+                src={imageBackground}
+                className={clsx(
+                  css`
+                    background-image: url(${imageBackground});
+                    background-position: center;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    opacity: ${imageBackground ? opacity : "0.5"};
+                  `
+                )}
+                alt=""
+              />
+            )}
             <VerticalLine times={times.slice(0, maxIndex)} />
             <div className={clsx("relative z-10")}>
               <TimeBar times={times.slice(0, maxIndex)} />
