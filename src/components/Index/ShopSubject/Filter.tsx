@@ -63,7 +63,7 @@ const Filter: NextPage<Props> = () => {
   }, [isMobile]);
 
   return (
-    <div>
+    <>
       {showFilterDesktop && !isMobile && (
         <div className="sticky top-[9rem] h-fit w-fit">
           <Paper
@@ -447,7 +447,7 @@ const Filter: NextPage<Props> = () => {
           
         </CardContent>
       </Modal>
-    </div>
+    </>
   );
 };
 
