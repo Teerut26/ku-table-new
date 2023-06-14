@@ -53,8 +53,25 @@ const ListSubject: NextPage<Props> = () => {
 
   const Filter = (input: OpenSubjectForEnrollInterface[]) => {
     try {
+
+        const sectionTimeFiltedRaw = input.filter((subject) => {
+            const daySeparate = CourseDateSeparate(subject.coursedate).filter(
+              (day) => {
+                return isTimeInRanges(
+                  sectionTime?.timeFrom!,
+                  sectionTime?.timeTo!,
+                  day.time_from!,
+                  day.time_to!
+                );
+              }
+            ).length > 0;
+    
+            return daySeparate;
+          });
+          const sectionTimeFilted = sectionTime ? sectionTimeFiltedRaw : input;
+
       const sectionTypeFiltedRaw =
-        input.filter((subject) => {
+      sectionTimeFilted.filter((subject) => {
           return sectionType.includes(subject.sectionTypeEn as any);
         }) || input;
 
@@ -84,24 +101,10 @@ const ListSubject: NextPage<Props> = () => {
           ? sectionStudentTypeFilted
           : sectionDayFiltedRaw;
 
-      const sectionTimeFiltedRaw = sectionDayFilted.filter((subject) => {
-        const daySeparate = CourseDateSeparate(subject.coursedate).filter(
-          (day) => {
-            return isTimeInRanges(
-              sectionTime?.timeFrom!,
-              sectionTime?.timeTo!,
-              day.time_from!,
-              day.time_to!
-            );
-          }
-        ).length > 0;
+      
 
-        return daySeparate;
-      });
-      const sectionTimeFilted = sectionTime ? sectionTimeFiltedRaw : input;
-
-      setResult(sectionTimeFilted.length);
-      return sectionTimeFilted;
+      setResult(sectionDayFilted.length);
+      return sectionDayFilted;
     } catch (error) {
       return input;
     }
