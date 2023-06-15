@@ -16,7 +16,6 @@ import {
   Collapse,
   CardContent,
   Button,
-  Alert,
 } from "@mui/material";
 import clsx from "clsx";
 import { NextPage } from "next";
@@ -29,6 +28,8 @@ import _ from "lodash";
 import useFilterStore from "@/stores/useFilterStore";
 import checkTimeConflict from "@/utils/checkTimeConflict";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
+import { Alert } from "antd";
+import { css } from "@emotion/css";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
@@ -233,17 +234,38 @@ const Subject: NextPage<Props> = ({ subject }) => {
           title={
             <div className="flex flex-col gap-2 overflow-hidden">
               {isConflict() && (
-                <Alert severity="error" className="overflow-hidden">
-                  {LocalsSwip("เวลาเรียนชนกับ",  "Time conflict with")}
-                  <div className="flex w-full flex-col gap-x-3 overflow-hidden font-bold">
-                    {isConflict()?.map((date, index) => (
-                      <div key={index} className="overflow-hidden truncate">
-                        ({date.subject_code}){" "}
-                        {expandAll && LocalsSwip(date.subject_name_th, date.subject_name_en)}
-                      </div>
-                    ))}
-                  </div>
-                </Alert>
+                <Alert
+                  message={
+                    <div className="flex gap-2 text-error">
+                      <Icon
+                        icon="ph:warning-circle-bold"
+                        className="text-2xl text-error"
+                      />
+                      {LocalsSwip("เวลาเรียนชนกับ", "Time conflict with")}
+                    </div>
+                  }
+                  className={clsx("overflow-hidden truncate",css`
+                  padding: 10px !important;
+                  border-width: 0px !important;
+                  `)}
+                  type="error"
+                  description={
+                    <div className="gap-x-3font-bold flex w-full flex-col text-error">
+                      {isConflict()?.map((date, index) => (
+                        <div
+                          key={index}
+                          className="max-w-[14rem] truncate md:max-w-full font-bold ml-5"
+                        >
+                          - ({date.subject_code}){" "}
+                          {LocalsSwip(
+                            date.subject_name_th,
+                            date.subject_name_en
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  }
+                />
               )}
               <div className="flex justify-between">
                 <div className="flex flex-wrap gap-x-4 ">
