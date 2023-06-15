@@ -3,6 +3,7 @@ import { SignInServicePropsInterface } from '@/interfaces/SignInServicePropsInte
 import { SignInServiceResponseInterface } from '@/interfaces/SignInServiceResponseInterface'
 import axios from 'axios'
 import crypto from 'crypto'
+import CORSProxy from './CORSProxy'
 
 const encodeString = (str: string) => {
     return crypto
@@ -18,7 +19,7 @@ const encodeString = (str: string) => {
 
 const SignInService = (props: SignInServicePropsInterface) => {
     return axios.post<SignInServiceResponseInterface>(
-        'https://myapi.ku.th/auth/login',
+        CORSProxy('https://myapi.ku.th/auth/login'),
         {
             username: encodeString(props.username),
             password: encodeString(props.password),
