@@ -1,7 +1,12 @@
-const CourseDateSeparate = (date: string) => {
+import { OpenSubjectForEnrollInterface } from "@/interfaces/OpenSubjectForEnrollInterface";
+
+const CourseDateSeparate = (
+  date: string,
+  subject?: OpenSubjectForEnrollInterface
+) => {
   try {
     let isError = false;
-    const result = date.split(",").map((schedule) => {
+    let result = date.split(",").map((schedule) => {
       const day = schedule.split("  ")[0];
       const time_from = schedule.split("  ")[1]?.split("-")[0]?.trim();
       const time_to = schedule.split("  ")[1]?.split("-")[1]?.trim();
@@ -17,9 +22,14 @@ const CourseDateSeparate = (date: string) => {
       };
     });
 
-    if (isError) return []
+    let newResult = result.map((r) => ({
+      ...r,
+      subject:subject
+    }));
 
-    return result;
+    if (isError) return [];
+
+    return newResult;
   } catch (error) {
     return [];
   }

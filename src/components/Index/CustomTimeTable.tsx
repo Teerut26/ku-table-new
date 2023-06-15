@@ -80,6 +80,17 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
     reader.readAsText(file);
   };
 
+  const onRemove = (course: Course) => {
+    let coursesAll = Courses;
+    _.remove(
+      coursesAll,
+      (c) =>
+        c.subject_code === course.subject_code &&
+        c.max_credit === course.max_credit
+    );
+    SetCourses(coursesAll);
+  };
+
   return (
     <>
       <SearchSubject
@@ -96,9 +107,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
             isIPhone={isIPhone}
             courseData={CourseSorting(Courses)}
             canRemove={true}
-            onRemove={(course) =>
-              SetCourses((pre) => pre.filter((c) => c.uuid !== course.uuid))
-            }
+            onRemove={onRemove}
             hasShare={true}
             canEdit={true}
             childrenBar={
@@ -125,9 +134,11 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                 </div>
                 <AddCourse />
                 <div className="flex justify-end md:mr-3 md:grow">
-                  <button className="btn-primary btn-sm btn gap-3 disabled btn-outline">
+                  <button className="btn-outline btn-primary disabled btn-sm btn gap-3">
                     {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
-                    <div className="badge-secondary badge">{calculateCredits(Courses)}</div>
+                    <div className="badge-secondary badge">
+                      {calculateCredits(Courses)}
+                    </div>
                   </button>
                 </div>
               </>

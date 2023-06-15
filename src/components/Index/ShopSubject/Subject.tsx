@@ -16,16 +16,19 @@ import {
   Collapse,
   CardContent,
   Button,
+  Alert,
 } from "@mui/material";
 import clsx from "clsx";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useMediaQuery } from "usehooks-ts";
+import { useLocalStorage, useMediaQuery } from "usehooks-ts";
 import useCartSubjectStore from "@/stores/useCartSubjectStore";
 import { toast } from "react-hot-toast";
 import _ from "lodash";
 import useFilterStore from "@/stores/useFilterStore";
+import checkTimeConflict from "@/utils/checkTimeConflict";
+import { Course } from "@/interfaces/GroupCourseResponseInterface";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
@@ -63,6 +66,7 @@ const ChipSectionStdType = styled(Chip)<ChipSectionStdTypeProps>`
 
 const Subject: NextPage<Props> = ({ subject }) => {
   const { LocalsSwip } = useLocalsSwip();
+  const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom04", []);
   const { addCourse, courses, removeCourse } = useCartSubjectStore(
     (state) => state
   );
@@ -143,6 +147,7 @@ const Subject: NextPage<Props> = ({ subject }) => {
       room_name_en: "",
       time_start: 0,
     });
+
     toast.success(
       LocalsSwip(
         "ลบรายวิชาออกจากตะกร้าเรียบร้อยแล้ว",
@@ -150,6 +155,31 @@ const Subject: NextPage<Props> = ({ subject }) => {
       )
     );
   };
+
+  const isConflict = () => {
+    try {
+      const subjectDate = CourseDateSeparate(subject.coursedate, subject);
+      let isConflictT: Course[] = [];
+      subjectDate.map((date) => {
+        isConflictT = [
+          ...isConflictT,
+          ...checkTimeConflict(
+            {
+              day_w: date.day_w!,
+              time_from: date.time_from!,
+              time_to: date.time_to!,
+            },
+            Courses
+          ),
+        ];
+      });
+      return isConflictT.length > 0 ? isConflictT : null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  isConflict();
 
   return (
     <>
@@ -201,14 +231,29 @@ const Subject: NextPage<Props> = ({ subject }) => {
         </div>
         <CardHeader
           title={
-            <div className="flex justify-between">
-              <div className="flex flex-wrap gap-x-4 ">
-                <Typography sx={{ fontWeight: "bold" }} variant="body1">
-                  {subject.subjectCode}{" "}
-                </Typography>
-                <Typography variant="body1" sx={{ opacity: 0.5 }}>
-                  [ {subject.maxCredit} {LocalsSwip("หน่วยกิต", "Credit")} ]
-                </Typography>
+            <div className="flex flex-col gap-2 overflow-hidden">
+              {isConflict() && (
+                <Alert severity="error" className="overflow-hidden">
+                  {LocalsSwip("เวลาเรียนชนกับ",  "Time conflict with")}
+                  <div className="flex w-full flex-col gap-x-3 overflow-hidden font-bold">
+                    {isConflict()?.map((date, index) => (
+                      <div key={index} className="overflow-hidden truncate">
+                        ({date.subject_code}){" "}
+                        {expandAll && LocalsSwip(date.subject_name_th, date.subject_name_en)}
+                      </div>
+                    ))}
+                  </div>
+                </Alert>
+              )}
+              <div className="flex justify-between">
+                <div className="flex flex-wrap gap-x-4 ">
+                  <Typography sx={{ fontWeight: "bold" }} variant="body1">
+                    {subject.subjectCode}{" "}
+                  </Typography>
+                  <Typography variant="body1" sx={{ opacity: 0.5 }}>
+                    [ {subject.maxCredit} {LocalsSwip("หน่วยกิต", "Credit")} ]
+                  </Typography>
+                </div>
               </div>
             </div>
           }

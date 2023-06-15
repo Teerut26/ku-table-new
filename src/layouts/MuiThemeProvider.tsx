@@ -12,6 +12,7 @@ const MuiThemeProvider: NextPage<Props> = ({ children }) => {
   const hexB2 = useCSSVariableToCSSHexCode("--b2");
   const hexP = useCSSVariableToCSSHexCode("--p");
   const hexBC = useCSSVariableToCSSHexCode("--bc");
+  const hexError = useCSSVariableToCSSHexCode("--er");
 
   if (!hexB1 || !hexP || !hexBC) return <></>;
 
