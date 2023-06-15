@@ -90,12 +90,16 @@ const ChangeImageBackground: NextPage<Props> = () => {
   useEffect(() => {
     if (valueOpacity) {
       setOpacity(valueOpacity);
+    } else {
+        setOpacity(0.5);
     }
   }, [valueOpacity]);
 
   useEffect(() => {
     if (valueOpacityTable) {
       setOpacityTable(valueOpacityTable);
+    }else {
+        setOpacityTable(0.5);
     }
   }, [valueOpacityTable]);
 
@@ -145,9 +149,8 @@ const ChangeImageBackground: NextPage<Props> = () => {
                 <Slider
                   min={0}
                   max={1}
-                  defaultValue={1}
                   step={0.01}
-                  value={opacity!}
+                  value={opacity ? opacity : 0.5}
                   onChange={(v) => onOpacity(v)}
                 />
               </div>
@@ -161,9 +164,8 @@ const ChangeImageBackground: NextPage<Props> = () => {
                 <Slider
                   min={0}
                   max={1}
-                  defaultValue={1}
                   step={0.01}
-                  value={opacityTable!}
+                  value={opacityTable ? opacityTable : 0.5}
                   onChange={(v) => onOpacityTable(v)}
                 />
               </div>

@@ -5,6 +5,7 @@ import getSchedule from "@/services/get-schedule";
 import getSubject from "@/services/get-subject";
 import getSubjects from "@/services/get-subjects";
 import getSubjectSearchService from "@/services/subject-search";
+import getGenEdService from "@/services/get-gened";
 
 export const subjectRouter = createTRPCRouter({
   get: protectedProcedure
@@ -94,4 +95,14 @@ export const subjectRouter = createTRPCRouter({
         throw new Error(error.response.data.code);
       }
     }),
+  getGenEd: protectedProcedure.query(async ({ input, ctx }) => {
+    try {
+      let res = await getGenEdService({
+        stringValues: "",
+      });
+      return res;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }),
 });

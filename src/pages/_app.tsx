@@ -13,6 +13,7 @@ import Router from "next/router";
 import SEO from "../next-seo.config";
 import { DefaultSeo } from "next-seo";
 import MuiThemeProvider from "@/layouts/MuiThemeProvider";
+import InitialStore from "@/components/InitialStore";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -40,6 +41,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <ThemeProvider defaultTheme="lofi">
           <MuiThemeProvider>
             <AntdTheme>
+              <InitialStore />
               <Component {...pageProps} />
               <Toaster />
             </AntdTheme>

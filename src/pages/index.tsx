@@ -11,6 +11,7 @@ import CustomTimeTable from "@/components/Index/CustomTimeTable";
 import useLocalsSwip from "@/hooks/useLocalsSwip";
 import ShopSubject from "@/components/Index/ShopSubject";
 import useTapStore from "@/stores/useTabStore";
+import GeneralEducation from "@/components/Index/GeneralEducation";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -80,6 +81,11 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
                       key: "tab2",
                       label: LocalsSwip("สำรวจวิชา", "Explore Course"),
                       children: <ShopSubject />,
+                    },
+                    {
+                      key: "tab4",
+                      label: LocalsSwip("วิชาศึกษาทั่วไป", "General Education"),
+                      children: <GeneralEducation />,
                     },
                     {
                       key: "tab3",
