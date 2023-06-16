@@ -40,6 +40,8 @@ export const authOptions: NextAuthOptions = {
 
           return user;
         } catch (error: any) {
+          console.log(error.response.data.message);
+
           throw new Error(error.response.data.message || "มีบางอย่างผิดพลาด");
         }
       },
