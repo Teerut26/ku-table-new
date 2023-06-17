@@ -70,7 +70,7 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
       {couresData.status !== "loading" ? (
         <>
           {couresData.status === "success" && (
-            <div className={clsx("flex min-w-[75rem] flex-col bg-base-100")}>
+            <div className={clsx("flex min-w-[75rem] flex-col bg-base-100 p-5")}>
               <div
                 className={clsx(
                   "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content relative overflow-hidden"
