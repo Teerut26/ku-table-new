@@ -7,6 +7,7 @@ import VerticalLine from "@/components/VerticalLine";
 import _ from "lodash";
 import TimeBar from "@/components/TimeBar";
 import CourseBar from "@/components/CourseBar";
+import { Course } from "@/interfaces/GroupCourseResponseInterface";
 
 let times: string[] = [
   "8:00",
@@ -53,9 +54,14 @@ export async function getServerSideProps(context: NextPageContext) {
 const Share: NextPage<Props> = ({ isIPhone }) => {
   const { query, back } = useRouter();
 
+  const CourseSorting = (courses: Course[] | undefined) => {
+    const sortedItems = _.orderBy(courses, ["time_start"], "asc");
+    return sortedItems;
+  };
+
   const couresData = api.share.getTable.useQuery({ link: query.id as string });
 
-  const maxTime = _.maxBy(couresData.data, (o) => {
+  const maxTime = _.maxBy(CourseSorting(couresData.data), (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
   });
 
@@ -70,10 +76,12 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
       {couresData.status !== "loading" ? (
         <>
           {couresData.status === "success" && (
-            <div className={clsx("flex min-w-[75rem] flex-col bg-base-100 p-5")}>
+            <div
+              className={clsx("flex min-w-[75rem] flex-col bg-base-100 p-5")}
+            >
               <div
                 className={clsx(
-                  "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content relative overflow-hidden"
+                  "relative overflow-hidden border-b-[1px] border-l-[1px] border-r-[1px] border-base-content"
                 )}
               >
                 <VerticalLine times={times.slice(0, maxIndex)} />
@@ -83,7 +91,7 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
                     return (
                       <CourseBar
                         key={index}
-                        data={couresData.data.filter(
+                        data={CourseSorting(couresData.data).filter(
                           (course) => course.day_w?.replaceAll(" ", "") === day
                         )}
                         times={times.slice(0, maxIndex)}
