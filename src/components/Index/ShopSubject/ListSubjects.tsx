@@ -8,6 +8,8 @@ import useFilterStore from "@/stores/useFilterStore";
 import CourseDateSeparate from "@/utils/courseDateSeparate";
 import _ from "lodash";
 import { isTimeInRanges } from "@/utils/timeMap";
+import { ClasseInterface } from "@/interfaces/ClassesInterface";
+import axios from "axios";
 
 interface Props {}
 
@@ -42,6 +44,16 @@ const ListSubject: NextPage<Props> = () => {
     sectionType,
     sectionTime,
   ]);
+
+  const [classes, setClasses] = useState<ClasseInterface[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const res = await axios.get<ClasseInterface[]>('https://corsproxy.io/?' + encodeURIComponent('https://api-review.kuclap.com/classes'));
+            setClasses(res.data);
+        })()
+    },[])
+
 
   if (subjectsApi.isLoading) {
     return (
@@ -113,7 +125,7 @@ const ListSubject: NextPage<Props> = () => {
       {subjectsApi.data &&
         subjectsApi.data.results.length > 0 &&
         subjectsDataTemp.map((subject, index) => (
-          <Subject subject={subject} key={index} />
+          <Subject subject={subject} key={index} classe={classes.find(c=>c.classId === subject.subjectCode.split("-")[0])} />
         ))}
     </div>
   );

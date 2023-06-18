@@ -210,7 +210,7 @@ const Table: NextPage<Props> = ({
               />
             )}
             <VerticalLine times={times.slice(0, maxIndex)} />
-            <div className={clsx("relative z-10")}>
+            <div className={clsx("relative")}>
               <TimeBar times={times.slice(0, maxIndex)} />
               {days.map((day, index) => {
                 return (

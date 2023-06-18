@@ -28,11 +28,13 @@ import _ from "lodash";
 import useFilterStore from "@/stores/useFilterStore";
 import checkTimeConflict from "@/utils/checkTimeConflict";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
-import { Alert } from "antd";
+import { Alert, Tooltip } from "antd";
 import { css } from "@emotion/css";
+import { ClasseInterface } from "@/interfaces/ClassesInterface";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
+  classe: ClasseInterface | undefined;
 }
 
 interface ChipDayProps {
@@ -65,7 +67,7 @@ const ChipSectionStdType = styled(Chip)<ChipSectionStdTypeProps>`
     type === "Regular" ? "#daeffe" : "#fff2c4"};
 `;
 
-const Subject: NextPage<Props> = ({ subject }) => {
+const Subject: NextPage<Props> = ({ subject, classe }) => {
   const { LocalsSwip } = useLocalsSwip();
   const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom04", []);
   const { addCourse, courses, removeCourse } = useCartSubjectStore(
@@ -244,17 +246,20 @@ const Subject: NextPage<Props> = ({ subject }) => {
                       {LocalsSwip("เวลาเรียนชนกับ", "Time conflict with")}
                     </div>
                   }
-                  className={clsx("overflow-hidden truncate",css`
-                  padding: 10px !important;
-                  border-width: 0px !important;
-                  `)}
+                  className={clsx(
+                    "overflow-hidden truncate",
+                    css`
+                      padding: 10px !important;
+                      border-width: 0px !important;
+                    `
+                  )}
                   type="error"
                   description={
                     <div className="gap-x-3font-bold flex w-full flex-col text-error">
                       {isConflict()?.map((date, index) => (
                         <div
                           key={index}
-                          className="max-w-[14rem] truncate md:max-w-full font-bold ml-5"
+                          className="ml-5 max-w-[14rem] truncate font-bold md:max-w-full"
                         >
                           - ({date.subject_code}){" "}
                           {LocalsSwip(
@@ -270,7 +275,23 @@ const Subject: NextPage<Props> = ({ subject }) => {
               <div className="flex justify-between">
                 <div className="flex flex-wrap gap-x-4 ">
                   <Typography sx={{ fontWeight: "bold" }} variant="body1">
-                    {subject.subjectCode}{" "}
+                    {classe ? (
+                      <div className="flex items-center gap-2">
+                        <a
+                          title={LocalsSwip(
+                            "ดูรีวิวใน KU Clap",
+                            "Reviews in KU Clap"
+                          )}
+                          href={`https://www.kuclap.com/${classe.classId}`}
+                          target="_blank"
+                        >
+                          <Icon icon="ic:outline-launch" className="text-xl" />
+                        </a>
+                        {subject.subjectCode}{" "}
+                      </div>
+                    ) : (
+                      subject.subjectCode
+                    )}
                   </Typography>
                   <Typography variant="body1" sx={{ opacity: 0.5 }}>
                     [ {subject.maxCredit} {LocalsSwip("หน่วยกิต", "Credit")} ]
