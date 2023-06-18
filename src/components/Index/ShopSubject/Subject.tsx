@@ -31,6 +31,7 @@ import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import { Alert, Tooltip } from "antd";
 import { css } from "@emotion/css";
 import { ClasseInterface } from "@/interfaces/ClassesInterface";
+import Link from "next/link";
 
 interface Props {
   subject: OpenSubjectForEnrollInterface;
@@ -277,7 +278,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                   <Typography sx={{ fontWeight: "bold" }} variant="body1">
                     {classe ? (
                       <div className="flex items-center gap-2">
-                        <a
+                        <Link
                           title={LocalsSwip(
                             "ดูรีวิวใน KU Clap",
                             "Reviews in KU Clap"
@@ -286,7 +287,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                           target="_blank"
                         >
                           <Icon icon="ic:outline-launch" className="text-xl" />
-                        </a>
+                        </Link>
                         {subject.subjectCode}{" "}
                       </div>
                     ) : (
