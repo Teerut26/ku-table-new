@@ -109,8 +109,7 @@ const Table: NextPage<Props> = ({
 
     try {
       let res = await axios.post(
-        "https://corsproxy.io/?" +
-          encodeURIComponent(process.env.NEXT_PUBLIC_KUTABLE_API_BASE + "/screenshot"),
+        "https://table-api.teerut.me/screenshot",
         courseData,
         {
           responseType: "blob",
