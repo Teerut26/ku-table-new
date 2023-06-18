@@ -20,6 +20,8 @@ import ExpandData from "./Table/ExpandData";
 import useTableStore from "./Table/store/useTableStore";
 import ChangeImageBackground from "./Table/ChangeImageBackground";
 import { css } from "@emotion/css";
+import axios from "axios";
+import { env } from "@/env/client.mjs";
 
 let times: string[] = [
   "8:00",
@@ -70,6 +72,7 @@ const Table: NextPage<Props> = ({
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
   const { expand, imageBackground, opacity } = useTableStore((r) => r);
+  const [IsServerLoading, setIsServerLoading] = useState(false);
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -101,6 +104,25 @@ const Table: NextPage<Props> = ({
     }, 1000);
   };
 
+  const handleDownloadServer = async () => {
+    setIsServerLoading(true);
+
+    try {
+      let res = await axios.post(
+        "https://corsproxy.io/?" +
+          encodeURIComponent(env.NEXT_PUBLIC_KUTABLE_API_BASE + "/screenshot"),
+        courseData,
+        {
+          responseType: "blob",
+        }
+      );
+      saveAs(res.data, `kutable-${themeCurrent}.png`);
+      setIsServerLoading(false);
+    } catch (error) {
+      setIsServerLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="flex w-full items-center gap-2">
@@ -114,6 +136,16 @@ const Table: NextPage<Props> = ({
           >
             {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
             PNG
+          </div>
+          <div
+            onClick={() => handleDownloadServer()}
+            className={clsx(
+              "btn-outline btn-primary btn-sm btn gap-2 uppercase",
+              IsServerLoading && "loading"
+            )}
+          >
+            {!IsServerLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
+            PNG Server
           </div>
           {!isIPhone && (
             <select

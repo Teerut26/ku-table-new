@@ -44,6 +44,7 @@ export const serverEnv = {
  */
 export const clientSchema = z.object({
   // NEXT_PUBLIC_CLIENTVAR: z.string(),
+  NEXT_PUBLIC_KUTABLE_API_BASE: z.string(),
 });
 
 /**
@@ -54,4 +55,5 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  NEXT_PUBLIC_KUTABLE_API_BASE: process.env.NEXT_PUBLIC_KUTABLE_API_BASE,
 };
