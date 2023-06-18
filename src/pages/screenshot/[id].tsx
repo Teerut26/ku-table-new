@@ -8,6 +8,8 @@ import _ from "lodash";
 import TimeBar from "@/components/TimeBar";
 import CourseBar from "@/components/CourseBar";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
+import { useEffect } from "react";
+import { useTheme } from "next-themes";
 
 let times: string[] = [
   "8:00",
@@ -53,6 +55,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Share: NextPage<Props> = ({ isIPhone }) => {
   const { query, back } = useRouter();
+  const { setTheme } = useTheme();
 
   const CourseSorting = (courses: Course[] | undefined) => {
     const sortedItems = _.orderBy(courses, ["time_start"], "asc");
@@ -70,6 +73,14 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
       times,
       (time) => time === maxTime?.time_to?.split(":")[0] + ":00"
     ) + 1;
+
+  console.log(query);
+
+  useEffect(() => {
+    if (query.theme) {
+      setTheme(query.theme as string);
+    }
+  }, [query]);
 
   return (
     <>
