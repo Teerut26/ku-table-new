@@ -110,7 +110,10 @@ const Table: NextPage<Props> = ({
     try {
       let res = await axios.post(
         "https://table-api.teerut.me/screenshot",
-        courseData,
+        {
+            courses:courseData,
+            theme:themeCurrent,
+        },
         {
           responseType: "blob",
         }
