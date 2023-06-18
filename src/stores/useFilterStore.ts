@@ -35,7 +35,7 @@ interface Filter {
 
 const useFilterStore = create<Filter>((set) => ({
   result: 0,
-  expandAll: false,
+  expandAll: true,
   showFilterMobile: false,
   showFilterDesktop: true,
   sectionType: [],

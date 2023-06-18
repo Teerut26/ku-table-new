@@ -10,7 +10,7 @@ const ShopSubject: NextPage<Props> = () => {
 
   return (
     <div className="flex flex-col ">
-      <div className="sticky top-0 z-10 flex flex-col gap-3 bg-base-100 py-5">
+      <div className="sticky top-[2.5rem] z-10 flex flex-col gap-3 bg-base-100 py-5">
         <MenuBar />
         <SearchBar />
       </div>

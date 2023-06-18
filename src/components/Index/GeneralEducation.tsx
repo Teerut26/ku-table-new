@@ -32,6 +32,7 @@ const GeneralEducation: NextPage<Props> = () => {
       />
       <div className="w-full overflow-x-auto">
         <Table
+        className="min-w-[80rem]"
           dataSource={genTemp}
           columns={
             [

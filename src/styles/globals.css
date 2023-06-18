@@ -13,3 +13,10 @@
   align-items: center !important;
   justify-content: center !important;
 }
+
+.ant-tabs-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10;
+  background-color: hsl(var(--b1));
+}
