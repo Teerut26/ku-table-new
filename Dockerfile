@@ -5,6 +5,8 @@ FROM --platform=linux/amd64 node:16-alpine3.17 AS deps
 RUN apk add --no-cache libc6-compat openssl1.1-compat
 WORKDIR /app
 
+ENV NEXT_PUBLIC_KUTABLE_API_BASE https://table-api.teerut.me
+
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
 
 RUN \
@@ -28,16 +30,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG GOOGLE_CLIENT_ID
-ARG GOOGLE_CLIENT_SECRET
-ARG S3
-ARG NEXT_PUBLIC_GRAPHQL_URL
-ARG NODE_ENV
-
 # ENV NEXT_TELEMETRY_DISABLED 1
 ENV SKIP_ENV_VALIDATION=1
 
-RUN SKIP_ENV_VALIDATION=1 yarn lint && yarn build
+RUN \
+ if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn lint && yarn build; \
+ elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run lint && npm run build; \
+ elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm lint && pnpm run build; \
+ else echo "Lockfile not found." && exit 1; \
+ fi
 
 ##### RUNNER
 
