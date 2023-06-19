@@ -137,14 +137,14 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
     return hashLocal === hashServer;
   };
 
-  useEffect(() => {
-    if (Courses.length > 0) {
-      const isSame = checkIsSameCourse(getSyncCoursesApi.data, Courses);
-      if (!isSame) {
-        saveTableOnServer();
-      }
-    }
-  }, [Courses]);
+//   useEffect(() => {
+//     if (Courses.length > 0) {
+//       const isSame = checkIsSameCourse(getSyncCoursesApi.data, Courses);
+//       if (!isSame) {
+//         saveTableOnServer();
+//       }
+//     }
+//   }, [Courses]);
 
   return (
     <>
