@@ -218,8 +218,8 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                           className="text-lg"
                         />
                         {LocalsSwip(
-                          "บันทึกตารางบน server",
-                          "Save table on server"
+                          "ซิงค์ทุกอุปกรณ์",
+                          "Sync all devices"
                         )}
                       </div>
                     </div>
