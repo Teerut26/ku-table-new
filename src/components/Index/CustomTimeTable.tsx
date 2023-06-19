@@ -2,7 +2,7 @@ import useLocalsSwip from "@/hooks/useLocalsSwip";
 import { NextPage } from "next";
 import Table from "../Table";
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { useLocalStorage } from "usehooks-ts";
 import { Icon } from "@iconify/react";
@@ -13,7 +13,9 @@ import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
 import calculateCredits from "@/utils/calculateCredits";
 import AddCourse from "./AddCourse";
-
+import { api } from "@/utils/api";
+import CryptoJS from "crypto-js";
+import { PageLoading } from "@ant-design/pro-components";
 interface Props {
   isIPhone: boolean;
 }
@@ -23,6 +25,10 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
   const [Courses, SetCourses] = useLocalStorage<Course[]>("CourseCustom04", []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const getSyncCoursesApi = api.sync.get.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+  const syncCoursesApi = api.sync.sync.useMutation();
 
   const CourseSorting = (courses: Course[]) => {
     const sortedItems = _.orderBy(courses, ["time_start"], "asc");
@@ -91,6 +97,55 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
     SetCourses(coursesAll);
   };
 
+  useEffect(() => {
+    if (getSyncCoursesApi.data && getSyncCoursesApi.data.length > 0) {
+      SetCourses(getSyncCoursesApi.data);
+    }
+  }, [getSyncCoursesApi.data]);
+
+  const saveTableOnServer = async () => {
+    syncCoursesApi.mutate(
+      {
+        courseData: Courses,
+      },
+      {
+        onSuccess: () => {
+          toast.success(
+            LocalsSwip("บันทึกตารางเรียนสำเร็จ", "Save table successfully")
+          );
+          getSyncCoursesApi.refetch();
+        },
+      }
+    );
+  };
+
+  const checkIsSameCourse = (
+    courseLocal: Course[] | undefined,
+    courseServer: Course[] | undefined
+  ) => {
+    if (
+      (courseLocal && courseLocal.length === 0) ||
+      (courseServer && courseServer.length === 0)
+    )
+      return false;
+    const hashLocal = CryptoJS.SHA256(JSON.stringify(courseLocal)).toString(
+      CryptoJS.enc.Hex
+    );
+    const hashServer = CryptoJS.SHA256(JSON.stringify(courseServer)).toString(
+      CryptoJS.enc.Hex
+    );
+    return hashLocal === hashServer;
+  };
+
+  useEffect(() => {
+    if (Courses.length > 0) {
+      const isSame = checkIsSameCourse(getSyncCoursesApi.data, Courses);
+      if (!isSame) {
+        saveTableOnServer();
+      }
+    }
+  }, [Courses]);
+
   return (
     <>
       <SearchSubject
@@ -102,70 +157,107 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
         }}
       />
       <div className="flex flex-col gap-3">
-        {Courses.length !== 0 ? (
-          <Table
-            isIPhone={isIPhone}
-            courseData={CourseSorting(Courses)}
-            canRemove={true}
-            onRemove={onRemove}
-            hasShare={true}
-            canEdit={true}
-            childrenBar={
-              <>
-                <input
-                  ref={inputRef}
-                  type="file"
-                  onChange={importTableJsonFile}
-                  style={{ display: "none" }}
-                />
-                <div
-                  onClick={exportTableJsonFile}
-                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
-                >
-                  <Icon icon="tabler:table-import" className="text-lg" /> Export
-                </div>
-                <div
-                  onClick={() => {
-                    inputRef.current?.click();
-                  }}
-                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
-                >
-                  <Icon icon="tabler:table-export" className="text-lg" /> Import
-                </div>
-                <AddCourse />
-                <div className="flex justify-end md:mr-3 md:grow">
-                  <button className="btn-outline btn-primary disabled btn-sm btn gap-3">
-                    {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
-                    <div className="badge-secondary badge">
-                      {calculateCredits(Courses)}
+        {!getSyncCoursesApi.isLoading ? (
+          <>
+            {Courses.length !== 0 ? (
+              <Table
+                isIPhone={isIPhone}
+                courseData={CourseSorting(Courses)}
+                canRemove={true}
+                onRemove={onRemove}
+                hasShare={true}
+                canEdit={true}
+                childrenBar={
+                  <>
+                    <input
+                      ref={inputRef}
+                      type="file"
+                      onChange={importTableJsonFile}
+                      style={{ display: "none" }}
+                    />
+                    <div
+                      onClick={exportTableJsonFile}
+                      className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                    >
+                      <Icon icon="tabler:table-import" className="text-lg" />{" "}
+                      Export
                     </div>
-                  </button>
+                    <div
+                      onClick={() => {
+                        inputRef.current?.click();
+                      }}
+                      className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                    >
+                      <Icon icon="tabler:table-export" className="text-lg" />{" "}
+                      Import
+                    </div>
+                    <AddCourse />
+                    <div className="flex justify-end md:mr-3 md:grow">
+                      <button className="btn-outline btn-primary disabled btn-sm btn gap-3">
+                        {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
+                        <div className="badge-secondary badge">
+                          {calculateCredits(Courses)}
+                        </div>
+                      </button>
+                    </div>
+                  </>
+                }
+                childrenFooterBar={
+                  <>
+                    <div className="flex justify-end md:mr-3 md:grow">
+                      <div
+                        onClick={saveTableOnServer}
+                        className="btn-outline btn-primary btn-sm btn items-center gap-2"
+                      >
+                        <Icon
+                          icon={
+                            checkIsSameCourse(getSyncCoursesApi.data, Courses)
+                              ? "material-symbols:cloud-done"
+                              : "material-symbols:cloud-off-outline"
+                          }
+                          className="text-lg"
+                        />
+                        {LocalsSwip(
+                          "บันทึกตารางบน server",
+                          "Save table on server"
+                        )}
+                      </div>
+                    </div>
+                  </>
+                }
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-3 border-[1px] border-base-content p-5">
+                <div className="flex gap-2">
+                  <>
+                    <input
+                      ref={inputRef}
+                      type="file"
+                      onChange={importTableJsonFile}
+                      style={{ display: "none" }}
+                    />
+                    <div
+                      onClick={() => {
+                        inputRef.current?.click();
+                      }}
+                      className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
+                    >
+                      <Icon icon="tabler:table-export" className="text-lg" />{" "}
+                      Import
+                    </div>
+                  </>
                 </div>
-              </>
-            }
-          />
+                {LocalsSwip(
+                  "คุณยังไม่มีจัดตารางเรียน",
+                  "You don't have timetable"
+                )}
+              </div>
+            )}
+          </>
         ) : (
-          <div className="flex flex-col items-center justify-center gap-3 border-[1px] border-base-content p-5">
-            <div className="flex gap-2">
-              <>
-                <input
-                  ref={inputRef}
-                  type="file"
-                  onChange={importTableJsonFile}
-                  style={{ display: "none" }}
-                />
-                <div
-                  onClick={() => {
-                    inputRef.current?.click();
-                  }}
-                  className="btn-outline btn-primary btn-sm btn gap-2 uppercase"
-                >
-                  <Icon icon="tabler:table-export" className="text-lg" /> Import
-                </div>
-              </>
-            </div>
-            {LocalsSwip("คุณยังไม่มีจัดตารางเรียน", "You don't have timetable")}
-          </div>
+          <>
+            <PageLoading />
+          </>
         )}
       </div>
     </>

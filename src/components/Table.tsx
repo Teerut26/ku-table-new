@@ -53,6 +53,8 @@ interface Props {
   onEdit?: (course: Course) => void;
   isIPhone: boolean;
   childrenBar?: React.ReactNode;
+  childrenFooterBar?: React.ReactNode;
+
 }
 
 const Table: NextPage<Props> = ({
@@ -64,6 +66,7 @@ const Table: NextPage<Props> = ({
   canEdit,
   onEdit,
   childrenBar,
+  childrenFooterBar
 }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
@@ -254,6 +257,7 @@ const Table: NextPage<Props> = ({
       </div>
       <div className="mt-3 flex flex-wrap gap-3">
         <ChangeImageBackground />
+        {childrenFooterBar && childrenFooterBar}
       </div>
     </>
   );
