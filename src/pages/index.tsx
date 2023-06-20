@@ -12,6 +12,8 @@ import useLocalsSwip from "@/hooks/useLocalsSwip";
 import ShopSubject from "@/components/Index/ShopSubject";
 import useTapStore from "@/stores/useTabStore";
 import GeneralEducation from "@/components/Index/GeneralEducation";
+import Howtouse from "@/components/Howtouse";
+import { Icon } from "@iconify/react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -91,6 +93,16 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
                       key: "tab3",
                       label: LocalsSwip("จัดตารางเรียน", "Custom Time Table"),
                       children: <CustomTimeTable isIPhone={isIPhone} />,
+                    },
+                    {
+                      key: "tab5",
+                      label: (
+                        <div className="flex gap-1">
+                          <Icon icon="tabler:info-circle" className="text-lg" />
+                          {LocalsSwip("วิธีใช้งาน", "How to use")}
+                        </div>
+                      ),
+                      children: <Howtouse />,
                     },
                   ]}
                 />

@@ -10,11 +10,13 @@ import _ from "lodash";
 import { isTimeInRanges } from "@/utils/timeMap";
 import { ClasseInterface } from "@/interfaces/ClassesInterface";
 import axios from "axios";
+import useLocalsSwip from "@/hooks/useLocalsSwip";
 
 interface Props {}
 
 const ListSubject: NextPage<Props> = () => {
   const { selectedSubjectCode } = useSearchStore((r) => r);
+  const { LocalsSwip } = useLocalsSwip();
   const {
     sectionDay,
     sectionStudentType,
@@ -47,13 +49,15 @@ const ListSubject: NextPage<Props> = () => {
 
   const [classes, setClasses] = useState<ClasseInterface[]>([]);
 
-    useEffect(() => {
-        (async () => {
-            const res = await axios.get<ClasseInterface[]>('https://corsproxy.io/?' + encodeURIComponent('https://api-review.kuclap.com/classes'));
-            setClasses(res.data);
-        })()
-    },[])
-
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get<ClasseInterface[]>(
+        "https://corsproxy.io/?" +
+          encodeURIComponent("https://api-review.kuclap.com/classes")
+      );
+      setClasses(res.data);
+    })();
+  }, []);
 
   if (subjectsApi.isLoading) {
     return (
@@ -97,21 +101,22 @@ const ListSubject: NextPage<Props> = () => {
           : sectionDayFiltedRaw;
 
       const sectionTimeFiltedRaw = sectionDayFilted.filter((subject) => {
-        const daySeparate = CourseDateSeparate(subject.coursedate).filter(
-          (day) => {
+        const daySeparate =
+          CourseDateSeparate(subject.coursedate).filter((day) => {
             return isTimeInRanges(
               sectionTime?.timeFrom!,
               sectionTime?.timeTo!,
               day.time_from!,
               day.time_to!
             );
-          }
-        ).length > 0;
+          }).length > 0;
 
         return daySeparate;
       });
 
-      const sectionTimeFilted = sectionTime ? sectionTimeFiltedRaw : sectionDayFilted;
+      const sectionTimeFilted = sectionTime
+        ? sectionTimeFiltedRaw
+        : sectionDayFilted;
 
       setResult(sectionTimeFilted.length);
       return sectionTimeFilted;
@@ -122,10 +127,17 @@ const ListSubject: NextPage<Props> = () => {
 
   return (
     <div className="flex flex-col gap-3">
+
       {subjectsApi.data &&
         subjectsApi.data.results.length > 0 &&
         subjectsDataTemp.map((subject, index) => (
-          <Subject subject={subject} key={index} classe={classes.find(c=>c.classId === subject.subjectCode.split("-")[0])} />
+          <Subject
+            subject={subject}
+            key={index}
+            classe={classes.find(
+              (c) => c.classId === subject.subjectCode.split("-")[0]
+            )}
+          />
         ))}
     </div>
   );
