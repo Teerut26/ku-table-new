@@ -185,7 +185,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
 
   isConflict();
 
-  const isSeatFull = subject.totalRegistered >= subject.totalSeat
+  const isSeatFull = Number.parseInt(subject.totalRegistered) >= Number.parseInt(subject.totalSeat) && Number.parseInt(subject.totalSeat) > 0;
 
   return (
     <>
@@ -365,15 +365,17 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                   </Typography>
                   <div className="flex flex-wrap gap-2">
                     <ChipSectionType
+                      label={subject.sectionCode}
+                      type={subject.sectionTypeEn}
+                      size="small"
+                    />
+                    <ChipSectionType
                       label={LocalsSwip(
                         `${subject.sectionTypeTh} (${LocalsSwip(
                           "หมู่",
                           "Sec"
                         )}: ${subject.sectionCode})`,
-                        `${subject.sectionTypeEn} (${LocalsSwip(
-                          "หมู่",
-                          "Sec"
-                        )}: ${subject.sectionCode})`
+                        `${subject.sectionTypeEn}`
                       )}
                       type={subject.sectionTypeEn}
                       size="small"
