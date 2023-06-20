@@ -257,7 +257,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
         <CardHeader
           title={
             <div className="flex flex-col gap-2 overflow-hidden">
-              {/* {isConflict() && (
+              {isConflict() && (
                 <Alert
                   message={
                     <div className="flex gap-2 text-error">
@@ -293,7 +293,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                     </div>
                   }
                 />
-              )} */}
+              )}
               <div className="flex justify-between">
                 <div className="flex flex-wrap gap-x-4 ">
                   <Typography sx={{ fontWeight: "bold" }} variant="body1">
