@@ -185,12 +185,15 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
 
   isConflict();
 
+  const isSeatFull = subject.totalRegistered >= subject.totalSeat
+
   return (
     <>
-      <Paper variant="outlined" className={clsx("relative pb-14 md:pb-0 border-error",subject.totalRegistered >= subject.totalSeat && css`
+      <Paper variant="outlined" className={clsx("relative pb-14 md:pb-0 border-error",isSeatFull && css`
         border-width: 2px !important;
         border-color: hsl(var(--er) / var(--tw-border-opacity)) !important;
         overflow: hidden;
+        ${isSeatFull && "padding-left: 1rem; padding-top: 1rem;"}
         ::after{
             content: "${LocalsSwip("เต็มแล้ว", "Full")}";
             position: absolute;
@@ -254,7 +257,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
         <CardHeader
           title={
             <div className="flex flex-col gap-2 overflow-hidden">
-              {isConflict() && (
+              {/* {isConflict() && (
                 <Alert
                   message={
                     <div className="flex gap-2 text-error">
@@ -290,7 +293,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                     </div>
                   }
                 />
-              )}
+              )} */}
               <div className="flex justify-between">
                 <div className="flex flex-wrap gap-x-4 ">
                   <Typography sx={{ fontWeight: "bold" }} variant="body1">
@@ -460,7 +463,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                 <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("จำนวนรับ", "Total Seat")}
                 </Typography>
-                <div className={clsx(subject.totalRegistered >= subject.totalSeat && "text-error")}>
+                <div className={clsx(isSeatFull && "text-error")}>
                   {subject.totalRegistered}/{subject.totalSeat}
                 </div>
               </div>
