@@ -187,7 +187,25 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
 
   return (
     <>
-      <Paper variant="outlined" className="relative pb-14 md:pb-0">
+      <Paper variant="outlined" className={clsx("relative pb-14 md:pb-0 border-error",subject.totalRegistered >= subject.totalSeat && css`
+        border-width: 2px !important;
+        border-color: hsl(var(--er) / var(--tw-border-opacity)) !important;
+        overflow: hidden;
+        ::after{
+            content: "${LocalsSwip("เต็มแล้ว", "Full")}";
+            position: absolute;
+            top: 0;
+            left:0;
+            text-align: center;
+            /* border-radius: 0 0 0.5rem 0; */
+            background-color: hsl(var(--er) / var(--tw-border-opacity));
+            color: white;
+            padding: 0rem;
+            width: 10rem;
+            rotate: -45deg;
+            transform: translate(-50px, -34px);
+        }
+      `)}>
         <div
           className={clsx(
             "absolute bottom-3 right-3 gap-3",
@@ -442,7 +460,7 @@ const Subject: NextPage<Props> = ({ subject, classe }) => {
                 <Typography variant="caption" sx={{ opacity: 0.5 }}>
                   {LocalsSwip("จำนวนรับ", "Total Seat")}
                 </Typography>
-                <div>
+                <div className={clsx(subject.totalRegistered >= subject.totalSeat && "text-error")}>
                   {subject.totalRegistered}/{subject.totalSeat}
                 </div>
               </div>
