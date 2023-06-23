@@ -1,6 +1,6 @@
 import { NextComponentType, NextPageContext } from "next";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import dynamic from "next/dynamic";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -8,13 +8,14 @@ import ChangeLanguage from "@/components/ChangeLanguage";
 import LocaleSwip from "@/utils/localeSwip";
 import clsx from "clsx";
 import Alert from "@/components/Alert";
+import { useCookies } from "react-cookie";
+import { RSAEncrypt } from "@/utils/RSA";
 
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
   ssr: false,
 });
 
-interface Props {
-}
+interface Props {}
 
 const Index: NextComponentType<Props> = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -24,6 +25,9 @@ const Index: NextComponentType<Props> = () => {
 
   const [showPass, setShowPass] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [cookies, setCookie, removeCookie] = useCookies(["store-data"]);
+  const isStoreData = useRef(cookies["store-data"] ? true : false);
 
   const router = useRouter();
 
@@ -36,10 +40,31 @@ const Index: NextComponentType<Props> = () => {
 
     try {
       setIsLoading(true);
+
       await signIn("credentials", {
         username: usernameRef.current.value!,
-        password: passwordRef.current.value!,
+        password:
+          passwordRef.current.value == "password-by-cookie"
+            ? cookies["store-data"].password
+            : RSAEncrypt(passwordRef.current.value!),
       });
+
+      if (
+        isStoreData.current &&
+        passwordRef.current.value != "password-by-cookie"
+      ) {
+        setCookie(
+          "store-data",
+          {
+            username: usernameRef.current.value!,
+            password: RSAEncrypt(passwordRef.current.value),
+          },
+          {
+            path: "/",
+          }
+        );
+      }
+
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -52,6 +77,18 @@ const Index: NextComponentType<Props> = () => {
       router.push("/");
     }
   }, [status]);
+
+  const onChangeisStoreData = () => {
+    isStoreData.current = !isStoreData.current;
+
+    if (!isStoreData.current) {
+      removeCookie("store-data", { path: "/" });
+
+      if (passwordRef?.current?.value == "password-by-cookie") {
+        passwordRef.current.value = "";
+      }
+    }
+  };
 
   return (
     <>
@@ -72,6 +109,7 @@ const Index: NextComponentType<Props> = () => {
             <input
               ref={usernameRef}
               type="text"
+              defaultValue={cookies["store-data"]?.username}
               placeholder="เช่น b63xxxxxxxx หรือ regxxx"
               className="input-bordered input-primary input w-full"
               required
@@ -98,11 +136,29 @@ const Index: NextComponentType<Props> = () => {
               <input
                 ref={passwordRef}
                 type={showPass ? "text" : "password"}
+                defaultValue={isStoreData.current ? "password-by-cookie" : ""}
                 placeholder="รหัสผ่านบัญชีผู้ใช้เครือข่ายนนทรี "
                 className="input-bordered input-primary input w-full"
                 required
               />
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="label cursor-pointer">
+              <input
+                type="checkbox"
+                defaultChecked={isStoreData.current}
+                onChange={onChangeisStoreData}
+                className="checkbox checkbox-sm"
+              />
+            </label>
+            <span className="text-md">
+              {LocaleSwip(
+                router.locale!,
+                "บันทึกข้อมูลการเข้าสู่ระบบ",
+                "Remember me"
+              )}
+            </span>
           </div>
           <button
             type="submit"
