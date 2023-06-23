@@ -20,6 +20,40 @@ export default {
     ],
     siteName: "KU Table",
   },
+  additionalMetaTags: [
+    {
+      name: "keywords",
+      content: "ku table",
+    },
+    {
+      name: "keywords",
+      content: "ku table มก",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มก",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ บางเขน",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ กำแพงแสน",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ ศรีราชา",
+    },
+    {
+      name: "keywords",
+      content: "ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ ทุกวิทยาเขต",
+    },
+  ],
   twitter: {
     handle: "@handle",
     site: "@site",
