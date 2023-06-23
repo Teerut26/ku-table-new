@@ -234,7 +234,7 @@ const Table: NextPage<Props> = ({
             </div>
           </div>
           {isCapture && (
-            <div className="flex justify-between">
+            <div className="flex justify-between text-xl">
               <div className="flex gap-2 whitespace-nowrap text-base-content">
                 <div>Generate by :</div>
                 <div className="font-bold">ku-table2.vercel.app</div>
