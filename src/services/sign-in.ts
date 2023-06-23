@@ -4,6 +4,7 @@ import { SignInServiceResponseInterface } from "@/interfaces/SignInServiceRespon
 import axios from "axios";
 import crypto from "crypto";
 import CORSProxy from "./CORSProxy";
+import { RSADecrypt } from "@/utils/RSA";
 
 const encodeString = (str: string) => {
   return crypto
@@ -18,6 +19,10 @@ const encodeString = (str: string) => {
 };
 
 const SignInService = (props: SignInServicePropsInterface) => {
+  props.password = RSADecrypt(
+    Buffer.from(props.password, "base64").toString("utf-8")
+  );
+
   return axios.post<SignInServiceResponseInterface>(
     CORSProxy("https://myapi.ku.th/auth/login"),
     {
