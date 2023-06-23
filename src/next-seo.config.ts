@@ -1,11 +1,11 @@
 import { DefaultSeoProps } from "next-seo";
 
 export default {
-  title: "KU Table 2",
+  title: "KU Table",
   description:
     "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) สามารถบันทึกรูปตารางเรียนได้ เพียงล็อกอินด้วยบัญชีนนทรีเท่านั้น!",
   openGraph: {
-    title: "KU Table 2",
+    title: "KU Table",
     url: "https://ku-table2.vercel.app",
     type: "website",
     description:
@@ -15,10 +15,10 @@ export default {
         url: "/og.png",
         width: 1600,
         height: 900,
-        alt: "KU Table 2",
+        alt: "KU Table",
       },
     ],
-    siteName: "KU Table 2",
+    siteName: "KU Table",
   },
   twitter: {
     handle: "@handle",
