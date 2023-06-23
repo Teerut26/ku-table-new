@@ -21,6 +21,7 @@ export const serverSchema = z.object({
   FIREBASE_ADMIN: z.string(),
   MYKU_PUBLIC_KEY: z.string(),
   TOKEN_LINE: z.string(),
+  STORE_PASSWORD_SECRET: z.string(),
 });
 
 /**
@@ -35,6 +36,7 @@ export const serverEnv = {
   FIREBASE_ADMIN: process.env.FIREBASE_ADMIN,
   MYKU_PUBLIC_KEY: process.env.MYKU_PUBLIC_KEY,
   TOKEN_LINE: process.env.TOKEN_LINE,
+  STORE_PASSWORD_SECRET: process.env.STORE_PASSWORD_SECRET,
 };
 
 /**
@@ -44,6 +46,7 @@ export const serverEnv = {
  */
 export const clientSchema = z.object({
   // NEXT_PUBLIC_CLIENTVAR: z.string(),
+  NEXT_PUBLIC_STORE_PASSWORD_KEY: z.string(),
 });
 
 /**
@@ -54,4 +57,5 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  NEXT_PUBLIC_STORE_PASSWORD_KEY: process.env.NEXT_PUBLIC_STORE_PASSWORD_KEY,
 };
