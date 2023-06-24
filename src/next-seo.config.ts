@@ -24,7 +24,7 @@ export default {
     {
       name: "keywords",
       content:
-        "ku table, ตารางเรียน, มก, มหาวิทยาลัยเกษตรศาสตร์, บางเขน, กำแพงแสน, ศรีราชา, ทุกวิทยาเขต,ku table มก,ตารางเรียน มก,ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์,ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ บางเขน,ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ กำแพงแสน,ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ ศรีราชา,ตารางเรียน มหาวิทยาลัยเกษตรศาสตร์ ทุกวิทยาเขต, kaset table, kaset, kaset table bangkhen, kaset table kamphaengsaen, kaset table sri racha, kaset table all campus, kaset table มก, kaset table มหาวิทยาลัยเกษตรศาสตร์, kaset table มหาวิทยาลัยเกษตรศาสตร์ บางเขน, kaset table มหาวิทยาลัยเกษตรศาสตร์ กำแพงแสน, kaset table มหาวิทยาลัยเกษตรศาสตร์ ศรีราชา, kaset table มหาวิทยาลัยเกษตรศาสตร์ ทุกวิทยาเขต",
+        "ku table, ku table vercel, my ku table, ku table ตารางเรียน, ku table vercel, ku.table, ku-table, ตารางเรียน มก, ตารางเรียน ku, ตารางเรียน, ตารางเรียน มก ศรช, ตารางเรียน มก กพส, ตารางเรียน มก ฉกส"
     },
   ],
   twitter: {
