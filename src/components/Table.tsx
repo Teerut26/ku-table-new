@@ -22,6 +22,10 @@ import ChangeImageBackground from "./Table/ChangeImageBackground";
 import { css } from "@emotion/css";
 import axios from "axios";
 import { env } from "@/env/client.mjs";
+import { convertKeyToColor } from "@/utils/colorsMap";
+import CourseCardMobileList from "./TableMobile/CourseCardMobileList";
+import useLocalsSwip from "@/hooks/useLocalsSwip";
+import { Icon } from "@iconify/react";
 
 let times: string[] = [
   "8:00",
@@ -54,7 +58,6 @@ interface Props {
   isIPhone: boolean;
   childrenBar?: React.ReactNode;
   childrenFooterBar?: React.ReactNode;
-
 }
 
 const Table: NextPage<Props> = ({
@@ -66,16 +69,18 @@ const Table: NextPage<Props> = ({
   canEdit,
   onEdit,
   childrenBar,
-  childrenFooterBar
+  childrenFooterBar,
 }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
+  const { LocalsSwip } = useLocalsSwip();
   const [scale, setScale] = useLocalStorage<number>("scaleV2", 1);
   const area = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
   const { expand, imageBackground, opacity } = useTableStore((r) => r);
   const [IsServerLoading, setIsServerLoading] = useState(false);
+  const [IsMobile, setIsMobile] = useLocalStorage("tableType", false);
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -114,8 +119,8 @@ const Table: NextPage<Props> = ({
       let res = await axios.post(
         "https://table-api.teerut.me/screenshot",
         {
-            courses:courseData,
-            theme:themeCurrent,
+          courses: courseData,
+          theme: themeCurrent,
         },
         {
           responseType: "blob",
@@ -126,6 +131,10 @@ const Table: NextPage<Props> = ({
     } catch (error) {
       setIsServerLoading(false);
     }
+  };
+
+  const handleIsMobile = () => {
+    setIsMobile((pre) => !pre);
   };
 
   return (
@@ -169,6 +178,21 @@ const Table: NextPage<Props> = ({
           <ChangeLanguage />
           <ExpandData />
           {hasShare && <ShareTableBtn courseData={courseData} />}
+          <button
+            className="btn-outline btn-primary btn-sm btn gap-1"
+            onClick={handleIsMobile}
+          >
+            {IsMobile ? (
+              <Icon
+                icon="material-symbols:desktop-windows-outline-rounded"
+                className="text-xl"
+              />
+            ) : (
+              <Icon icon="material-symbols:smartphone" className="text-xl" />
+            )}
+
+            {IsMobile ? LocalsSwip("ตารางคอมพิวเตอร์", "Computer Table") : LocalsSwip("ตารางโทรศัพท์", "Smartphone Table")}
+          </button>
           {childrenBar && childrenBar}
         </div>
       </div>
@@ -178,82 +202,90 @@ const Table: NextPage<Props> = ({
           "border-[1px] border-base-content"
         )}
       >
-        <div
-          ref={area}
-          className={clsx(
-            "flex flex-col bg-base-100",
-            isCapture && "p-5",
-            expand ? "min-w-[110rem]" : "min-w-[75rem]"
-          )}
-        >
+        {IsMobile ? (
+          <CourseCardMobileList
+            courseDatas={courseData}
+            ref={area}
+            isCapture={isCapture}
+          />
+        ) : (
           <div
+            ref={area}
             className={clsx(
-              isCapture &&
-                "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
-              "relative overflow-hidden"
+              "flex flex-col bg-base-100",
+              isCapture && "p-5",
+              expand ? "min-w-[110rem]" : "min-w-[75rem]"
             )}
           >
-            {imageBackground && (
-              <img
-                src={imageBackground}
-                className={clsx(
-                  css`
-                    background-image: url(${imageBackground});
-                    background-position: center;
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    position: absolute;
-                    height: 100%;
-                    width: 100%;
-                    object-fit: cover;
-                    opacity: ${imageBackground ? opacity : "0.5"};
-                  `
-                )}
-                alt=""
-              />
-            )}
-            <VerticalLine times={times.slice(0, maxIndex)} />
-            <div className={clsx("relative")}>
-              <TimeBar times={times.slice(0, maxIndex)} />
-              {days.map((day, index) => {
-                return (
-                  <CourseBar
-                    key={index}
-                    data={courseData.filter(
-                      (course) => course.day_w?.replaceAll(" ", "") === day
-                    )}
-                    times={times.slice(0, maxIndex)}
-                    day={day}
-                    canRemove={canRemove}
-                    onRemove={onRemove}
-                    canEdit={canEdit}
-                    onEdit={onEdit}
-                  />
-                );
-              })}
-            </div>
-          </div>
-          {isCapture && (
-            <div className="flex justify-between text-xl">
-              <div className="flex gap-2 whitespace-nowrap text-base-content">
-                <div>Generate by :</div>
-                <div className="font-bold">ku-table2.vercel.app</div>
-              </div>
-              {hasShare && (
-                <div className="flex gap-2 whitespace-nowrap text-base-content">
-                  <div className="font-bold">
-                    {session?.user?.email?.user.student.majorCode} -{" "}
-                    {LocaleSwip(
-                      locale!,
-                      session?.user?.email?.user.student.majorNameTh,
-                      session?.user?.email?.user.student.majorNameEn
-                    )}
-                  </div>
-                </div>
+            <div
+              className={clsx(
+                isCapture &&
+                  "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
+                "relative overflow-hidden"
               )}
+            >
+              {imageBackground && (
+                <img
+                  src={imageBackground}
+                  className={clsx(
+                    css`
+                      background-image: url(${imageBackground});
+                      background-position: center;
+                      background-size: cover;
+                      background-repeat: no-repeat;
+                      position: absolute;
+                      height: 100%;
+                      width: 100%;
+                      object-fit: cover;
+                      opacity: ${imageBackground ? opacity : "0.5"};
+                    `
+                  )}
+                  alt=""
+                />
+              )}
+              <VerticalLine times={times.slice(0, maxIndex)} />
+              <div className={clsx("relative")}>
+                <TimeBar times={times.slice(0, maxIndex)} />
+                {days.map((day, index) => {
+                  return (
+                    <CourseBar
+                      key={index}
+                      data={courseData.filter(
+                        (course) => course.day_w?.replaceAll(" ", "") === day
+                      )}
+                      times={times.slice(0, maxIndex)}
+                      day={day}
+                      canRemove={canRemove}
+                      onRemove={onRemove}
+                      canEdit={canEdit}
+                      onEdit={onEdit}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          )}
-        </div>
+            {isCapture && (
+              <div className="flex justify-between text-xl">
+                <div className="flex gap-2 whitespace-nowrap text-base-content">
+                  <div>Generate by :</div>
+                  <div className="font-bold">ku-table2.vercel.app</div>
+                </div>
+                {hasShare && (
+                  <div className="flex gap-2 whitespace-nowrap text-base-content">
+                    <div className="font-bold">
+                      {session?.user?.email?.user.student.majorCode} -{" "}
+                      {LocaleSwip(
+                        locale!,
+                        session?.user?.email?.user.student.majorNameTh,
+                        session?.user?.email?.user.student.majorNameEn
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="mt-3 flex flex-wrap gap-3">
         <ChangeImageBackground />
