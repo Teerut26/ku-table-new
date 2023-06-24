@@ -192,7 +192,7 @@ const CustomTimeTable: NextPage<Props> = ({ isIPhone }) => {
                       Import
                     </div>
                     <AddCourse />
-                    <div className="flex justify-end md:mr-3 md:grow">
+                    <div className="flex justify-end ">
                       <button className="btn-outline btn-primary disabled btn-sm btn gap-3">
                         {LocalsSwip("หน่วยกิตรวม", "Total Credit")}
                         <div className="badge-secondary badge">
