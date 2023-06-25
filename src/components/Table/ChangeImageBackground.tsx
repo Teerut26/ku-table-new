@@ -109,7 +109,7 @@ const ChangeImageBackground: NextPage<Props> = () => {
         className="btn-outline btn-primary btn-sm btn"
         onClick={() => setOpen((pre) => !pre)}
       >
-        {LocalsSwip("เปลี้ยนรูปพื้นหลัง", "Change Image Background")}
+        {LocalsSwip("เปลี่ยนรูปพื้นหลัง", "Change Image Background")}
       </button>
       <Modal
         open={Open}
