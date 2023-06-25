@@ -61,6 +61,7 @@ const Index: NextComponentType<Props> = () => {
           },
           {
             path: "/",
+            maxAge: 30 * 86400,
           }
         );
       }
