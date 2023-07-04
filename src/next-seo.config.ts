@@ -1,30 +1,30 @@
 import { DefaultSeoProps } from "next-seo";
 
 export default {
-  title: "KU Table",
+  title: "KU Get Reg",
   description:
-    "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) สามารถบันทึกรูปตารางเรียนได้ เพียงล็อกอินด้วยบัญชีนนทรีเท่านั้น!",
+    "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) จัดตารางเรียน",
   openGraph: {
-    title: "KU Table",
-    url: "https://ku-table2.vercel.app",
+    title: "KU Get Reg",
+    url: "https://kugetreg.vercel.app",
     type: "website",
     description:
-      "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) สามารถบันทึกรูปตารางเรียนได้ เพียงล็อกอินด้วยบัญชีนนทรีเท่านั้น!",
+      "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) จัดตารางเรียน",
     images: [
       {
         url: "/og.png",
         width: 1600,
         height: 900,
-        alt: "KU Table",
+        alt: "KU Get Reg",
       },
     ],
-    siteName: "KU Table",
+    siteName: "KU Get Reg",
   },
   additionalMetaTags: [
     {
       name: "keywords",
       content:
-        "ku table, ku table vercel, my ku table, ku table ตารางเรียน, ku table vercel, ku.table, ku-table, ตารางเรียน มก, ตารางเรียน ku, ตารางเรียน, ตารางเรียน มก ศรช, ตารางเรียน มก กพส, ตารางเรียน มก ฉกส"
+        "ku,kaset,เกษตร,reg,getreg,regku,ตารางเรียน,ตารางสอน,gened,KU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก"
     },
   ],
   twitter: {
