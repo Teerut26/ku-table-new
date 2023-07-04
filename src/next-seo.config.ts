@@ -20,11 +20,16 @@ export default {
     ],
     siteName: "KU Get Reg",
   },
+
   additionalMetaTags: [
     {
       name: "keywords",
       content:
-        "ku,kaset,เกษตร,reg,getreg,regku,ตารางเรียน,ตารางสอน,gened,KU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก"
+        "ku,kaset,เกษตร,reg,getreg,regku,ตารางเรียน,ตารางสอน,gened,KU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+    },
+    {
+      name: "google-site-verification",
+      content: "GbVnz8dxZstenMRFhAbjs3OFMe-08dmT8OThyO9mI8I",
     },
   ],
   twitter: {
