@@ -66,7 +66,7 @@ const CourseCardMobileList: ForwardRefExoticComponent<Props> = forwardRef<HTMLDi
           {isCapture && (
             <div className="z-10 flex gap-2 whitespace-nowrap text-lg text-base-content">
               <div>Generate by :</div>
-              <div className="font-bold">ku-table2.vercel.app</div>
+              <div className="font-bold">kugetreg.vercel.app</div>
             </div>
           )}
         </div>
