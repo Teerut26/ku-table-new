@@ -105,8 +105,8 @@ const Table: NextPage<Props> = ({
       });
       const name =
         status === "authenticated"
-          ? `kutable-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
-          : `kutable-${themeCurrent}.png`;
+          ? `kugetreg-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
+          : `kugetreg-${themeCurrent}.png`;
       saveAs(dataUrl, name);
       setIsCapture(false);
     }, 1000);
@@ -126,7 +126,7 @@ const Table: NextPage<Props> = ({
           responseType: "blob",
         }
       );
-      saveAs(res.data, `kutable-${themeCurrent}.png`);
+      saveAs(res.data, `kugetreg-${themeCurrent}.png`);
       setIsServerLoading(false);
     } catch (error) {
       setIsServerLoading(false);
@@ -268,7 +268,7 @@ const Table: NextPage<Props> = ({
               <div className="flex justify-between text-xl">
                 <div className="flex gap-2 whitespace-nowrap text-base-content">
                   <div>Generate by :</div>
-                  <div className="font-bold">ku-table2.vercel.app</div>
+                  <div className="font-bold">kugetreg.vercel.app</div>
                 </div>
                 {hasShare && (
                   <div className="flex gap-2 whitespace-nowrap text-base-content">
