@@ -11,7 +11,7 @@ const Footer: NextPage<Props> = () => {
     <>
       <footer className="footer items-center p-4 text-base-content">
         <div className="flex flex-col justify-self-center justify-center items-center">
-          <Link href="/report" className="underline text-info">{LocalsSwip("รายงานปัญหา", "Report")}</Link>
+          <Link href="https://www.instagram.com/teerut_1t/" target="_blank" className="underline text-info">รายงานปัญหาการใช้งานที่ Instragram</Link>
           <a href="https://github.com/Teerut26/ku-table-new">
             <GitHubIcon />
           </a>
