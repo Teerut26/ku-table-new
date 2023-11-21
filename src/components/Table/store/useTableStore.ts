@@ -12,7 +12,7 @@ interface ExpandTableDataInterface {
 }
 
 const useTableStore = create<ExpandTableDataInterface>((set) => ({
-  expand: true,
+  expand: false,
   imageBackground: null,
   opacity: null,
   opacityTable: null,
