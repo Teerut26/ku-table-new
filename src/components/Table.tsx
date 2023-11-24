@@ -151,7 +151,7 @@ const Table: NextPage<Props> = ({
             {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
             PNG
           </div>
-          <div
+          {/* <div
             onClick={() => handleDownloadServer()}
             className={clsx(
               "btn-outline btn-primary btn-sm btn gap-2 uppercase",
@@ -160,7 +160,7 @@ const Table: NextPage<Props> = ({
           >
             {!IsServerLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
             PNG Server
-          </div>
+          </div> */}
           {!isIPhone && (
             <select
               defaultValue={scale}

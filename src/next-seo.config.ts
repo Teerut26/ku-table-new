@@ -1,12 +1,12 @@
 import { DefaultSeoProps } from "next-seo";
 
 export default {
-  title: "KU Get Reg",
+  title: "KU Get Reg: จัดตารางเรียน",
   description:
     "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) จัดตารางเรียน",
   openGraph: {
-    title: "KU Get Reg",
-    url: "https://kugetreg.vercel.app",
+    title: "KU Get Reg: จัดตารางเรียน",
+    url: "https://kugetreg.onrender.com",
     type: "website",
     description:
       "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) จัดตารางเรียน",
