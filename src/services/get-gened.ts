@@ -1,4 +1,5 @@
 import { GenEdApiResponseInterface } from "@/interfaces/GenEdApiResponseInterface";
+import { SubjectGroupGenEdEnum } from "@/interfaces/SubjectGroupEnum";
 import axios from "axios";
 
 export enum SourceFieldNameEnum {
@@ -11,11 +12,11 @@ export enum SourceFieldNameEnum {
 }
 
 export interface GenEdServiceResponseInterface {
-    subjectGroup: string;
-    subjectCode: string;
-    subjectName: string;
-    subjectCredits: string;
-    subjectFaculty: string;
+  subjectGroup: SubjectGroupGenEdEnum;
+  subjectCode: string;
+  subjectName: string;
+  subjectCredits: string;
+  subjectFaculty: string;
 }
 
 interface Props {
@@ -177,8 +178,8 @@ const getGenEdService = async (props: Props) => {
     });
 
     const resultRaw =
-      (JSON.parse(res.data.replace(`)]}'`, "")) as GenEdApiResponseInterface)
-        .dataResponse[0]?.dataSubset[0]?.dataset.tableDataset.column || [];
+      (JSON.parse(res.data.replace(`)]}'`, "")) as GenEdApiResponseInterface).dataResponse[0]
+        ?.dataSubset[0]?.dataset.tableDataset.column || [];
 
     const result =
       resultRaw[0]?.stringColumn?.values.map((item: string, index) => ({
