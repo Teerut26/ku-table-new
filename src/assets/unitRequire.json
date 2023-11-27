@@ -1,0 +1,29 @@
+{
+  "ref": "https://github.com/KU-Table/KU-Table-server/blob/main/data/newGenEd.json",
+  "D14": {
+    "60": {
+      "Wellness": 3,
+      "Entrepreneurship": 3,
+      "Thai_Citizen_and_Global_Citizen": 3,
+      "Language_and_Communication": 13,
+      "Aesthetics": 3,
+      "Faculty": 5,
+      "Core": 16,
+      "Required_Specialized": 55,
+      "Elective_Specialized": 21,
+      "Elective": 6
+    },
+    "65": {
+      "Wellness": 3,
+      "Entrepreneurship": 3,
+      "Thai_Citizen_and_Global_Citizen": 3,
+      "Language_and_Communication": 13,
+      "Aesthetics": 3,
+      "Faculty": 5,
+      "Core": 16,
+      "Required_Specialized": 55,
+      "Elective_Specialized": 21,
+      "Elective": 6
+    }
+  }
+}
