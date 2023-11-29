@@ -47,7 +47,7 @@ export const api = createTRPCNext<AppRouter>({
       queryClientConfig: {
         defaultOptions: {
           queries: {
-            // refetchOnWindowFocus: false,
+            refetchOnWindowFocus: false,
           },
         },
       },
