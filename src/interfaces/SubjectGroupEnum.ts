@@ -10,7 +10,7 @@ export enum SubjectGroupGenEdEnum {
   Language_and_Communication = "กลุ่มสาระภาษากับการสื่อสาร",
   Entrepreneurship = "กลุ่มสาระศาสตร์แห่งผู้ประกอบการ",
   Aesthetics = "กลุ่มสาระสุนทรียศาสตร์",
-  Faculty = "กลุ่มสาระคณะ",
+  Other = "กลุ่มสาระอื่นๆ",
 }
 
 export enum SubjectGroupSpecializedEnum {
