@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import CardAchievement from './Achievement/CardAchievement'
 import useLocalsSwip from '@/hooks/useLocalsSwip';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { api } from '@/utils/api';
 import { useSession } from 'next-auth/react';
 
@@ -39,7 +39,15 @@ const Achievement: NextPage<Props> = () => {
                             }))
                         }
                     } />
-                )) : LocalsSwip(`ไม่พบข้อมูลสำหรับ ${session?.user?.email?.user.student.majorCode}`, `No data for ${session?.user?.email?.user.student.majorCode}`)}
+                )) : <>
+                    <div className='flex flex-col'>
+                        {LocalsSwip(`ไม่พบข้อมูลสำหรับ ${session?.user?.email?.user.student.majorCode}`, `No data for ${session?.user?.email?.user.student.majorCode}`)}
+                        <div >
+                            สนใจเพิ่ม Achievement สาขาตนเองติดต่อได้ที่{" "}
+                            <a href="https://www.instagram.com/teerut_1t/" className='underline text-info' target='_blank'>Instragram teerut_1t</a>
+                        </div>
+                    </div>
+                </>}
             </div>}
 
         </div>

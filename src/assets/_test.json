@@ -1,0 +1,20 @@
+{
+  "N07": {
+    "60": {
+      "Wellness": 6,
+      "Entrepreneurship": 3,
+      "Thai_Citizen_and_Global_Citizen": 5,
+      "Language_and_Communication": 13,
+      "Aesthetics": 3,
+      "Other": 6
+    },
+    "65": {
+      "Wellness": 7,
+      "Entrepreneurship": 3,
+      "Thai_Citizen_and_Global_Citizen": 2,
+      "Language_and_Communication": 15,
+      "Aesthetics": 3,
+      "Other": 6
+    }
+  }
+}
