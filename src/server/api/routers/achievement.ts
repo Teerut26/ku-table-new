@@ -11,11 +11,12 @@ import IntersectionSubjectFunction from "@/utils/IntersectionSubjectFunction";
 import DataCastingSubjectFunction from "@/utils/DataCastingSubjectFunction";
 import sumGeneralEducationFunc from "@/utils/sumGEF";
 import axios from "axios";
+import { redisClient } from "@/services/redis";
 
 export const achievementRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ input, ctx }) => {
     try {
-      const result = await getGrades({
+      let result = await getGrades({
         token: ctx.session.user.email?.accesstoken!,
       });
 
@@ -24,9 +25,29 @@ export const achievementRouter = createTRPCRouter({
 
       const courseYear = findCourseYear(idCode!);
 
-      const res = await axios.get("https://api.github.com/gists/d0ae25194bf6676e6109b6b2d53802b7")
-      const UnitRequireRaw = JSON.parse(res.data.files["unitRequire.json"].content);
+      const dataInCacheUnitRequire = await redisClient.get("unitRequire");
 
+      let UnitRequireRaw;
+
+      if (dataInCacheUnitRequire) {
+        console.log("Cache hit : UnitRequire");
+        UnitRequireRaw = JSON.parse(dataInCacheUnitRequire);
+      } else {
+        console.log("Cache miss : UnitRequire");
+        const res = await axios({
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "https://api.github.com/gists/d0ae25194bf6676e6109b6b2d53802b7",
+          headers: {
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        });
+        UnitRequireRaw = JSON.parse(res.data.files["unitRequire.json"].content);
+        redisClient.set("unitRequire", JSON.stringify(UnitRequireRaw), {
+          EX: 60 * 60 * 1,
+        });
+      }
 
       if ((UnitRequireRaw as any)[majorCode] === undefined || (UnitRequireRaw as any)[majorCode][courseYear] === undefined) {
         return [];
@@ -37,18 +58,18 @@ export const achievementRouter = createTRPCRouter({
       const genEdCreditRequire = unitRequire.Aesthetics + unitRequire.Language_and_Communication + unitRequire.Thai_Citizen_and_Global_Citizen + unitRequire.Entrepreneurship + unitRequire.Wellness + unitRequire.Other;
 
       let gradeAll: intersectionType[] = [];
-      result.data.results.map((grade) =>
-        grade.grade.map((grade) => {
+      result.data.results.map((grade: any) =>
+        grade.grade.map((grade2: any) => {
           const gradeSet = ["A", "B", "B+", "C+", "C", "D+", "D"];
 
-          if (!gradeSet.includes(grade.grade)) {
+          if (!gradeSet.includes(grade2.grade)) {
             return;
           }
 
           gradeAll.push({
-            subjectCode: grade.subject_code,
-            subjectName: grade.subject_name_en,
-            subjectCredits: grade.credit,
+            subjectCode: grade2.subject_code,
+            subjectName: grade2.subject_name_en,
+            subjectCredits: grade2.credit,
           });
         })
       );

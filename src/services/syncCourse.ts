@@ -1,6 +1,7 @@
 import { Course } from "@/interfaces/GroupCourseResponseInterface";
 import db from "@/configs/firestoreAdmin";
 import CryptoJS from "crypto-js";
+import { redisClient } from "./redis";
 
 interface Props {
   course: Course[];
