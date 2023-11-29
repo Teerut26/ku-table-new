@@ -2,8 +2,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import getGrades from "@/services/get-grades";
 import { SubjectGroupEnum, SubjectGroupGenEdEnum } from "@/interfaces/SubjectGroupEnum";
 
-import UnitRequireRaw from "@/assets/unitRequire.json";
-
 import GenEdAll from "@/assets/genEd/All.json";
 
 import _, { sum } from "lodash";
@@ -12,6 +10,7 @@ import { intersectionType } from "@/interfaces/intersectionType";
 import IntersectionSubjectFunction from "@/utils/IntersectionSubjectFunction";
 import DataCastingSubjectFunction from "@/utils/DataCastingSubjectFunction";
 import sumGeneralEducationFunc from "@/utils/sumGEF";
+import axios from "axios";
 
 export const achievementRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ input, ctx }) => {
@@ -24,6 +23,10 @@ export const achievementRouter = createTRPCRouter({
       const idCode = ctx.session.user.email?.user.idCode.slice(0, 2).trim();
 
       const courseYear = findCourseYear(idCode!);
+
+      const res = await axios.get("https://api.github.com/gists/d0ae25194bf6676e6109b6b2d53802b7")
+      const UnitRequireRaw = JSON.parse(res.data.files["unitRequire.json"].content);
+
 
       if ((UnitRequireRaw as any)[majorCode] === undefined || (UnitRequireRaw as any)[majorCode][courseYear] === undefined) {
         return [];
@@ -105,49 +108,54 @@ export const achievementRouter = createTRPCRouter({
         sumToMax(sumLanguage_and_Communication, unitRequire.Language_and_Communication) +
         sumToMax(sumOther, unitRequire.Other);
 
+      let childrens = [
+        {
+          type: SubjectGroupGenEdEnum.Wellness,
+          credit_require: unitRequire.Wellness,
+          credit_current: sumWellness,
+          children: WellnessIntersect,
+        },
+        {
+          type: SubjectGroupGenEdEnum.Aesthetics,
+          credit_require: unitRequire.Aesthetics,
+          credit_current: sumAesthetics,
+          children: AestheticsIntersect,
+        },
+        {
+          type: SubjectGroupGenEdEnum.Entrepreneurship,
+          credit_require: unitRequire.Entrepreneurship,
+          credit_current: sumEntrepreneurship,
+          children: EntrepreneurshipIntersect,
+        },
+        {
+          type: SubjectGroupGenEdEnum.Thai_Citizen_and_Global_Citizen,
+          credit_require: unitRequire.Thai_Citizen_and_Global_Citizen,
+          credit_current: sumThai_Citizen_and_Global_Citizen,
+          children: Thai_Citizen_and_Global_CitizenIntersect,
+        },
+        {
+          type: SubjectGroupGenEdEnum.Language_and_Communication,
+          credit_require: unitRequire.Language_and_Communication,
+          credit_current: sumLanguage_and_Communication,
+          children: Language_and_CommunicationIntersect,
+        },
+      ];
+
+      if (unitRequire.Other) {
+        childrens.push({
+          type: SubjectGroupGenEdEnum.Other,
+          credit_require: unitRequire.Other,
+          credit_current: sumOther,
+          children: OtherIntersect,
+        });
+      }
+
       return [
         {
           type: SubjectGroupEnum.General_Education,
           credit_require: genEdCreditRequire,
           credit_current: sumGeneral_EducationAll,
-          children: [
-            {
-              type: SubjectGroupGenEdEnum.Wellness,
-              credit_require: unitRequire.Wellness,
-              credit_current: sumWellness,
-              children: WellnessIntersect,
-            },
-            {
-              type: SubjectGroupGenEdEnum.Aesthetics,
-              credit_require: unitRequire.Aesthetics,
-              credit_current: sumAesthetics,
-              children: AestheticsIntersect,
-            },
-            {
-              type: SubjectGroupGenEdEnum.Entrepreneurship,
-              credit_require: unitRequire.Entrepreneurship,
-              credit_current: sumEntrepreneurship,
-              children: EntrepreneurshipIntersect,
-            },
-            {
-              type: SubjectGroupGenEdEnum.Thai_Citizen_and_Global_Citizen,
-              credit_require: unitRequire.Thai_Citizen_and_Global_Citizen,
-              credit_current: sumThai_Citizen_and_Global_Citizen,
-              children: Thai_Citizen_and_Global_CitizenIntersect,
-            },
-            {
-              type: SubjectGroupGenEdEnum.Language_and_Communication,
-              credit_require: unitRequire.Language_and_Communication,
-              credit_current: sumLanguage_and_Communication,
-              children: Language_and_CommunicationIntersect,
-            },
-            {
-                type: SubjectGroupGenEdEnum.Other,
-                credit_require: unitRequire.Other,
-                credit_current: sumOther,
-                children: OtherIntersect,
-            }
-          ],
+          children: childrens,
         },
       ];
     } catch (error) {
