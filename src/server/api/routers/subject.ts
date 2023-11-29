@@ -6,6 +6,7 @@ import getSubject from "@/services/get-subject";
 import getSubjects from "@/services/get-subjects";
 import getSubjectSearchService from "@/services/subject-search";
 import getGenEdService from "@/services/get-gened";
+import { redisClient } from "@/services/redis";
 
 export const subjectRouter = createTRPCRouter({
   get: protectedProcedure
@@ -16,12 +17,7 @@ export const subjectRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const {
-        studentStatusCode: stdStatusCode,
-        campusCode,
-        facultyCode,
-        majorCode,
-      } = ctx.session.user.email?.user.student!;
+      const { studentStatusCode: stdStatusCode, campusCode, facultyCode, majorCode } = ctx.session.user.email?.user.student!;
 
       try {
         let resSchedule = await getSchedule({
@@ -53,12 +49,7 @@ export const subjectRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const {
-        studentStatusCode: stdStatusCode,
-        campusCode,
-        facultyCode,
-        majorCode,
-      } = ctx.session.user.email?.user.student!;
+      const { studentStatusCode: stdStatusCode, campusCode, facultyCode, majorCode } = ctx.session.user.email?.user.student!;
 
       try {
         let resSchedule = await getSchedule({
@@ -82,25 +73,33 @@ export const subjectRouter = createTRPCRouter({
         throw new Error(error.response.data.code);
       }
     }),
-  search: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ input, ctx }) => {
-      try {
-        let res = await getSubjectSearchService({
-          token: ctx.session.user.email?.accesstoken!,
-          query: input,
-        });
-        return res.data;
-      } catch (error: any) {
-        throw new Error(error.response.data.code);
-      }
-    }),
+  search: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    try {
+      let res = await getSubjectSearchService({
+        token: ctx.session.user.email?.accesstoken!,
+        query: input,
+      });
+      return res.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.code);
+    }
+  }),
   getGenEd: protectedProcedure.query(async ({ input, ctx }) => {
     try {
-      let res = await getGenEdService({
-        stringValues: "",
-      });
-      return res;
+      const dataInCache = await redisClient.get("GenEd");
+      if (dataInCache) {
+        console.log("Cache hit : GenEd");
+        return JSON.parse(dataInCache);
+      } else {
+        console.log("Cache miss : GenEd");
+        let res = await getGenEdService({
+          stringValues: "",
+        });
+        redisClient.set("GenEd", JSON.stringify(res), {
+          EX: 24 * 60 * 60,
+        });
+        return res;
+      }
     } catch (error: any) {
       throw new Error(error.message);
     }

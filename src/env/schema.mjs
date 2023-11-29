@@ -7,10 +7,7 @@ import { z } from "zod";
  */
 export const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
-  NEXTAUTH_SECRET:
-    process.env.NODE_ENV === "production"
-      ? z.string().min(1)
-      : z.string().min(1).optional(),
+  NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
   NEXTAUTH_URL: z.preprocess(
     // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
@@ -22,6 +19,7 @@ export const serverSchema = z.object({
   MYKU_PUBLIC_KEY: z.string(),
   TOKEN_LINE: z.string(),
   STORE_PASSWORD_SECRET: z.string(),
+  REDIS_URL: z.string().url().optional(),
 });
 
 /**
@@ -37,6 +35,7 @@ export const serverEnv = {
   MYKU_PUBLIC_KEY: process.env.MYKU_PUBLIC_KEY,
   TOKEN_LINE: process.env.TOKEN_LINE,
   STORE_PASSWORD_SECRET: process.env.STORE_PASSWORD_SECRET,
+  REDIS_URL: process.env.REDIS_URL,
 };
 
 /**
