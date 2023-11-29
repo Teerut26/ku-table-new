@@ -8,12 +8,10 @@ import GenEdAll from "@/assets/genEd/All.json";
 
 import _, { sum } from "lodash";
 import findCourseYear from "@/utils/findCourseYear";
-
-interface intersectionType {
-  subjectCode: string;
-  subjectName: string;
-  subjectCredits: number;
-}
+import { intersectionType } from "@/interfaces/intersectionType";
+import IntersectionSubjectFunction from "@/utils/IntersectionSubjectFunction";
+import DataCastingSubjectFunction from "@/utils/DataCastingSubjectFunction";
+import sumGeneralEducationFunc from "@/utils/sumGEF";
 
 export const achievementRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ input, ctx }) => {
@@ -23,7 +21,6 @@ export const achievementRouter = createTRPCRouter({
       });
 
       const majorCode = ctx.session.user.email?.user.student.majorCode.trim()!;
-      const facultyNameTh = ctx.session.user.email?.user.student.facultyNameTh.trim()!;
       const idCode = ctx.session.user.email?.user.idCode.slice(0, 2).trim();
 
       const courseYear = findCourseYear(idCode!);
@@ -53,38 +50,23 @@ export const achievementRouter = createTRPCRouter({
         })
       );
 
-      const IntersectionFunction = (a: intersectionType, b: intersectionType) => a.subjectCode.slice(0, 8) === b.subjectCode.slice(0, 8);
-
-      const DataCastingFunction = (subject: any) => {
-        return {
-          subjectCode: subject.subjectCode,
-          subjectName: subject.subjectName,
-          subjectCredits: parseInt(subject.subjectCredits),
-        };
-      };
-
-      const OtherRaw = GenEdAll.filter(
-        (v) => v.subjectGroup.match("กลุ่มสาระอยู่ดีมีสุข") || v.subjectGroup.match("กลุ่มสาระสุนทรียศาสตร์") || v.subjectGroup.match("กลุ่มสาระศาสตร์แห่งผู้ประกอบการ") || v.subjectGroup.match("กลุ่มสาระพลเมืองไทยและพลเมืองโลก") || v.subjectGroup.match("กลุ่มสาระภาษากับการสื่อสาร")
-      );
-
       const WellnessRaw = GenEdAll.filter((v) => v.subjectGroup.match("กลุ่มสาระอยู่ดีมีสุข"));
       const AestheticsRaw = GenEdAll.filter((v) => v.subjectGroup.match("กลุ่มสาระสุนทรียศาสตร์"));
       const EntrepreneurshipRaw = GenEdAll.filter((v) => v.subjectGroup.match("กลุ่มสาระศาสตร์แห่งผู้ประกอบการ"));
       const Thai_Citizen_and_Global_CitizenRaw = GenEdAll.filter((v) => v.subjectGroup.match("กลุ่มสาระพลเมืองไทยและพลเมืองโลก"));
       const Language_and_CommunicationRaw = GenEdAll.filter((v) => v.subjectGroup.match("กลุ่มสาระภาษากับการสื่อสาร"));
 
-      const Wellness: intersectionType[] = WellnessRaw.map(DataCastingFunction);
-      const Aesthetics: intersectionType[] = AestheticsRaw.map(DataCastingFunction);
-      const Entrepreneurship: intersectionType[] = EntrepreneurshipRaw.map(DataCastingFunction);
-      const Thai_Citizen_and_Global_Citizen: intersectionType[] = Thai_Citizen_and_Global_CitizenRaw.map(DataCastingFunction);
-      const Language_and_Communication: intersectionType[] = Language_and_CommunicationRaw.map(DataCastingFunction);
-      const Other: intersectionType[] = OtherRaw.map(DataCastingFunction);
+      const Wellness: intersectionType[] = WellnessRaw.map(DataCastingSubjectFunction);
+      const Aesthetics: intersectionType[] = AestheticsRaw.map(DataCastingSubjectFunction);
+      const Entrepreneurship: intersectionType[] = EntrepreneurshipRaw.map(DataCastingSubjectFunction);
+      const Thai_Citizen_and_Global_Citizen: intersectionType[] = Thai_Citizen_and_Global_CitizenRaw.map(DataCastingSubjectFunction);
+      const Language_and_Communication: intersectionType[] = Language_and_CommunicationRaw.map(DataCastingSubjectFunction);
 
-      const WellnessIntersect = _.intersectionWith(gradeAll, Wellness, IntersectionFunction);
-      const AestheticsIntersect = _.intersectionWith(gradeAll, Aesthetics, IntersectionFunction);
-      const EntrepreneurshipIntersect = _.intersectionWith(gradeAll, Entrepreneurship, IntersectionFunction);
-      const Thai_Citizen_and_Global_CitizenIntersect = _.intersectionWith(gradeAll, Thai_Citizen_and_Global_Citizen, IntersectionFunction);
-      const Language_and_CommunicationIntersect = _.intersectionWith(gradeAll, Language_and_Communication, IntersectionFunction);
+      const WellnessIntersect = _.intersectionWith(gradeAll, Wellness, IntersectionSubjectFunction);
+      const AestheticsIntersect = _.intersectionWith(gradeAll, Aesthetics, IntersectionSubjectFunction);
+      const EntrepreneurshipIntersect = _.intersectionWith(gradeAll, Entrepreneurship, IntersectionSubjectFunction);
+      const Thai_Citizen_and_Global_CitizenIntersect = _.intersectionWith(gradeAll, Thai_Citizen_and_Global_Citizen, IntersectionSubjectFunction);
+      const Language_and_CommunicationIntersect = _.intersectionWith(gradeAll, Language_and_Communication, IntersectionSubjectFunction);
 
       let OtherIntersect: intersectionType[] = [];
 
@@ -108,14 +90,12 @@ export const achievementRouter = createTRPCRouter({
         return value > max ? max : value;
       };
 
-      const sGEF = (v: intersectionType) => v.subjectCredits;
-
-      const sumWellness = _.sumBy(WellnessIntersect, sGEF);
-      const sumAesthetics = _.sumBy(AestheticsIntersect, sGEF);
-      const sumEntrepreneurship = _.sumBy(EntrepreneurshipIntersect, sGEF);
-      const sumThai_Citizen_and_Global_Citizen = _.sumBy(Thai_Citizen_and_Global_CitizenIntersect, sGEF);
-      const sumLanguage_and_Communication = _.sumBy(Language_and_CommunicationIntersect, sGEF);
-      const sumOther = _.sumBy(OtherIntersect, sGEF);
+      const sumWellness = _.sumBy(WellnessIntersect, sumGeneralEducationFunc);
+      const sumAesthetics = _.sumBy(AestheticsIntersect, sumGeneralEducationFunc);
+      const sumEntrepreneurship = _.sumBy(EntrepreneurshipIntersect, sumGeneralEducationFunc);
+      const sumThai_Citizen_and_Global_Citizen = _.sumBy(Thai_Citizen_and_Global_CitizenIntersect, sumGeneralEducationFunc);
+      const sumLanguage_and_Communication = _.sumBy(Language_and_CommunicationIntersect, sumGeneralEducationFunc);
+      const sumOther = _.sumBy(OtherIntersect, sumGeneralEducationFunc);
 
       const sumGeneral_EducationAll =
         sumToMax(sumWellness, unitRequire.Wellness) +
@@ -134,37 +114,37 @@ export const achievementRouter = createTRPCRouter({
             {
               type: SubjectGroupGenEdEnum.Wellness,
               credit_require: unitRequire.Wellness,
-              credit_current: _.sumBy(WellnessIntersect, (v) => v.subjectCredits),
+              credit_current: sumWellness,
               children: WellnessIntersect,
             },
             {
               type: SubjectGroupGenEdEnum.Aesthetics,
               credit_require: unitRequire.Aesthetics,
-              credit_current: _.sumBy(AestheticsIntersect, (v) => v.subjectCredits),
+              credit_current: sumAesthetics,
               children: AestheticsIntersect,
             },
             {
               type: SubjectGroupGenEdEnum.Entrepreneurship,
               credit_require: unitRequire.Entrepreneurship,
-              credit_current: _.sumBy(EntrepreneurshipIntersect, (v) => v.subjectCredits),
+              credit_current: sumEntrepreneurship,
               children: EntrepreneurshipIntersect,
             },
             {
               type: SubjectGroupGenEdEnum.Thai_Citizen_and_Global_Citizen,
               credit_require: unitRequire.Thai_Citizen_and_Global_Citizen,
-              credit_current: _.sumBy(Thai_Citizen_and_Global_CitizenIntersect, (v) => v.subjectCredits),
+              credit_current: sumThai_Citizen_and_Global_Citizen,
               children: Thai_Citizen_and_Global_CitizenIntersect,
             },
             {
               type: SubjectGroupGenEdEnum.Language_and_Communication,
               credit_require: unitRequire.Language_and_Communication,
-              credit_current: _.sumBy(Language_and_CommunicationIntersect, (v) => v.subjectCredits),
+              credit_current: sumLanguage_and_Communication,
               children: Language_and_CommunicationIntersect,
             },
             {
                 type: SubjectGroupGenEdEnum.Other,
                 credit_require: unitRequire.Other,
-                credit_current: _.sumBy(OtherIntersect, (v) => v.subjectCredits),
+                credit_current: sumOther,
                 children: OtherIntersect,
             }
           ],
