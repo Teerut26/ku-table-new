@@ -19,7 +19,8 @@ export const serverSchema = z.object({
   MYKU_PUBLIC_KEY: z.string(),
   TOKEN_LINE: z.string(),
   STORE_PASSWORD_SECRET: z.string(),
-  REDIS_URL: z.string().url().optional(),
+  REDIS_URL: z.string().url(),
+  UNIT_REQUIRE_URL: z.string().url()
 });
 
 /**
@@ -36,6 +37,7 @@ export const serverEnv = {
   TOKEN_LINE: process.env.TOKEN_LINE,
   STORE_PASSWORD_SECRET: process.env.STORE_PASSWORD_SECRET,
   REDIS_URL: process.env.REDIS_URL,
+  UNIT_REQUIRE_URL: process.env.UNIT_REQUIRE_URL
 };
 
 /**

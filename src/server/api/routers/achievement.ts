@@ -12,6 +12,8 @@ import DataCastingSubjectFunction from "@/utils/DataCastingSubjectFunction";
 import sumGeneralEducationFunc from "@/utils/sumGEF";
 import axios from "axios";
 import { redisClient } from "@/services/redis";
+import storage from "@/configs/storageAdmin";
+import { env } from "@/env/server.mjs";
 
 export const achievementRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ input, ctx }) => {
@@ -25,29 +27,24 @@ export const achievementRouter = createTRPCRouter({
 
       const courseYear = findCourseYear(idCode!);
 
-      const dataInCacheUnitRequire = await redisClient.get("unitRequire");
+    //   const dataInCacheUnitRequire = await redisClient.get("unitRequire");
 
       let UnitRequireRaw;
 
-      if (dataInCacheUnitRequire) {
-        console.log("Cache hit : UnitRequire");
-        UnitRequireRaw = JSON.parse(dataInCacheUnitRequire);
-      } else {
-        console.log("Cache miss : UnitRequire");
-        const res = await axios({
-          method: "get",
-          maxBodyLength: Infinity,
-          url: "https://api.github.com/gists/d0ae25194bf6676e6109b6b2d53802b7",
-          headers: {
-            Accept: "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-          },
-        });
-        UnitRequireRaw = JSON.parse(res.data.files["unitRequire.json"].content);
-        redisClient.set("unitRequire", JSON.stringify(UnitRequireRaw), {
-          EX: 60 * 60 * 1,
-        });
-      }
+      const res = await axios.get(env.UNIT_REQUIRE_URL);
+      UnitRequireRaw = res.data;
+
+      //   if (dataInCacheUnitRequire) {
+      //     console.log("Cache hit : UnitRequire");
+      //     UnitRequireRaw = JSON.parse(dataInCacheUnitRequire);
+      //   } else {
+      //     console.log("Cache miss : UnitRequire");
+      //     const res = await axios.get("https://firebasestorage.googleapis.com/v0/b/ku-table.appspot.com/o/unitRequire%2FunitRequire.json?alt=media");
+      //     UnitRequireRaw = res.data;
+      //     redisClient.set("unitRequire", JSON.stringify(UnitRequireRaw), {
+      //       EX: 60 * 60 * 1,
+      //     });
+      //   }
 
       if ((UnitRequireRaw as any)[majorCode] === undefined || (UnitRequireRaw as any)[majorCode][courseYear] === undefined) {
         return [];
