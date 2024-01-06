@@ -17,9 +17,22 @@ import { Icon } from "@iconify/react";
 import Achievement from "@/components/Achievement";
 import { useLocalStorage } from "usehooks-ts";
 import { useEffect } from "react";
+import domainCheck from "@/utils/domainCheck";
+import { env } from "@/env/server.mjs";
 
 export async function getServerSideProps(context: NextPageContext) {
     const UA = context.req!.headers["user-agent"];
+    const domain = context.req!.headers["host"];
+
+    if (!domainCheck(domain!)) {
+        return {
+            redirect: {
+                destination: env.NEXTAUTH_URL,
+                permanent: false,
+            },
+        };
+    }
+
     let isIPhone = false;
     if (UA!.match(/iPhone|iPad|Macintosh/i)) {
         if (UA!.match(/Mobile/i)) {
