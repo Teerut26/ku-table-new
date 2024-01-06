@@ -21,15 +21,16 @@ import domainCheck from "@/utils/domainCheck";
 
 export async function getServerSideProps(context: NextPageContext) {
     const UA = context.req!.headers["user-agent"];
-    // const domain = context.req!.headers["host"];
-    // const { res } = context
+    const domain = context.req!.headers["host"];
 
-    // if (!domainCheck(domain!)) {
-    //     res?.writeHead(302, {
-    //         Location: env.NEXTAUTH_URL,
-    //     })
-    //     res?.end()
-    // }
+    if (!domainCheck(domain!)) {
+       return {
+           redirect: {
+               destination: "https://kugetreg.teerut.me",
+               permanent: false,
+           },
+       }
+    }
 
     let isIPhone = false;
     if (UA!.match(/iPhone|iPad|Macintosh/i)) {
