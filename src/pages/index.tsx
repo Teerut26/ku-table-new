@@ -23,14 +23,13 @@ import { env } from "@/env/server.mjs";
 export async function getServerSideProps(context: NextPageContext) {
     const UA = context.req!.headers["user-agent"];
     const domain = context.req!.headers["host"];
+    const { res } = context
 
     if (!domainCheck(domain!)) {
-        return {
-            redirect: {
-                destination: env.NEXTAUTH_URL,
-                permanent: false,
-            },
-        };
+        res?.writeHead(302, {
+            Location: env.NEXTAUTH_URL,
+        })
+        res?.end()
     }
 
     let isIPhone = false;

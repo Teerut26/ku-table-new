@@ -19,13 +19,12 @@ const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
 
 export async function getServerSideProps(context: NextPageContext) {
     const domain = context.req!.headers["host"];
+    const { res } = context
     if (!domainCheck(domain!)) {
-        return {
-            redirect: {
-                destination: env.NEXTAUTH_URL,
-                permanent: false,
-            },
-        };
+        res?.writeHead(302, {
+            Location: env.NEXTAUTH_URL,
+        })
+        res?.end()
     }
     return {
         props: {},
