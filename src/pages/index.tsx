@@ -18,19 +18,18 @@ import Achievement from "@/components/Achievement";
 import { useLocalStorage } from "usehooks-ts";
 import { useEffect } from "react";
 import domainCheck from "@/utils/domainCheck";
-import { env } from "@/env/server.mjs";
 
 export async function getServerSideProps(context: NextPageContext) {
     const UA = context.req!.headers["user-agent"];
-    const domain = context.req!.headers["host"];
-    const { res } = context
+    // const domain = context.req!.headers["host"];
+    // const { res } = context
 
-    if (!domainCheck(domain!)) {
-        res?.writeHead(302, {
-            Location: env.NEXTAUTH_URL,
-        })
-        res?.end()
-    }
+    // if (!domainCheck(domain!)) {
+    //     res?.writeHead(302, {
+    //         Location: env.NEXTAUTH_URL,
+    //     })
+    //     res?.end()
+    // }
 
     let isIPhone = false;
     if (UA!.match(/iPhone|iPad|Macintosh/i)) {

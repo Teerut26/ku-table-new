@@ -11,7 +11,6 @@ import Alert from "@/components/Alert";
 import { useCookies } from "react-cookie";
 import { RSAEncrypt } from "@/utils/RSA";
 import domainCheck from "@/utils/domainCheck";
-import { env } from "@/env/server.mjs";
 
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
     ssr: false,
@@ -19,13 +18,13 @@ const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
 
 export async function getServerSideProps(context: NextPageContext) {
     const domain = context.req!.headers["host"];
-    const { res } = context
-    if (!domainCheck(domain!)) {
-        res?.writeHead(302, {
-            Location: env.NEXTAUTH_URL,
-        })
-        res?.end()
-    }
+    // const { res } = context
+    // if (!domainCheck(domain!)) {
+    //     res?.writeHead(302, {
+    //         Location: env.NEXTAUTH_URL,
+    //     })
+    //     res?.end()
+    // }
     return {
         props: {},
     }
@@ -46,6 +45,12 @@ const Index: NextComponentType<Props> = () => {
     const isStoreData = useRef(cookies["store-data"] ? true : false);
 
     const router = useRouter();
+
+    useEffect(() => {
+      console.log(router.domainLocales);
+      
+    }, [router])
+    
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
