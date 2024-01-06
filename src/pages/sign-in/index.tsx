@@ -11,6 +11,19 @@ import Alert from "@/components/Alert";
 import { useCookies } from "react-cookie";
 import { RSAEncrypt } from "@/utils/RSA";
 
+
+
+export async function getServerSideProps(context: NextPageContext) {
+    // get domain from getServerSideProps
+    const domain = context.req!.headers["host"];
+    console.log(domain);
+
+    return {
+        props: { domain },
+    }
+    
+}
+
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
   ssr: false,
 });
