@@ -18,13 +18,15 @@ const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
 
 export async function getServerSideProps(context: NextPageContext) {
     const domain = context.req!.headers["host"];
-    // const { res } = context
-    // if (!domainCheck(domain!)) {
-    //     res?.writeHead(302, {
-    //         Location: env.NEXTAUTH_URL,
-    //     })
-    //     res?.end()
-    // }
+
+    if (!domainCheck(domain!)) {
+        return {
+            redirect: {
+                destination: "https://kugetreg.teerut.me",
+                permanent: false,
+            },
+        }
+    }
     return {
         props: {},
     }
@@ -47,10 +49,10 @@ const Index: NextComponentType<Props> = () => {
     const router = useRouter();
 
     useEffect(() => {
-      console.log(router.domainLocales);
-      
+        console.log(router.domainLocales);
+
     }, [router])
-    
+
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
