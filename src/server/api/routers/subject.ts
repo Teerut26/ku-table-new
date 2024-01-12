@@ -7,6 +7,7 @@ import getSubjects from "@/services/get-subjects";
 import getSubjectSearchService from "@/services/subject-search";
 import getGenEdService from "@/services/get-gened";
 import { redisClient } from "@/services/redis";
+import GenEdJson from "@/assets/genEd/All.json";
 
 export const subjectRouter = createTRPCRouter({
   get: protectedProcedure
@@ -85,9 +86,13 @@ export const subjectRouter = createTRPCRouter({
     }
   }),
   getGenEd: protectedProcedure.query(async ({ input, ctx }) => {
-    try {
+    try { 
       const dataInCache = await redisClient.get("GenEd");
       if (dataInCache) {
+        if (JSON.parse(dataInCache).length <= 0) {
+          console.log("Cache hit : GenEd [] get from json file");
+          return GenEdJson;
+        }
         console.log("Cache hit : GenEd");
         return JSON.parse(dataInCache);
       } else {
