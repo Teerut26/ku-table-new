@@ -18,6 +18,9 @@ const Achievement: NextPage<Props> = () => {
         <div className='flex flex-col gap-2'>
             <div className=''>
                 {LocalsSwip("ความสำเร็จ", "Achievement")}
+                <span className='text-error text-md md:text-lg font-bold'>
+                   {" "}*{LocalsSwip("คำเตือน: โปรดตรวจสอบกับหลักสูตรของคุณอีกครั้ง", "Please check with your major course")}
+                </span>
             </div>
             {isLoading ? "Loading..." : <div className='flex gap-3 flex-col sm:flex-row'>
                 {(data && data.length > 0) ? data?.map((e) => (
