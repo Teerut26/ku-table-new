@@ -26,7 +26,7 @@ export async function getServerSideProps(context: NextPageContext) {
     if (!domainCheck(domain!)) {
        return {
            redirect: {
-               destination: "https://kugetreg.teerut.me",
+               destination: "https://kugetreg.teerut.com",
                permanent: false,
            },
        }
