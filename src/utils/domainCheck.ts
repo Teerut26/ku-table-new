@@ -1,6 +1,6 @@
 const domainCanAcess =  [
     "localhost:3000",
-    "kugetreg.teerut.me"
+    "kugetreg.teerut.com"
 ]
 
 const domainCheck = (domain:string) => {
