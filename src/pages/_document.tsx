@@ -15,8 +15,7 @@ export default function Document() {
                     href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100;200;300;400;500;600;700;800;900&display=swap"
                     rel="stylesheet"
                 />
-               <script defer src="https://eu.umami.is/script.js" data-website-id="81607876-b154-4ac9-aaf1-062fb84ff756"></script>
-               <script async src="https://umami.teerut.me/script.js" data-website-id="8c1f071c-63e3-4562-8b89-af9ed10e13d5"></script>
+               <script async src="https://eu.umami.is/script.js" data-website-id="ae99cf5b-4930-4e72-8bf6-209130e00cbc"></script>
             </Head>
             <body>
                 <Main />
