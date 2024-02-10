@@ -10,7 +10,7 @@ import { Button, Skeleton } from '@mui/material';
 interface Props { }
 
 const fetcher = (classId: string | null) => {
-    return fetch(`https://corsproxy.io/?${encodeURIComponent(`https://course-recommend-api-kugetreg.teerut.me/${(classId as string).slice(0, 8)}`)}`).then(res =>
+    return fetch(`/api/recommend/${(classId as string).slice(0, 8)}`).then(res =>
         res.json()
     )
 }

@@ -20,7 +20,8 @@ export const serverSchema = z.object({
   TOKEN_LINE: z.string(),
   STORE_PASSWORD_SECRET: z.string(),
   REDIS_URL: z.string().url(),
-  UNIT_REQUIRE_URL: z.string().url()
+  UNIT_REQUIRE_URL: z.string().url(),
+  RECOMMEND_API: z.string(),
 });
 
 /**
@@ -37,7 +38,8 @@ export const serverEnv = {
   TOKEN_LINE: process.env.TOKEN_LINE,
   STORE_PASSWORD_SECRET: process.env.STORE_PASSWORD_SECRET,
   REDIS_URL: process.env.REDIS_URL,
-  UNIT_REQUIRE_URL: process.env.UNIT_REQUIRE_URL
+  UNIT_REQUIRE_URL: process.env.UNIT_REQUIRE_URL,
+  RECOMMEND_API: process.env.RECOMMEND_API,
 };
 
 /**
