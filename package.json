@@ -34,6 +34,7 @@
     "file-saver": "^2.0.5",
     "firebase": "^9.16.0",
     "firebase-admin": "^11.5.0",
+    "form-data": "^4.0.0",
     "hybrid-crypto-js": "^0.2.4",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",

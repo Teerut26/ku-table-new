@@ -80,6 +80,9 @@ dependencies:
   firebase-admin:
     specifier: ^11.5.0
     version: 11.11.1
+  form-data:
+    specifier: ^4.0.0
+    version: 4.0.0
   hybrid-crypto-js:
     specifier: ^0.2.4
     version: 0.2.4

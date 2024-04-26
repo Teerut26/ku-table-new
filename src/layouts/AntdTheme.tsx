@@ -1,5 +1,4 @@
 import useCSSVariableToCSSHexCode from "@/hooks/useCSSVariableToCSSHexCode";
-import { StyleProvider } from "@ant-design/cssinjs";
 import { ConfigProvider, theme } from "antd";
 import { NextPage } from "next";
 import { useTheme } from "next-themes";
@@ -41,7 +40,7 @@ const AntdTheme: NextPage<Props> = ({ children }) => {
             : theme.defaultAlgorithm,
         }}
       >
-        <StyleProvider hashPriority="high">{children}</StyleProvider>
+        {children}
       </ConfigProvider>
     </>
   );
