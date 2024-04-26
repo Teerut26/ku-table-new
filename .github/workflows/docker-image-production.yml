@@ -3,8 +3,6 @@ name: Docker Image CICD
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 jobs:
   build:
@@ -13,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build --build-arg NEXT_PUBLIC_STORE_PASSWORD_KEY=${{ secrets.NEXT_PUBLIC_STORE_PASSWORD_KEY }} -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest .
+        run: docker build --build-arg -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest .
       - name: Push the Docker image
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}

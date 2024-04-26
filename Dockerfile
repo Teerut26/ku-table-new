@@ -1,63 +1,48 @@
 ##### DEPENDENCIES
-# --platform=linux/amd64
 
-FROM --platform=linux/amd64 node:16-alpine3.17 AS deps
-RUN apk add --no-cache libc6-compat openssl1.1-compat
+FROM --platform=linux/amd64 node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat openssl build-base python3
 WORKDIR /app
 
-ENV NEXT_PUBLIC_KUTABLE_API_BASE https://table-api.teerut.me
+# Install dependencies based on the preferred package manager
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
 
-RUN \
- if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
- elif [ -f package-lock.json ]; then npm ci; \
- elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
- else echo "Lockfile not found." && exit 1; \
- fi
+RUN yarn global add pnpm && pnpm i
 
 ##### BUILDER
 
-FROM --platform=linux/amd64 node:16-alpine3.17 AS builder
-
-ARG NEXTAUTH_URL
-ARG JWT_SECRET
-ARG NEXTAUTH_SECRET
-ARG MYKU_PUBLIC_KEY
-ARG FIREBASE_ADMIN
-ARG NEXT_PUBLIC_STORE_PASSWORD_KEY
-
+FROM --platform=linux/amd64 node:20-alpine AS builder
+ARG DATABASE_URL
+ARG NEXT_PUBLIC_CLIENTVAR
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # ENV NEXT_TELEMETRY_DISABLED 1
-ENV SKIP_ENV_VALIDATION=1
 
-RUN \
- if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn lint && yarn build; \
- elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run lint && npm run build; \
- elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm lint && pnpm run build; \
- else echo "Lockfile not found." && exit 1; \
- fi
+RUN yarn global add pnpm && pnpm run db:generate && SKIP_ENV_VALIDATION=1 pnpm run build
 
 ##### RUNNER
 
-FROM --platform=linux/amd64 node:16-alpine3.17 AS runner
+# FROM --platform=linux/amd64 gcr.io/distroless/nodejs20-debian12 AS runner
+FROM --platform=linux/amd64 node:20-alpine AS runner
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+
+ENV NODE_ENV production
+
+# ENV NEXT_TELEMETRY_DISABLED 1
 
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./package.json
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["node", "server.js"]
+CMD ["server.js"]
