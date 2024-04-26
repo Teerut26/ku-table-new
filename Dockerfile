@@ -21,7 +21,7 @@ COPY . .
 
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn global add pnpm && pnpm run db:generate && SKIP_ENV_VALIDATION=1 pnpm run build
+RUN yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm run build
 
 ##### RUNNER
 
@@ -36,7 +36,6 @@ ENV NODE_ENV production
 
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./package.json
 
 COPY --from=builder /app/.next/standalone ./
