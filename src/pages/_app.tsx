@@ -15,6 +15,7 @@ import { DefaultSeo } from "next-seo";
 import MuiThemeProvider from "@/layouts/MuiThemeProvider";
 import InitialStore from "@/components/InitialStore";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { clarity } from 'react-microsoft-clarity';
 
 const queryClient = new QueryClient()
 
@@ -23,6 +24,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
     pageProps: { session, ...pageProps },
 }) => {
     useEffect(() => {
+        clarity.init('lpdophdw4g');
+
         const handleRouteStart = () => NProgress.start();
         const handleRouteDone = () => NProgress.done();
 
