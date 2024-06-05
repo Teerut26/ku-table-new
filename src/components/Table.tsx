@@ -268,7 +268,7 @@ const Table: NextPage<Props> = ({
               <div className="flex justify-between text-xl">
                 <div className="flex gap-2 whitespace-nowrap text-base-content">
                   <div>Generate by :</div>
-                  <div className="font-bold">kugetreg.vercel.app</div>
+                  <div className="font-bold">kugetreg.teerut.com</div>
                 </div>
                 {hasShare && (
                   <div className="flex gap-2 whitespace-nowrap text-base-content">

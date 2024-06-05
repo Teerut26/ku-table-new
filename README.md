@@ -1,11 +1,11 @@
 # 📚 KU Table 2
 
-<a href="https://kugetreg.vercel.app/" >
+<a href="https://kugetreg.teerut.com/" >
 <img src="public/main.png" />
 </a>
 
 
-## [kugetreg.vercel.app](https://kugetreg.vercel.app)
+## [kugetreg.teerut.com](https://kugetreg.teerut.com)
 ## ✨ Feature
 
 - เปลี่ยน Theme ได้หลากหลาย

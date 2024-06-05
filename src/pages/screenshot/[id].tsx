@@ -115,7 +115,7 @@ const Share: NextPage<Props> = ({ isIPhone }) => {
               <div className="flex justify-between">
                 <div className="flex gap-2 whitespace-nowrap text-base-content">
                   <div>Generate by :</div>
-                  <div className="font-bold">kugetreg.vercel.app</div>
+                  <div className="font-bold">kugetreg.teerut.com</div>
                 </div>
               </div>
             </div>
