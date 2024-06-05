@@ -44,14 +44,8 @@ const Cart: NextPage<Props> = () => {
   return (
     <>
       <Badge badgeContent={courseFindUnique(courses).length} color="primary">
-        <button
-          onClick={showModal}
-          className="btn-outline btn-primary btn-sm btn items-center gap-2"
-        >
-          <Icon
-            icon="material-symbols:shopping-cart-rounded"
-            className="text-lg"
-          />
+        <button onClick={showModal} className="btn btn-outline btn-primary btn-sm items-center gap-2">
+          <Icon icon="material-symbols:shopping-cart-rounded" className="text-lg" />
           {LocalsSwip("วิชาที่เลือก", "Selected Subjects")}
         </button>
       </Badge>
@@ -60,12 +54,7 @@ const Cart: NextPage<Props> = () => {
           <>
             <div className="flex justify-between">
               {LocalsSwip("วิชาที่เลือก", "Selected Subjects")}
-              <div className="pr-5">
-                {LocalsSwip(
-                  `รวม ${calculateCredits(courses)} หน่วยกิต`,
-                  `Total ${calculateCredits(courses)} credits`
-                )}
-              </div>
+              <div className="pr-5">{LocalsSwip(`รวม ${calculateCredits(courses)} หน่วยกิต`, `Total ${calculateCredits(courses)} credits`)}</div>
             </div>
           </>
         }
@@ -73,18 +62,10 @@ const Cart: NextPage<Props> = () => {
         onCancel={handleCancel}
         footer={[
           <div className="flex justify-end gap-2" key={1}>
-            <Button onClick={handleCancel}>
-              {LocalsSwip("ยกเลิก", "Cancel")}
-            </Button>
-            <Button
-              onClick={handleOk}
-              type="primary"
-              icon={
-                <Icon icon="material-symbols:add-rounded" className="text-lg" />
-              }
-            >
+            <button className="btn btn-outline btn-primary btn-sm items-center gap-2">{LocalsSwip("ยกเลิก", "Cancel")}</button>
+            <button className="btn btn-primary btn-sm items-center gap-2" onClick={handleOk}>
               {LocalsSwip("เพิ่มวิชา", "Add Subjects")}
-            </Button>
+            </button>
           </div>,
         ]}
       >
@@ -92,15 +73,8 @@ const Cart: NextPage<Props> = () => {
           {courseFindUnique(courses).map((course, id) => (
             <div key={id} className="flex items-center justify-between gap-5">
               <div>{course.subject_code}</div>
-              <div className="grow">
-                {LocalsSwip(course.subject_name_th, course.subject_name_en)}
-              </div>
-              <div>
-                {LocalsSwip(
-                  `${course.max_credit} หน่วยกิต`,
-                  `${course.max_credit} Credits`
-                )}
-              </div>
+              <div className="grow">{LocalsSwip(course.subject_name_th, course.subject_name_en)}</div>
+              <div>{LocalsSwip(`${course.max_credit} หน่วยกิต`, `${course.max_credit} Credits`)}</div>
               <Button size="small" danger onClick={() => removeCourse(course)}>
                 {LocalsSwip("ลบ", "Delete")}
               </Button>

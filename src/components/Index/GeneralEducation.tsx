@@ -76,12 +76,7 @@ const GeneralEducation: NextPage<Props> = () => {
                 key: "action",
                 render: (_, text) => (
                   <div className="flex gap-2">
-                    <Button
-                      onClick={() => onFind(text.subjectCode)}
-                      type="primary"
-                    >
-                      {LocalsSwip("ค้นหา", "Search")}
-                    </Button>
+                    <button  onClick={() => onFind(text.subjectCode)} className="btn btn-primary btn-sm">{LocalsSwip("ค้นหา", "Search")}</button>
                   </div>
                 ),
               },
