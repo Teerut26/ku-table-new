@@ -11,6 +11,7 @@ import Alert from "@/components/Alert";
 import { useCookies } from "react-cookie";
 import { RSAEncrypt } from "@/utils/RSA";
 import domainCheck from "@/utils/domainCheck";
+import Footer from "@/components/Footer";
 
 const ThemeSwich = dynamic(() => import("@/components/ThemeSwich"), {
     ssr: false,
@@ -47,11 +48,6 @@ const Index: NextComponentType<Props> = () => {
     const isStoreData = useRef(cookies["store-data"] ? true : false);
 
     const router = useRouter();
-
-    useEffect(() => {
-        console.log(router.domainLocales);
-
-    }, [router])
 
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -190,6 +186,7 @@ const Index: NextComponentType<Props> = () => {
                     >
                         {LocaleSwip(router.locale!, "เข้าสู่ระบบ", "SignIn")}
                     </button>
+                    <Footer />
                 </form>
             </div>
         </>
