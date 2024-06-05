@@ -10,17 +10,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest .
-      - name: Push the Docker image
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest --build-arg NEXT_PUBLIC_BUILD_MESSAGE="${{ steps.tag_version.outputs.new_tag }}" .
+      - name: Push the Docker image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
