@@ -15,6 +15,7 @@ RUN yarn global add pnpm && pnpm i
 FROM --platform=linux/amd64 node:20-alpine AS builder
 ARG DATABASE_URL
 ARG NEXT_PUBLIC_CLIENTVAR
+ARG NEXT_PUBLIC_BUILD_MESSAGE
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
