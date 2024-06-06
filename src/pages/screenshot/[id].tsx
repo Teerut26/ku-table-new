@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { useTheme } from "next-themes";
 import CourseCardMobileList from "@/components/TableMobile/CourseCardMobileList";
 import useTableStore from "@/components/Table/store/useTableStore";
+import db from "@/configs/firestoreAdmin";
+import { redisClient } from "@/services/redis";
 
 let times: string[] = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
 
@@ -26,35 +28,23 @@ interface Props {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const UA = context.req!.headers["user-agent"];
-  let isIPhone = false;
-  if (UA!.match(/iPhone|iPad|Macintosh/i)) {
-    if (UA!.match(/Mobile/i)) {
-      isIPhone = true;
-    } else if (UA!.match(/Chrome/i)) {
-      isIPhone = false;
-    } else {
-      isIPhone = true;
-    }
-  }
+  const result = await redisClient.get(context.query.id?.toString()!);
 
-  const { screenType, lang, theme, major, courseData, isExpand } = context.query;
+  const { screenType, lang, theme, major, courseData, isExpand } = JSON.parse(result as string);
 
   return {
     props: {
-      isIPhone,
       screenType,
       lang,
       theme,
       major,
-      isExpand: isExpand === "true",
+      isExpand,
       courseData: courseData ? JSON.parse(courseData as string) : [],
     },
   };
 }
 
 const Share: NextPage<Props> = ({ lang, courseData, screenType, major, theme, isExpand }) => {
-    
   const { query, push, pathname, asPath } = useRouter();
   const { setTheme } = useTheme();
   const { setExpand } = useTableStore((r) => r);
