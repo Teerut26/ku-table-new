@@ -15,9 +15,9 @@ const ShopSubject: NextPage<Props> = () => {
                 <MenuBar />
                 <SearchBar />
             </div>
-            <div className="sticky top-[2.5rem] z-10 flex flex-col gap-3 bg-base-100 pb-5">
+            {/* <div className="sticky top-[2.5rem] z-10 flex flex-col gap-3 bg-base-100 pb-5">
                 <CourseRecommend />
-            </div>
+            </div> */}
 
             <div className="flex gap-3">
                 <div className="flex flex-grow flex-col">

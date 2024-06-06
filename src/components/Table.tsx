@@ -26,25 +26,9 @@ import { convertKeyToColor } from "@/utils/colorsMap";
 import CourseCardMobileList from "./TableMobile/CourseCardMobileList";
 import useLocalsSwip from "@/hooks/useLocalsSwip";
 import { Icon } from "@iconify/react";
+import { api } from "@/utils/api";
 
-let times: string[] = [
-  "8:00",
-  "9:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00",
-  "21:00",
-  "22:00",
-  "23:00",
-];
+let times: string[] = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
 
 const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -58,19 +42,10 @@ interface Props {
   isIPhone: boolean;
   childrenBar?: React.ReactNode;
   childrenFooterBar?: React.ReactNode;
+  clean?: boolean;
 }
 
-const Table: NextPage<Props> = ({
-  courseData,
-  hasShare,
-  isIPhone,
-  canRemove,
-  onRemove,
-  canEdit,
-  onEdit,
-  childrenBar,
-  childrenFooterBar,
-}) => {
+const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onRemove, canEdit, onEdit, childrenBar, childrenFooterBar, clean }) => {
   const [isCapture, setIsCapture] = useState(false);
   const { locale } = useRouter();
   const { LocalsSwip } = useLocalsSwip();
@@ -79,18 +54,15 @@ const Table: NextPage<Props> = ({
   const { data: session, status } = useSession();
   const { theme: themeCurrent } = useTheme();
   const { expand, imageBackground, opacity } = useTableStore((r) => r);
-  const [IsServerLoading, setIsServerLoading] = useState(false);
   const [IsMobile, setIsMobile] = useLocalStorage("tableType", false);
+  const captureApi = api.screenshotRouter.capture.useMutation();
+  const pdfApi = api.screenshotRouter.pdf.useMutation();
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
   });
 
-  const maxIndex =
-    _.findIndex(
-      times,
-      (time) => time === maxTime?.time_to?.split(":")[0] + ":00"
-    ) + 1;
+  const maxIndex = _.findIndex(times, (time) => time === maxTime?.time_to?.split(":")[0] + ":00") + 1;
 
   const handleDownload = async () => {
     setIsCapture(true);
@@ -103,34 +75,10 @@ const Table: NextPage<Props> = ({
           transformOrigin: "top left",
         },
       });
-      const name =
-        status === "authenticated"
-          ? `kugetreg-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png`
-          : `kugetreg-${themeCurrent}.png`;
+      const name = status === "authenticated" ? `kugetreg-${session?.user?.email?.user.student.stdId}-${themeCurrent}.png` : `kugetreg-${themeCurrent}.png`;
       saveAs(dataUrl, name);
       setIsCapture(false);
     }, 1000);
-  };
-
-  const handleDownloadServer = async () => {
-    setIsServerLoading(true);
-
-    try {
-      let res = await axios.post(
-        "https://table-api.teerut.me/screenshot",
-        {
-          courses: courseData,
-          theme: themeCurrent,
-        },
-        {
-          responseType: "blob",
-        }
-      );
-      saveAs(res.data, `kugetreg-${themeCurrent}.png`);
-      setIsServerLoading(false);
-    } catch (error) {
-      setIsServerLoading(false);
-    }
   };
 
   const handleIsMobile = () => {
@@ -141,32 +89,64 @@ const Table: NextPage<Props> = ({
     <>
       <div className="flex w-full items-center gap-2">
         <div className="flex w-full flex-wrap items-center gap-2">
-          <div
-            onClick={() => handleDownload()}
-            className={clsx(
-              "btn-outline btn-primary btn-sm btn gap-2 uppercase",
-              isCapture && "loading"
-            )}
+          <button
+            disabled={pdfApi.isLoading}
+            onClick={() =>
+              pdfApi.mutate(
+                {
+                  courseData: courseData,
+                  lang: locale?.toString() as "th" | "en",
+                  major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
+                  screenType: IsMobile ? "mobile" : "desktop",
+                  theme: themeCurrent ?? "lofi",
+                  isExpand: expand,
+                },
+                {
+                  onSuccess: (data) => {
+                    saveAs(data, `kugetreg-${themeCurrent}.pdf`);
+                  },
+                }
+              )
+            }
+            className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", pdfApi.isLoading && "loading")}
           >
-            {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
-            PNG
-          </div>
-          {/* <div
-            onClick={() => handleDownloadServer()}
-            className={clsx(
-              "btn-outline btn-primary btn-sm btn gap-2 uppercase",
-              IsServerLoading && "loading"
-            )}
-          >
-            {!IsServerLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
-            PNG Server
-          </div> */}
-          {!isIPhone && (
-            <select
-              defaultValue={scale}
-              onChange={(e) => setScale(e.target.value as any)}
-              className="select-primary select select-sm text-primary"
+             {!pdfApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
+            PDF
+          </button>
+          {imageBackground ? (
+            <button disabled={isCapture} onClick={() => handleDownload()} className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", isCapture && "loading")}>
+              {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
+              PNG
+            </button>
+          ) : (
+            <button
+              disabled={captureApi.isLoading}
+              onClick={() =>
+                captureApi.mutate(
+                  {
+                    courseData: courseData,
+                    lang: locale?.toString() as "th" | "en",
+                    major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
+                    screenType: IsMobile ? "mobile" : "desktop",
+                    theme: themeCurrent ?? "lofi",
+                    isExpand: expand,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      saveAs(data, `kugetreg-${themeCurrent}.png`);
+                    },
+                  }
+                )
+              }
+              className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", captureApi.isLoading && "loading")}
             >
+              {!captureApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
+              PNG
+            </button>
+          )}
+
+          {!isIPhone && imageBackground && (
+            <select defaultValue={scale} onChange={(e) => setScale(e.target.value as any)} className="select select-primary select-sm text-primary">
               {[...new Array(7)].map((_, index) => (
                 <option key={index} value={index + 1} className="text-center ">
                   x{index + 1}
@@ -178,52 +158,20 @@ const Table: NextPage<Props> = ({
           <ChangeLanguage />
           <ExpandData />
           {hasShare && <ShareTableBtn courseData={courseData} />}
-          <button
-            className="btn-outline btn-primary btn-sm btn gap-1"
-            onClick={handleIsMobile}
-          >
-            {IsMobile ? (
-              <Icon
-                icon="material-symbols:desktop-windows-outline-rounded"
-                className="text-xl"
-              />
-            ) : (
-              <Icon icon="material-symbols:smartphone" className="text-xl" />
-            )}
+          <button className="btn btn-outline btn-primary btn-sm gap-1" onClick={handleIsMobile}>
+            {IsMobile ? <Icon icon="material-symbols:desktop-windows-outline-rounded" className="text-xl" /> : <Icon icon="material-symbols:smartphone" className="text-xl" />}
 
             {IsMobile ? LocalsSwip("ตารางคอมพิวเตอร์", "Computer Table") : LocalsSwip("ตารางโทรศัพท์", "Smartphone Table")}
           </button>
           {childrenBar && childrenBar}
         </div>
       </div>
-      <div
-        className={clsx(
-          "mt-3 overflow-x-auto",
-          "border-[1px] border-base-content"
-        )}
-      >
+      <div className={clsx("mt-3 overflow-x-auto", "border-[1px] border-base-content")}>
         {IsMobile ? (
-          <CourseCardMobileList
-            courseDatas={courseData}
-            ref={area}
-            isCapture={isCapture}
-          />
+          <CourseCardMobileList courseDatas={courseData} ref={area} isCapture={isCapture} />
         ) : (
-          <div
-            ref={area}
-            className={clsx(
-              "flex flex-col bg-base-100",
-              isCapture && "p-5",
-              expand ? "min-w-[110rem]" : "min-w-[75rem]"
-            )}
-          >
-            <div
-              className={clsx(
-                isCapture &&
-                  "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content",
-                "relative overflow-hidden"
-              )}
-            >
+          <div ref={area} className={clsx("flex flex-col bg-base-100", isCapture && "p-5", expand ? "min-w-[110rem]" : "min-w-[75rem]")}>
+            <div className={clsx(isCapture && "border-b-[1px] border-l-[1px] border-r-[1px] border-base-content", "relative overflow-hidden")}>
               {imageBackground && (
                 <img
                   src={imageBackground}
@@ -247,20 +195,7 @@ const Table: NextPage<Props> = ({
               <div className={clsx("relative")}>
                 <TimeBar times={times.slice(0, maxIndex)} />
                 {days.map((day, index) => {
-                  return (
-                    <CourseBar
-                      key={index}
-                      data={courseData.filter(
-                        (course) => course.day_w?.replaceAll(" ", "") === day
-                      )}
-                      times={times.slice(0, maxIndex)}
-                      day={day}
-                      canRemove={canRemove}
-                      onRemove={onRemove}
-                      canEdit={canEdit}
-                      onEdit={onEdit}
-                    />
-                  );
+                  return <CourseBar key={index} data={courseData.filter((course) => course.day_w?.replaceAll(" ", "") === day)} times={times.slice(0, maxIndex)} day={day} canRemove={canRemove} onRemove={onRemove} canEdit={canEdit} onEdit={onEdit} />;
                 })}
               </div>
             </div>
@@ -273,12 +208,7 @@ const Table: NextPage<Props> = ({
                 {hasShare && (
                   <div className="flex gap-2 whitespace-nowrap text-base-content">
                     <div className="font-bold">
-                      {session?.user?.email?.user.student.majorCode} -{" "}
-                      {LocaleSwip(
-                        locale!,
-                        session?.user?.email?.user.student.majorNameTh,
-                        session?.user?.email?.user.student.majorNameEn
-                      )}
+                      {session?.user?.email?.user.student.majorCode} - {LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}
                     </div>
                   </div>
                 )}

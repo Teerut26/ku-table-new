@@ -5,6 +5,7 @@ import { subjectRouter } from "./routers/subject";
 import { sendReportRouter } from "./routers/send-report";
 import { syncRouter } from "./routers/sync";
 import { achievementRouter } from "./routers/achievement";
+import { screenshotRouter } from "./routers/screenshot";
 
 export const appRouter = createTRPCRouter({
   group_course: groupCourseRouter,
@@ -12,7 +13,8 @@ export const appRouter = createTRPCRouter({
   subject: subjectRouter,
   sendReport: sendReportRouter,
   sync: syncRouter,
-  achievement: achievementRouter
+  achievement: achievementRouter,
+  screenshotRouter: screenshotRouter
 });
 
 // export type definition of API

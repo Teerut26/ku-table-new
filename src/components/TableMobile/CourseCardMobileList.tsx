@@ -12,19 +12,20 @@ import sortByDay from "@/utils/sortByDay";
 interface Props extends RefAttributes<HTMLDivElement> {
   courseDatas: Course[];
   isCapture?: boolean;
+  major?: string;
 }
 
 const CourseCardMobileList: ForwardRefExoticComponent<Props> = forwardRef<HTMLDivElement, Props>(
-  ({ courseDatas, isCapture = true, ...props }, ref) => {
+  ({ courseDatas, isCapture = true, major, ...props }, ref) => {
     const { imageBackground, opacity } = useTableStore((r) => r);
     const { data: session } = useSession();
     const { LocalsSwip } = useLocalsSwip();
 
     return (
       <>
-        <div ref={ref} className="mx-auto min-w-[40rem] bg-base-100">
+        <div id="capture" ref={ref} className="mx-auto min-w-[40rem] bg-base-100">
           <div className="flex flex-col items-center justify-center gap-2 overflow-hidden py-2 px-5">
-            {isCapture && (
+            {major ? <div className="z-10 text-lg font-bold">{major}</div> : isCapture && (
               <div className="z-10 text-lg font-bold">
                 {session?.user?.email?.user.student.majorCode} -{" "}
                 {LocalsSwip(

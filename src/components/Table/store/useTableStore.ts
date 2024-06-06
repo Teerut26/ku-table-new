@@ -5,6 +5,7 @@ interface ExpandTableDataInterface {
   imageBackground: string | null;
   opacity: number | null;
   opacityTable: number | null;
+  setExpand: (value: boolean) => void;
   handleExpand: () => void;
   setImageBackground: (image: string | null) => void;
   setOpacity: (value: number | null) => void;
@@ -34,6 +35,13 @@ const useTableStore = create<ExpandTableDataInterface>((set) => ({
     set((state) => {
       return {
         expand: !state.expand,
+      };
+    });
+  },
+  setExpand: (value) => {
+    set((state) => {
+      return {
+        expand: value,
       };
     });
   },
