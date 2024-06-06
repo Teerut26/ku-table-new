@@ -89,30 +89,32 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
     <>
       <div className="flex w-full items-center gap-2">
         <div className="flex w-full flex-wrap items-center gap-2">
-          <button
-            disabled={pdfApi.isLoading}
-            onClick={() =>
-              pdfApi.mutate(
-                {
-                  courseData: courseData,
-                  lang: locale?.toString() as "th" | "en",
-                  major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
-                  screenType: IsMobile ? "mobile" : "desktop",
-                  theme: themeCurrent ?? "lofi",
-                  isExpand: expand,
-                },
-                {
-                  onSuccess: (data) => {
-                    saveAs(data, `kugetreg-${themeCurrent}.pdf`);
+          {!imageBackground && (
+            <button
+              disabled={pdfApi.isLoading}
+              onClick={() =>
+                pdfApi.mutate(
+                  {
+                    courseData: courseData,
+                    lang: locale?.toString() as "th" | "en",
+                    major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
+                    screenType: IsMobile ? "mobile" : "desktop",
+                    theme: themeCurrent ?? "lofi",
+                    isExpand: expand,
                   },
-                }
-              )
-            }
-            className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", pdfApi.isLoading && "loading")}
-          >
-             {!pdfApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
-            PDF
-          </button>
+                  {
+                    onSuccess: (data) => {
+                      saveAs(data, `kugetreg-${themeCurrent}.pdf`);
+                    },
+                  }
+                )
+              }
+              className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", pdfApi.isLoading && "loading")}
+            >
+              {!pdfApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
+              PDF
+            </button>
+          )}
           {imageBackground ? (
             <button disabled={isCapture} onClick={() => handleDownload()} className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", isCapture && "loading")}>
               {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
