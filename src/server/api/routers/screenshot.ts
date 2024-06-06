@@ -9,7 +9,7 @@ export const screenshotRouter = createTRPCRouter({
       z.object({
         theme: z.string(),
         screenType: z.enum(["desktop", "mobile"]),
-        courseData: z.array(courseSchema),
+        courseData: z.string(),
         lang: z.string(),
         major: z.string(),
         scale: z.number().optional(),
@@ -29,7 +29,7 @@ export const screenshotRouter = createTRPCRouter({
       const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/capture`);
       url.searchParams.append("theme", input.theme);
       url.searchParams.append("screenType", input.screenType);
-      url.searchParams.append("courseData", JSON.stringify(input.courseData));
+      url.searchParams.append("courseData", input.courseData);
       url.searchParams.append("lang", input.lang);
       url.searchParams.append("major", input.major);
       url.searchParams.append("isExpand", input.isExpand ? "true" : "false");
@@ -51,7 +51,7 @@ export const screenshotRouter = createTRPCRouter({
       z.object({
         theme: z.string(),
         screenType: z.enum(["desktop", "mobile"]),
-        courseData: z.array(courseSchema),
+        courseData: z.string(),
         lang: z.string(),
         major: z.string(),
         scale: z.number().optional(),
@@ -71,7 +71,7 @@ export const screenshotRouter = createTRPCRouter({
       const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/capture`);
       url.searchParams.append("theme", input.theme);
       url.searchParams.append("screenType", input.screenType);
-      url.searchParams.append("courseData", JSON.stringify(input.courseData));
+      url.searchParams.append("courseData", input.courseData);
       url.searchParams.append("lang", input.lang);
       url.searchParams.append("major", input.major);
       url.searchParams.append("isExpand", input.isExpand ? "true" : "false");

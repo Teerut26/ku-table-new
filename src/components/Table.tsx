@@ -95,7 +95,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
               onClick={() =>
                 pdfApi.mutate(
                   {
-                    courseData: courseData,
+                    courseData: JSON.stringify(courseData),
                     lang: locale?.toString() as "th" | "en",
                     major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
                     screenType: IsMobile ? "mobile" : "desktop",
@@ -126,7 +126,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
               onClick={() =>
                 captureApi.mutate(
                   {
-                    courseData: courseData,
+                    courseData: JSON.stringify(courseData),
                     lang: locale?.toString() as "th" | "en",
                     major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
                     screenType: IsMobile ? "mobile" : "desktop",
