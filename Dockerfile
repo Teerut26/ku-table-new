@@ -2,6 +2,10 @@
 
 FROM --platform=linux/amd64 node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl build-base python3
+RUN apk add --no-cache \
+    udev \
+    ttf-freefont \
+    chromium
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -9,16 +13,6 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
 
 RUN yarn global add pnpm && pnpm i
-ENV CHROME_BIN="/usr/bin/chromium-browser" \
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
-RUN set -x \
-    && apk update \
-    && apk upgrade \
-    && apk add --no-cache \
-    udev \
-    ttf-freefont \
-    chromium \
-    && yarn global add pnpm && pnpm i puppeteer@22.10.0
 
 ##### BUILDER
 
@@ -38,19 +32,15 @@ RUN yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm run build
 
 # FROM --platform=linux/amd64 gcr.io/distroless/nodejs20-debian12 AS runner
 FROM --platform=linux/amd64 node:20-alpine AS runner
-WORKDIR /app
-ENV CHROME_BIN="/usr/bin/chromium-browser" \
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
-RUN set -x \
-    && apk update \
-    && apk upgrade \
-    && apk add --no-cache \
+RUN apk add --no-cache \
     udev \
     ttf-freefont \
     chromium
+WORKDIR /app
 
 
 ENV NODE_ENV production
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # ENV NEXT_TELEMETRY_DISABLED 1
 

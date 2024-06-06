@@ -19,7 +19,7 @@ export const screenshotRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const browser = await puppeteer.launch({
         headless: true,
-        executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/google-chrome" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
       });
       const page = await browser.newPage();
@@ -61,7 +61,7 @@ export const screenshotRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const browser = await puppeteer.launch({
         headless: true,
-        executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/google-chrome" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
       });
       const page = await browser.newPage();
