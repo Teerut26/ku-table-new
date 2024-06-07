@@ -12,6 +12,8 @@ import CourseCardMobileList from "@/components/TableMobile/CourseCardMobileList"
 import useTableStore from "@/components/Table/store/useTableStore";
 import db from "@/configs/firestoreAdmin";
 import { redisClient } from "@/services/redis";
+import { api } from "@/utils/api";
+import axios from "axios";
 
 let times: string[] = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
 
@@ -28,9 +30,8 @@ interface Props {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const result = await redisClient.get(context.query.id?.toString()!);
-
-  const { screenType, lang, theme, major, courseData, isExpand } = JSON.parse(result as string);
+  const result = await axios.get(`${process.env.NEXTAUTH_URL}/api/screenshot/${context.query.id}`);
+  const { screenType, lang, theme, major, courseData, isExpand } = result.data as any;
 
   return {
     props: {

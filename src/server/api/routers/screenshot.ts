@@ -43,7 +43,7 @@ export const screenshotRouter = createTRPCRouter({
     await page.close();
     await redisClient.del(keyId);
     await browser.close();
-    
+
     return "data:image/png;base64," + result?.toString("base64");
   }),
   pdf: protectedProcedure.input(screenshotSchema).mutation(async ({ input }) => {
@@ -72,5 +72,13 @@ export const screenshotRouter = createTRPCRouter({
     await redisClient.del(keyId);
     await browser.close();
     return "data:application/pdf;base64," + pdf.toString("base64");
+  }),
+  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const dataInCache = await redisClient.get(input);
+    if (dataInCache) {
+      return JSON.parse(dataInCache);
+    } else {
+      throw new Error("Data not found in cache");
+    }
   }),
 });
