@@ -44,7 +44,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
       </div>
       <div>ORDER #0001 FOR {props.major}</div>
       <div>{format(new Date(), "EEEE, LLLL d, u")}</div>
-      <div>---------------------------------------------------------------------</div>
+      <div className="border-b-2 border-dashed w-full border-black"></div>
       <div className="flex justify-between">
         <div className="flex gap-3">
           <div>QTY</div>
@@ -52,7 +52,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
         </div>
         {hasCredit && <div>Credit</div>}
       </div>
-      <div>---------------------------------------------------------------------</div>
+      <div className="border-b-2 border-dashed w-full border-black"></div>
       <div className="mt-3 flex flex-col">
         {courseData.map((course, index) => (
           <div key={index} className="flex justify-between">
@@ -64,7 +64,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
           </div>
         ))}
       </div>
-      <div>---------------------------------------------------------------------</div>
+      <div className="border-b-2 border-dashed w-full border-black"></div>
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div>Item Count</div>
@@ -77,7 +77,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
           </div>
         )}
       </div>
-      <div>---------------------------------------------------------------------</div>
+      <div className="border-b-2 border-dashed w-full border-black"></div>
       <div className="text-2xl text-center">Thank you</div>
       <div className="text-center">Generate By kugetreg.teerut.com</div>
     </div>

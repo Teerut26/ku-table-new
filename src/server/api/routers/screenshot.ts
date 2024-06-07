@@ -113,14 +113,14 @@ export const screenshotRouter = createTRPCRouter({
 
     let width = 600;
 
-    await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 2 });
+    await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 3 });
 
     const keyId = uuid();
     await redisClient.set(keyId, JSON.stringify(input), {
       EX: 60, // 1 minute
     });
 
-    const url = new URL(`${process.env.NEXTAUTH_URL}/receipt/${keyId}`);
+    const url = new URL(`${process.env.NEXTAUTH_URL}/en/receipt/${keyId}`);
     await page.goto(url.toString(), {
       waitUntil: "networkidle0",
     });
