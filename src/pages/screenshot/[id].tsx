@@ -78,7 +78,7 @@ const Share: NextPage<Props> = ({ lang, courseData, screenType, major, theme, is
   return (
     <>
       {screenType === "desktop" ? (
-        <div id="capture" className={clsx("flex w-full flex-col bg-base-100 p-5")}>
+        <div id="capture" className={clsx("flex min-w-[75rem] flex-col bg-base-100 p-5")}>
           <div className={clsx("relative overflow-hidden border-b-[1px] border-l-[1px] border-r-[1px] border-base-content")}>
             <VerticalLine times={times.slice(0, maxIndex)} />
             <div className={clsx("relative z-10")}>
