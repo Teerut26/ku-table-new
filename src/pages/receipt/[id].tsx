@@ -79,7 +79,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
       </div>
       <div className="border-b-2 border-dashed w-full border-black my-2"></div>
       <div className="text-2xl text-center">Thank you</div>
-      <div className="text-center">Generate By kugetreg.teerut.com</div>
+      <div className="text-center">kugetreg.teerut.com</div>
     </div>
   );
 }
