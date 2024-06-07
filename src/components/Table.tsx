@@ -57,6 +57,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
   const [IsMobile, setIsMobile] = useLocalStorage("tableType", false);
   const captureApi = api.screenshotRouter.capture.useMutation();
   const pdfApi = api.screenshotRouter.pdf.useMutation();
+  const receiptApi = api.screenshotRouter.receipt.useMutation();
 
   const maxTime = _.maxBy(courseData, (o) => {
     return parseInt(o.time_to?.split(":")[0]!);
@@ -117,6 +118,32 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
               PDF
             </button>
           )}
+          {!imageBackground && (
+            <button
+              disabled={receiptApi.isLoading}
+              onClick={() =>
+                receiptApi.mutate(
+                  {
+                    courseData: JSON.stringify(courseData),
+                    lang: locale?.toString() as "th" | "en",
+                    major: `${session?.user?.email?.user.student.majorCode} - ${LocaleSwip(locale!, session?.user?.email?.user.student.majorNameTh, session?.user?.email?.user.student.majorNameEn)}`,
+                    screenType: IsMobile ? "mobile" : "desktop",
+                    theme: themeCurrent ?? "lofi",
+                    isExpand: expand,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      saveAs(data, `kugetreg-receipt-${new Date().getTime()}.png`);
+                    },
+                  }
+                )
+              }
+              className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", receiptApi.isLoading && "loading")}
+            >
+              {!receiptApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
+              receipt
+            </button>
+          )}
           {imageBackground ? (
             <button disabled={isCapture} onClick={() => handleDownload()} className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", isCapture && "loading")}>
               {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
@@ -137,9 +164,9 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
                   },
                   {
                     onSuccess: (data) => {
-                        saveAs(data, `kugetreg-${themeCurrent}-${new Date().getTime()}.png`);
-                    //   let pdfWindow = window.open("");
-                    //   pdfWindow?.document.write(`<img height='100%' src='${data}'></img>`);
+                      saveAs(data, `kugetreg-${themeCurrent}-${new Date().getTime()}.png`);
+                      //   let pdfWindow = window.open("");
+                      //   pdfWindow?.document.write(`<img height='100%' src='${data}'></img>`);
                     },
                   }
                 )

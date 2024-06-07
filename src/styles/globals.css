@@ -20,3 +20,10 @@
   z-index: 10;
   background-color: hsl(var(--b1));
 }
+
+.receiptContainer {
+  background-image: url(https://receiptify.herokuapp.com/wrinkled-paper-texture-7.jpg);
+  background-position: center;
+  filter: brightness(105%);
+  padding: 20px;
+}

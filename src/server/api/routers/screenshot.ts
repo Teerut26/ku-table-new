@@ -103,4 +103,35 @@ export const screenshotRouter = createTRPCRouter({
     await browser.close();
     return "data:application/pdf;base64," + pdf.toString("base64");
   }),
+  receipt: protectedProcedure.input(screenshotSchema).mutation(async ({ input }) => {
+    const browser = await puppeteer.launch({
+      headless: true,
+      executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
+    });
+    const page = await browser.newPage();
+
+    let width = 600;
+
+    await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 2 });
+
+    const keyId = uuid();
+    await redisClient.set(keyId, JSON.stringify(input), {
+      EX: 60, // 1 minute
+    });
+
+    const url = new URL(`${process.env.NEXTAUTH_URL}/receipt/${keyId}`);
+    await page.goto(url.toString(), {
+      waitUntil: "networkidle0",
+    });
+
+    await page.waitForSelector("#capture");
+    const logo = await page.$("#capture");
+    const result = await logo?.screenshot({ type: "png" });
+    await page.close();
+    await redisClient.del(keyId);
+    await browser.close();
+
+    return "data:image/png;base64," + result?.toString("base64");
+  }),
 });
