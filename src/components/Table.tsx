@@ -104,9 +104,9 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
                   },
                   {
                     onSuccess: (data) => {
-                      //   saveAs(data, `kugetreg-${themeCurrent}.pdf`);
-                      let pdfWindow = window.open("");
-                      pdfWindow?.document.write(`<iframe width='100%' height='100%' src='${data}'></iframe>`);
+                      saveAs(data, `kugetreg-${themeCurrent}-${new Date().getTime()}.pdf`);
+                      //   let pdfWindow = window.open("");
+                      //   pdfWindow?.document.write(`<iframe width='100%' height='100%' src='${data}'></iframe>`);
                     },
                   }
                 )
@@ -137,9 +137,9 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
                   },
                   {
                     onSuccess: (data) => {
-                    //   saveAs(data, `kugetreg-${themeCurrent}.png`);
-                      let pdfWindow = window.open("");
-                      pdfWindow?.document.write(`<img height='100%' src='${data}'></img>`);
+                        saveAs(data, `kugetreg-${themeCurrent}-${new Date().getTime()}.png`);
+                    //   let pdfWindow = window.open("");
+                    //   pdfWindow?.document.write(`<img height='100%' src='${data}'></img>`);
                     },
                   }
                 )
