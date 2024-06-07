@@ -1,9 +1,7 @@
-import { courseSchema } from "@/interfaces/GroupCourseResponseInterface";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import puppeteer from "puppeteer";
 import db from "@/configs/firestoreAdmin";
-import { redisClient } from "@/services/redis";
 import { v4 as uuid } from "uuid";
 
 const screenshotSchema = z.object({
@@ -28,9 +26,7 @@ export const screenshotRouter = createTRPCRouter({
     await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 3 });
 
     const keyId = uuid();
-    await redisClient.set(keyId, JSON.stringify(input), {
-      EX: 60, // 1 minute
-    });
+    await db.collection("screenshot").doc(keyId).set(input);
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/${keyId}`);
     await page.goto(url.toString(), {
@@ -41,7 +37,7 @@ export const screenshotRouter = createTRPCRouter({
     const logo = await page.$("#capture");
     const result = await logo?.screenshot({ type: "png" });
     await page.close();
-    await redisClient.del(keyId);
+    await db.collection("screenshot").doc(keyId).delete();
     await browser.close();
     
     return "data:image/png;base64," + result?.toString("base64");
@@ -57,9 +53,7 @@ export const screenshotRouter = createTRPCRouter({
     await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 3 });
 
     const keyId = uuid();
-    await redisClient.set(keyId, JSON.stringify(input), {
-      EX: 60, // 1 minute
-    });
+    await db.collection("screenshot").doc(keyId).set(input);
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/${keyId}`);
     await page.goto(url.toString(), {
@@ -69,7 +63,7 @@ export const screenshotRouter = createTRPCRouter({
     await page.waitForSelector("#capture");
     const pdf = await page.pdf({ format: "A4", printBackground: true, landscape: input.screenType === "desktop" });
     await page.close();
-    await redisClient.del(keyId);
+    await db.collection("screenshot").doc(keyId).delete();
     await browser.close();
     return "data:application/pdf;base64," + pdf.toString("base64");
   }),
