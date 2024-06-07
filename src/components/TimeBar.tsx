@@ -23,7 +23,7 @@ const TimeBar: NextPage<Props> = ({ times }) => {
   `;
   return (
     <Bar className="relative">
-      <Time className="col-span-2 text-center text-xl">Day/Time</Time>
+      <Time className="col-span-2 text-center items-center flex justify-center">Day/Time</Time>
       {times.map((time, index) => (
         <Time key={index} className="col-span-2 pl-3 text-xl">
           {time}

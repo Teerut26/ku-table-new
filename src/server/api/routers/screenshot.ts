@@ -1,7 +1,7 @@
 import { courseSchema } from "@/interfaces/GroupCourseResponseInterface";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import puppeteer from "puppeteer";
+import puppeteer, { PDFOptions } from "puppeteer";
 import db from "@/configs/firestoreAdmin";
 import { redisClient } from "@/services/redis";
 import { v4 as uuid } from "uuid";
@@ -24,7 +24,13 @@ export const screenshotRouter = createTRPCRouter({
       args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
     });
     const page = await browser.newPage();
-    const width = input.isExpand ? 1000 : 600;
+    let width = 600;
+    if (input.isExpand) {
+      width = 1000;
+      if (input.screenType === "desktop") {
+        width = 1700;
+      }
+    }
     await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 3 });
 
     const keyId = uuid();
@@ -53,8 +59,16 @@ export const screenshotRouter = createTRPCRouter({
       args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
     });
     const page = await browser.newPage();
-    const width = input.isExpand ? 1000 : 600;
-    await page.setViewport({ width: width, height: 0, deviceScaleFactor: input.scale ?? 3 });
+
+    let width = 600;
+    if (input.isExpand) {
+      width = 1000;
+      if (input.screenType === "desktop") {
+        width = 1700;
+      }
+    }
+
+    await page.setViewport({ width: width, height: 0 });
 
     const keyId = uuid();
     await redisClient.set(keyId, JSON.stringify(input), {
@@ -67,18 +81,26 @@ export const screenshotRouter = createTRPCRouter({
     });
 
     await page.waitForSelector("#capture");
-    const pdf = await page.pdf({ format: "A4", printBackground: true, landscape: input.screenType === "desktop" });
+
+    let scale = 0.8;
+    if (input.isExpand) {
+      scale = 0.8;
+      if (input.screenType === "desktop") {
+        scale = 0.7;
+      }
+    }
+
+    const pdfOption: PDFOptions = {
+      printBackground: true,
+      landscape: input.screenType === "desktop",
+      scale: scale,
+      format: "A4",
+    };
+
+    const pdf = await page.pdf(pdfOption);
     await page.close();
     await redisClient.del(keyId);
     await browser.close();
     return "data:application/pdf;base64," + pdf.toString("base64");
-  }),
-  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const dataInCache = await redisClient.get(input);
-    if (dataInCache) {
-      return JSON.parse(dataInCache);
-    } else {
-      throw new Error("Data not found in cache");
-    }
   }),
 });
