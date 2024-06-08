@@ -93,6 +93,9 @@ const Share: NextPage<Props> = ({ lang, courseData, screenType, major, theme, is
               <div>Generate by :</div>
               <div className="font-bold">kugetreg.teerut.com</div>
             </div>
+            <div className="flex gap-2 whitespace-nowrap text-base-content">
+              <div className="font-bold">{major}</div>
+            </div>
           </div>
         </div>
       ) : (
