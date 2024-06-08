@@ -141,13 +141,13 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
               className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", receiptApi.isLoading && "loading")}
             >
               {!receiptApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
-              receipt
+              {LocalsSwip("ใบเสร็จ", "receipt")}
             </button>
           )}
           {imageBackground ? (
             <button disabled={isCapture} onClick={() => handleDownload()} className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", isCapture && "loading")}>
               {!isCapture && <CloudDownloadIcon sx={{ width: 20 }} />}
-              PNG
+              {LocalsSwip("รูปภาพ", "image")}
             </button>
           ) : (
             <button
@@ -174,7 +174,7 @@ const Table: NextPage<Props> = ({ courseData, hasShare, isIPhone, canRemove, onR
               className={clsx("btn btn-outline btn-primary btn-sm gap-2 uppercase", captureApi.isLoading && "loading")}
             >
               {!captureApi.isLoading && <CloudDownloadIcon sx={{ width: 20 }} />}
-              PNG
+              {LocalsSwip("รูปภาพ", "image")}
             </button>
           )}
 
