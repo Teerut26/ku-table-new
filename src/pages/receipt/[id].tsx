@@ -33,7 +33,7 @@ interface Props {
 export default function Receipt(props: Props) {
   const courseData = _.uniqBy(props.courseData, (x) => x.subject_code + x.max_credit);
 
-const hasCredit = courseData.some((course) => course.max_credit);
+  const hasCredit = courseData.some((course) => course.max_credit);
 
   return (
     <div id="capture" className="receiptContainer flex w-[25rem] flex-col">
@@ -44,7 +44,7 @@ const hasCredit = courseData.some((course) => course.max_credit);
       </div>
       <div>ORDER #0001 FOR {props.major}</div>
       <div>{format(new Date(), "EEEE, LLLL d, u")}</div>
-      <div className="border-b-2 border-dashed w-full border-black my-2"></div>
+      <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="flex justify-between">
         <div className="flex gap-3">
           <div>QTY</div>
@@ -52,19 +52,19 @@ const hasCredit = courseData.some((course) => course.max_credit);
         </div>
         {hasCredit && <div>Credit</div>}
       </div>
-      <div className="border-b-2 border-dashed w-full border-black my-2"></div>
+      <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="my-3 flex flex-col">
         {courseData.map((course, index) => (
           <div key={index} className="flex justify-between">
             <div className="flex gap-2">
-              <div className="min-w-[35px]">{String(index+1).padStart(2, '0')}</div>
-              <div className={hasCredit ? "max-w-[16rem]" : "w-full"}>{course.subject_name_en}</div>
+              <div className="min-w-[35px]">{String(index + 1).padStart(2, "0")}</div>
+              <div className={hasCredit ? "max-w-[16rem]" : "w-full"}><span className="font-medium">{course.subject_code}</span> {course.subject_name_en}</div>
             </div>
             <div>{course.max_credit}</div>
           </div>
         ))}
       </div>
-      <div className="border-b-2 border-dashed w-full border-black my-2"></div>
+      <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div>Item Count</div>
@@ -77,8 +77,11 @@ const hasCredit = courseData.some((course) => course.max_credit);
           </div>
         )}
       </div>
-      <div className="border-b-2 border-dashed w-full border-black my-2"></div>
-      <div className="text-center">kugetreg.teerut.com</div>
+      <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
+      <div className="flex whitespace-nowrap text-base-content flex-col items-center justify-center">
+        <div>Generate by :</div>
+        <div className="font-bold">kugetreg.teerut.com</div>
+      </div>
     </div>
   );
 }
