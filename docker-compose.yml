@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  kugetreg:
+    restart: unless-stopped
+    image: teerut26/kugetreg:latest
+    ports:
+      - 31791:3000
+    environment:
+      - REDIS_URL=redis://redis-cache
+      - UNIT_REQUIRE_URL=${UNIT_REQUIRE_URL}
+      - RECOMMEND_API=${RECOMMEND_API}
+      - STORE_PASSWORD_SECRET=${STORE_PASSWORD_SECRET}
+      - NEXT_PUBLIC_STORE_PASSWORD_KEY=${NEXT_PUBLIC_STORE_PASSWORD_KEY}
+      - TOKEN_LINE=${TOKEN_LINE}
+      - FIREBASE_ADMIN=${FIREBASE_ADMIN}
+      - MYKU_PUBLIC_KEY=${MYKU_PUBLIC_KEY}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    container_name: redis-cache
+    command: redis-server
+    ports:
+      - "6379:6379"
