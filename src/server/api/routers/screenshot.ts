@@ -24,7 +24,7 @@ export const screenshotRouter = createTRPCRouter({
       args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
     });
     const page = await browser.newPage();
-    let width = 600;
+    let width = 700;
     if (input.isExpand) {
       width = 1000;
       if (input.screenType === "desktop") {
