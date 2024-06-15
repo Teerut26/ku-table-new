@@ -39,7 +39,10 @@ export default function GeneralEducationSection(props: Props) {
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Object.values(_.groupBy(props.genTemp, (item) => item.subjectGroup))[props.index]?.map((item2, index2) => (
             <div className="flex cursor-pointer flex-col rounded-lg border p-3 hover:bg-base-200" key={index2} onClick={() => onFind(item2.subjectCode)}>
-              <div>{item2.subjectCode}</div>
+              <div className="flex items-center justify-between">
+                <div>{item2.subjectCode}</div>
+                <div className="text-xs font-light">หนวยกิต {item2.subjectCredits.split("(")[0]}</div>
+              </div>
               <div className="line-clamp-1 text-lg leading-6">{item2.subjectName.split(" (")[0]}</div>
               <div className="line-clamp-1 font-light">{item2.subjectName.split(" (")[1]?.replace(")", "")}</div>
               <div className="mt-2 flex items-center gap-2">

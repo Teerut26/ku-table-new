@@ -18,7 +18,7 @@ const GeneralEducation: NextPage<Props> = () => {
 
   const searchGenEd = (search: string) => {
     const fuse = new Fuse(genEd, {
-      keys: ["subjectName", "subjectCode", "subjectGroup", "subjectFaculty"],
+      keys: ["subjectCode", "subjectName", "subjectGroup", "subjectFaculty"],
     });
 
     setGenEdTemp(fuse.search(search).map((item) => item.item));
