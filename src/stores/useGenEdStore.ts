@@ -33,7 +33,7 @@ const useGenEdStore = create<Filter>((set) => ({
   searchGenEd: (search: string) => {
     set((state) => {
       return {
-        genTemp: search.length > 0 ? state.genEd.filter((gen) => gen.subjectName.toLowerCase().includes(search.toLowerCase()) || gen.subjectCode.toLowerCase().includes(search.toLowerCase()) || gen.subjectGroup.toLowerCase().includes(search.toLowerCase())) : state.genEd,
+        genTemp: search.length > 0 ? state.genEd.filter((gen) => gen.subjectName.toLowerCase().includes(search.toLowerCase()) || gen.subjectCode.toLowerCase().includes(search.toLowerCase()) || gen.subjectGroup.toLowerCase().includes(search.toLowerCase()) || gen.subjectFaculty.toLowerCase().includes(search.toLowerCase())) : state.genEd,
       };
     });
   },
