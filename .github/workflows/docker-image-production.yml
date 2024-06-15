@@ -9,26 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
+      - name: Get Time
+        id: time
+        uses: josStorer/get-current-time@v2
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+          format: DD/MM/YYYY HH:mm
+          timezone: Asia/Bangkok
+      - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest --build-arg NEXT_PUBLIC_BUILD_MESSAGE="${{ steps.tag_version.outputs.new_tag }}" .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest --build-arg NEXT_PUBLIC_BUILD_MESSAGE="อัพเดทเมื่อ ${{ steps.time.outputs.formattedTime }}" .
       - name: Push the Docker image
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ secrets.DOCKER_USERNAME }}/kugetreg:latest
-      - name: Bump version and push tag
-        id: tag_version2
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-            tag: ${{ steps.tag_version2.outputs.new_tag }}
-            name: Release ${{ steps.tag_version2.outputs.new_tag }}
-            body: ${{ steps.tag_version2.outputs.changelog }}
