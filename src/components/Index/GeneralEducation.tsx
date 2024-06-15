@@ -1,13 +1,10 @@
 import useLocalsSwip from "@/hooks/useLocalsSwip";
 import useGenEdStore from "@/stores/useGenEdStore";
-import { Input } from "antd";
 import { NextPage } from "next";
-import useTapStore from "@/stores/useTabStore";
-import useSearchStore from "./ShopSubject/store/useSearchStore";
 import _ from "lodash";
-import { useEffect } from "react";
 import GeneralEducationSection from "./GeneralEducationSection";
 import { Icon } from "@iconify/react";
+import { AnimatePresence } from "framer-motion";
 
 interface Props {}
 
@@ -25,9 +22,11 @@ const GeneralEducation: NextPage<Props> = () => {
         {/* <Input allowClear className="w-fit" onChange={(e) => searchGenEd(e.target.value)} size="large" placeholder={LocalsSwip("ค้นหา", "Search")} /> */}
       </div>
       <div className="flex flex-col">
-        {Object.keys(_.groupBy(genTemp, (item) => item.subjectGroup)).map((item, index) => (
-          <GeneralEducationSection groupName={item} index={index} key={index} />
-        ))}
+        <AnimatePresence key={genTemp.length.toString()}>
+          {Object.keys(_.groupBy(genTemp, (item) => item.subjectGroup)).map((item, index) => (
+            <GeneralEducationSection groupName={item} index={index} key={index} />
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
