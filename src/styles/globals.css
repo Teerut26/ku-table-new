@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
   font-family: "Noto Sans Thai", sans-serif !important;
+  /* font-family: "Anuphan", sans-serif; */
   --obg: 0.7;
 }
 
