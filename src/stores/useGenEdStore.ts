@@ -7,7 +7,6 @@ interface Filter {
   lastScrollPosition: number;
   setGenEd: (genEd: GenEdServiceResponseInterface[]) => void;
   filterGenEd: (filterGroup: string) => void;
-  searchGenEd: (search: string) => void;
   setLastScrollPosition: (lastScrollPosition: number) => void;
 }
 
@@ -27,13 +26,6 @@ const useGenEdStore = create<Filter>((set) => ({
     set((state) => {
       return {
         genTemp: filterGroup.length > 0 ? state.genEd.filter((gen) => gen.subjectGroup === filterGroup) : state.genEd,
-      };
-    });
-  },
-  searchGenEd: (search: string) => {
-    set((state) => {
-      return {
-        genTemp: search.length > 0 ? state.genEd.filter((gen) => gen.subjectName.toLowerCase().includes(search.toLowerCase()) || gen.subjectCode.toLowerCase().includes(search.toLowerCase()) || gen.subjectGroup.toLowerCase().includes(search.toLowerCase()) || gen.subjectFaculty.toLowerCase().includes(search.toLowerCase())) : state.genEd,
       };
     });
   },

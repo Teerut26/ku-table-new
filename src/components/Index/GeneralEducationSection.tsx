@@ -6,22 +6,23 @@ import { useState } from "react";
 import { Collapse, IconButton } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { GenEdServiceResponseInterface } from "@/services/get-gened";
 
 interface Props {
   groupName: string;
   index: number;
+  genTemp: GenEdServiceResponseInterface[];
 }
 
 export default function GeneralEducationSection(props: Props) {
-  const { genTemp } = useGenEdStore((s) => s);
-  const { setSelectedSubjectCode } = useSearchStore((s) => s);
-  const { setTab } = useTapStore((s) => s);
+  //   const { setSelectedSubjectCode } = useSearchStore((s) => s);
+  //   const { setTab } = useTapStore((s) => s);
   const [isCollapse, setIsCollapse] = useState(true);
 
   const onFind = (subjectCode: string) => {
-    setSelectedSubjectCode(subjectCode);
-    window.scrollTo(0, 0);
-    setTab("tab2");
+    // setSelectedSubjectCode(subjectCode);
+    // window.scrollTo(0, 0);
+    // setTab("tab2");
   };
 
   const handleCollapse = () => {
@@ -36,13 +37,15 @@ export default function GeneralEducationSection(props: Props) {
       </div>
       <Collapse in={isCollapse}>
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {Object.values(_.groupBy(genTemp, (item) => item.subjectGroup))[props.index]?.map((item2, index2) => (
+          {Object.values(_.groupBy(props.genTemp, (item) => item.subjectGroup))[props.index]?.map((item2, index2) => (
             <div className="flex cursor-pointer flex-col rounded-lg border p-3 hover:bg-base-200" key={index2} onClick={() => onFind(item2.subjectCode)}>
               <div>{item2.subjectCode}</div>
               <div className="line-clamp-1 text-lg leading-6">{item2.subjectName.split(" (")[0]}</div>
               <div className="line-clamp-1 font-light">{item2.subjectName.split(" (")[1]?.replace(")", "")}</div>
-              <div className="flex gap-2 items-center mt-2">
-                <Icon icon="material-symbols:flag" />
+              <div className="mt-2 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M5 21V4h9l.4 2H20v10h-7l-.4-2H7v7z" />
+                </svg>
                 <div className="line-clamp-1 text-sm font-light">{item2.subjectFaculty}</div>
               </div>
             </div>
