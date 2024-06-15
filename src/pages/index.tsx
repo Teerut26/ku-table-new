@@ -19,6 +19,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { useEffect } from "react";
 import domainCheck from "@/utils/domainCheck";
 import { Player } from "@lottiefiles/react-lottie-player";
+import useGenEdStore from "@/stores/useGenEdStore";
 
 export async function getServerSideProps(context: NextPageContext) {
   const UA = context.req!.headers["user-agent"];
@@ -55,6 +56,7 @@ interface Props {
 const Home: NextPage<Props> = ({ isIPhone }) => {
   const getCourseData = api.group_course.getCourse.useQuery();
   const { tab, setTab } = useTapStore((s) => s);
+  const { lastScrollPosition } = useGenEdStore((s) => s);
   const [tab2, setTab2] = useLocalStorage("tab", "tab1");
   const { LocalsSwip } = useLocalsSwip();
 
@@ -96,7 +98,7 @@ const Home: NextPage<Props> = ({ isIPhone }) => {
                                 <div className="my-20 flex justify-center">
                                   <div className="flex flex-col items-center text-base-content/60">
                                     <Player autoplay loop src={"https://lottie.host/7844839c-5ab8-49e0-b1b4-32d1509d7fbd/gXxqjE7jaN.json"} style={{ height: "50px", width: "50px" }} />
-                                    <div className="text-xl mt-5">{LocalsSwip("ไม่พบรายวิชา", "No courses found")}</div>
+                                    <div className="mt-5 text-xl">{LocalsSwip("ไม่พบรายวิชา", "No courses found")}</div>
                                     <div>{LocalsSwip("อาจจะยังไม่ได้ลงทะเบียน", "It may not have been enrolled")}</div>
                                   </div>
                                 </div>
