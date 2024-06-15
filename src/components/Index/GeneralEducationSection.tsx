@@ -30,13 +30,13 @@ export default function GeneralEducationSection(props: Props) {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-8 mt-3 flex flex-col gap-2">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-8 mt-3 flex flex-col gap2">
       <div className="flex items-center justify-between">
         <div className="text-xl">{props.groupName}</div>
         <IconButton onClick={handleCollapse}>{isCollapse ? <Icon icon="material-symbols:keyboard-arrow-up" className="text-3xl" /> : <Icon icon="material-symbols:keyboard-arrow-down" className="text-3xl" />}</IconButton>
       </div>
       <Collapse in={isCollapse}>
-        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-2 grid grid-cols-1 gap-3 lg:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Object.values(_.groupBy(props.genTemp, (item) => item.subjectGroup))[props.index]?.map((item2, index2) => (
             <div className="flex cursor-pointer flex-col rounded-lg border p-3 hover:bg-base-200" key={index2} onClick={() => onFind(item2.subjectCode)}>
               <div className="flex items-center justify-between">

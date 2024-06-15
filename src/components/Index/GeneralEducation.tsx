@@ -37,8 +37,8 @@ const GeneralEducation: NextPage<Props> = () => {
   }, [genEd, search]);
 
   return (
-    <div className="flex w-full flex-col gap-2 overflow-x-auto">
-      <div className="mt-3 flex justify-center">
+    <div className="flex w-full flex-col overflow-x-auto">
+      <div className="mt-5 flex justify-center">
         <div className="flex w-full max-w-md items-center gap-2 rounded-full border px-3 py-2">
           <div className="flex-1">
             <Icon icon="material-symbols:search" className="text-2xl text-base-content/50" />
@@ -52,7 +52,7 @@ const GeneralEducation: NextPage<Props> = () => {
         </div>
       </div>
       {search.length > 0 && (
-        <div>
+        <div className="mt-2">
           {genEdTemp.length.toLocaleString("th-TH")} {LocalsSwip("ผลการค้นหา", "Search Result")}
         </div>
       )}
