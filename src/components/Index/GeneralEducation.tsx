@@ -39,7 +39,7 @@ const GeneralEducation: NextPage<Props> = () => {
   return (
     <div className="flex w-full flex-col gap-2 overflow-x-auto">
       <div className="mt-3 flex justify-center">
-        <div className="flex w-full max-w-md items-center gap-2 rounded-full border border-base-300 px-3 py-2">
+        <div className="flex w-full max-w-md items-center gap-2 rounded-full border px-3 py-2">
           <div className="flex-1">
             <Icon icon="material-symbols:search" className="text-2xl text-base-content/50" />
           </div>
