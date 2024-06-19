@@ -1,13 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap");
+@font-face {
+  font-family: "thermal-receipt";
+  src: url("/font/thermal-receipt.ttf");
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: "Noto Sans Thai", sans-serif !important;
-  /* font-family: "Anuphan", sans-serif; */
+  font-family: "Noto Sans Thai", sans-serif;
   --obg: 0.7;
+}
+
+.thermal-receipt {
+  font-family: "thermal-receipt" !important;
 }
 
 .ant-tag,

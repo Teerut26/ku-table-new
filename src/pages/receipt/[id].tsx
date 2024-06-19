@@ -37,56 +37,56 @@ export default function Receipt(props: Props) {
   const hasCredit = courseData.some((course) => course.max_credit);
 
   return (
-    <div id="capture" className="receiptContainer flex w-[25rem] flex-col">
+    <div id="capture" className="receiptContainer flex w-[25rem] flex-col thermal-receipt">
       <div className="flex flex-col items-center">
         <div>*****************************************</div>
-        <div className="text-2xl">Receipt</div>
+        <div className="text-2xl thermal-receipt">Receipt</div>
         <div>*****************************************</div>
       </div>
-      <div>ORDER #0001 FOR {props.major}</div>
-      <div>{format(new Date(), "EEEE, LLLL d, u")}</div>
+      <div className="thermal-receipt">ORDER #0001 FOR {props.major}</div>
+      <div className="thermal-receipt">{format(new Date(), "EEEE, LLLL d, u")}</div>
       <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="flex justify-between">
         <div className="flex gap-3">
-          <div>QTY</div>
-          <div>Item</div>
+          <div className="thermal-receipt">QTY</div>
+          <div className="thermal-receipt">Item</div>
         </div>
-        {hasCredit && <div>Credit</div>}
+        {hasCredit && <div className="thermal-receipt">Credit</div>}
       </div>
       <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="my-3 flex flex-col">
         {courseData.map((course, index) => (
           <div key={index} className="flex justify-between">
             <div className="flex gap-2">
-              <div className="min-w-[35px]">{String(index + 1).padStart(2, "0")}</div>
+              <div className="min-w-[35px] thermal-receipt">{String(index + 1).padStart(2, "0")}</div>
               <div className={hasCredit ? "max-w-[16rem]" : "w-full"}>
                 <div className="flex flex-col">
-                  <div className="font-medium">{course.subject_code}</div>
-                  <div>{course.subject_name_en}</div>
+                  <div className="font-medium thermal-receipt">{course.subject_code}</div>
+                  <div className="thermal-receipt">{course.subject_name_en}</div>
                 </div>
               </div>
             </div>
-            <div>{course.max_credit}</div>
+            <div className="thermal-receipt">{course.max_credit}</div>
           </div>
         ))}
       </div>
       <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <div>Item Count</div>
-          <div>{courseData.length}</div>
+          <div className="thermal-receipt">Item Count</div>
+          <div className="thermal-receipt">{courseData.length}</div>
         </div>
         {hasCredit && (
           <div className="flex justify-between">
-            <div>Total Credit</div>
-            <div>{calculateCredits(props.courseData)}</div>
+            <div className="thermal-receipt">Total Credit</div>
+            <div className="thermal-receipt">{calculateCredits(props.courseData)}</div>
           </div>
         )}
       </div>
       <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
       <div className="flex flex-col items-center justify-center whitespace-nowrap text-base-content">
         <div className="flex w-full flex-col items-center justify-center px-5">
-          <div className="uppercase">Thank you for visiting!!</div>
+          <div className="uppercase thermal-receipt">Thank you for visiting!!</div>
           <img src="/barcode.svg" />
           <div>kugetreg.teerut.com</div>
         </div>
