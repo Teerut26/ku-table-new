@@ -4,6 +4,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { NextPageContext } from "next";
 import _ from "lodash";
+import Barcode from "react-barcode";
 
 export async function getServerSideProps(context: NextPageContext) {
   const result = await axios.get(`${process.env.NEXTAUTH_URL}/api/screenshot/${context.query.id}`);
@@ -58,7 +59,12 @@ export default function Receipt(props: Props) {
           <div key={index} className="flex justify-between">
             <div className="flex gap-2">
               <div className="min-w-[35px]">{String(index + 1).padStart(2, "0")}</div>
-              <div className={hasCredit ? "max-w-[16rem]" : "w-full"}><span className="font-medium">{course.subject_code}</span> {course.subject_name_en}</div>
+              <div className={hasCredit ? "max-w-[16rem]" : "w-full"}>
+                <div className="flex flex-col">
+                  <div className="font-medium">{course.subject_code}</div>
+                  <div>{course.subject_name_en}</div>
+                </div>
+              </div>
             </div>
             <div>{course.max_credit}</div>
           </div>
@@ -78,9 +84,12 @@ export default function Receipt(props: Props) {
         )}
       </div>
       <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
-      <div className="flex whitespace-nowrap text-base-content flex-col items-center justify-center">
-        <div>Generate by :</div>
-        <div className="font-bold">kugetreg.teerut.com</div>
+      <div className="flex flex-col items-center justify-center whitespace-nowrap text-base-content">
+        <div className="flex w-full flex-col items-center justify-center px-5">
+          <div className="uppercase">Thank you for visiting!!</div>
+          <img src="/barcode.svg" />
+          <div>kugetreg.teerut.com</div>
+        </div>
       </div>
     </div>
   );

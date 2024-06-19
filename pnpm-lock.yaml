@@ -131,6 +131,9 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
+      react-barcode:
+        specifier: ^1.5.3
+        version: 1.5.3(react@18.2.0)
       react-cookie:
         specifier: ^4.1.1
         version: 4.1.1(react@18.2.0)
@@ -2537,6 +2540,9 @@ packages:
   js2xmlparser@4.0.2:
     resolution: {integrity: sha512-6n4D8gLlLf1n5mNLQPRfViYzu9RATblzPEtm1SthMX1Pjao0r9YI9nw7ZIfRxQMERS87mcswrg+r/OYrPRX6jA==}
 
+  jsbarcode@3.11.6:
+    resolution: {integrity: sha512-G5TKGyKY1zJo0ZQKFM1IIMfy0nF2rs92BLlCz+cU4/TazIc4ZH+X1GYeDRt7TKjrYqmPfTjwTBkU/QnQlsYiuA==}
+
   jsbn@1.1.0:
     resolution: {integrity: sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==}
 
@@ -3535,6 +3541,11 @@ packages:
     peerDependencies:
       react: '*'
       react-dom: '*'
+
+  react-barcode@1.5.3:
+    resolution: {integrity: sha512-EJPUwuERKpApcQ9qXzdVZzddFYRT7+3R/jJ3OrTfW6m2iq+WT+CBaVB7DsQazhPRXDfMcx9+dmMmzjsmveOViQ==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0
 
   react-cookie@4.1.1:
     resolution: {integrity: sha512-ffn7Y7G4bXiFbnE+dKhHhbP+b8I34mH9jqnm8Llhj89zF4nPxPutxHT1suUqMeCEhLDBI7InYwf1tpaSoK5w8A==}
@@ -7226,6 +7237,8 @@ snapshots:
       xmlcreate: 2.0.4
     optional: true
 
+  jsbarcode@3.11.6: {}
+
   jsbn@1.1.0: {}
 
   jsdoc@4.0.2:
@@ -8445,6 +8458,12 @@ snapshots:
       rc-util: 5.38.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+
+  react-barcode@1.5.3(react@18.2.0):
+    dependencies:
+      jsbarcode: 3.11.6
+      prop-types: 15.8.1
+      react: 18.2.0
 
   react-cookie@4.1.1(react@18.2.0):
     dependencies:
