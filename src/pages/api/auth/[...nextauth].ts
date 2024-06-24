@@ -53,9 +53,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, user, token }) {
-      const data = jwt_decode(
-        session.user?.email?.accesstoken!
-      ) as UserKuInterface;
+      const data = jwt_decode(session.user?.email?.accesstoken!) as UserKuInterface;
 
       if (data.exp < Date.now() / 1000) {
         return {} as any;
