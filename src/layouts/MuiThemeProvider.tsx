@@ -47,6 +47,9 @@ const MuiThemeProvider: NextPage<Props> = ({ children }) => {
     shape: {
       borderRadius: 5,
     },
+    typography: {
+        fontFamily: 'Noto Sans Thai',
+    }
   });
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
