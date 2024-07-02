@@ -39,9 +39,7 @@ export const screenshotRouter = createTRPCRouter({
     });
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/${keyId}`);
-    await page.goto(url.toString(), {
-      waitUntil: "networkidle2",
-    });
+    await page.goto(url.toString());
 
     await page.waitForSelector("#capture");
     const logo = await page.$("#capture");
@@ -76,9 +74,7 @@ export const screenshotRouter = createTRPCRouter({
     });
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/screenshot/${keyId}`);
-    await page.goto(url.toString(), {
-      waitUntil: "networkidle2",
-    });
+    await page.goto(url.toString());
 
     await page.waitForSelector("#capture");
 
@@ -122,7 +118,7 @@ export const screenshotRouter = createTRPCRouter({
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/en/receipt/${keyId}`);
     await page.goto(url.toString(), {
-      waitUntil: "networkidle0",
+      waitUntil: "networkidle2",
     });
 
     await page.waitForSelector("#capture");

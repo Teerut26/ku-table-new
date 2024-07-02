@@ -31,7 +31,7 @@
 }
 
 .receiptContainer {
-  background-image: url(https://receiptify.herokuapp.com/wrinkled-paper-texture-7.jpg);
+  background-image: url(/wrinkled-paper-texture-7.jpg);
   background-position: center;
   filter: brightness(105%);
   padding: 20px;
