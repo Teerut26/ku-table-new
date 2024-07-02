@@ -15,12 +15,13 @@ interface Props {
 }
 
 export default function GeneralEducationSection(props: Props) {
-  const { setSelectedSubjectCode } = useSearchStore((s) => s);
+  const { setSelectedSubjectCode , setKeyword} = useSearchStore((s) => s);
   const { setTab } = useTapStore((s) => s);
   const [isCollapse, setIsCollapse] = useState(true);
 
   const onFind = (subjectCode: string) => {
     setSelectedSubjectCode(subjectCode);
+    setKeyword(subjectCode);
     window.scrollTo(0, 0);
     setTab("tab2");
   };
