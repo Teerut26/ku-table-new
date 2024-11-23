@@ -1,10 +1,11 @@
 import { courseSchema } from "@/interfaces/GroupCourseResponseInterface";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import puppeteer, { PDFOptions } from "puppeteer";
+import puppeteer, { PDFOptions } from "puppeteer-core";
 import db from "@/configs/firestoreAdmin";
 import { redisClient } from "@/services/redis";
 import { v4 as uuid } from "uuid";
+import { PuppeteerLaunchOptionsConfig } from "@/configs/PuppeteerLaunchOptionsConfig";
 
 const screenshotSchema = z.object({
   theme: z.string(),
@@ -18,11 +19,7 @@ const screenshotSchema = z.object({
 
 export const screenshotRouter = createTRPCRouter({
   capture: protectedProcedure.input(screenshotSchema).mutation(async ({ input }) => {
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
-    });
+    const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
     const page = await browser.newPage();
     let width = 700;
     if (input.isExpand) {
@@ -48,14 +45,11 @@ export const screenshotRouter = createTRPCRouter({
     await redisClient.del(keyId);
     await browser.close();
 
-    return "data:image/png;base64," + result?.toString("base64");
+    const base64 = (result as unknown as Buffer).toString("base64");
+    return "data:image/png;base64," + base64;
   }),
   pdf: protectedProcedure.input(screenshotSchema).mutation(async ({ input }) => {
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
-    });
+    const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
     const page = await browser.newPage();
 
     let width = 600;
@@ -97,14 +91,12 @@ export const screenshotRouter = createTRPCRouter({
     await page.close();
     await redisClient.del(keyId);
     await browser.close();
-    return "data:application/pdf;base64," + pdf.toString("base64");
+
+    const base64 = (pdf as unknown as Buffer).toString("base64");
+    return "data:application/pdf;base64," + base64;
   }),
   receipt: protectedProcedure.input(screenshotSchema).mutation(async ({ input }) => {
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: process.platform === "win32" ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" : process.platform === "linux" ? "/usr/bin/chromium-browser" : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      args: ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"],
-    });
+    const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
     const page = await browser.newPage();
 
     let width = 600;
@@ -128,6 +120,7 @@ export const screenshotRouter = createTRPCRouter({
     await redisClient.del(keyId);
     await browser.close();
 
-    return "data:image/png;base64," + result?.toString("base64");
+    const base64 = (result as unknown as Buffer).toString("base64");
+    return "data:image/png;base64," + base64;
   }),
 });
